@@ -12,6 +12,11 @@ examples/*/out/
 coverage/
 *.tgz
 
+# tooling logs (written only when a command fails; must never be committed)
+*.log
+.pnpm-debug.log*
+npm-debug.log*
+
 # tooling caches
 .eslintcache
 .size-limit.json.cache

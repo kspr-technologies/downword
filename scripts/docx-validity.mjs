@@ -9,7 +9,9 @@
  *      mandatory OOXML parts). Runs everywhere, needs no LibreOffice.
  *   2. Converts every generated `.docx` to PDF with headless LibreOffice and
  *      fails if any conversion errors or produces no readable PDF.
- *   3. Runs a NEGATIVE CONTROL against a deliberately corrupt fixture
+ *   3. Runs a POSITIVE CONTROL for the forced WordprocessingML import filter,
+ *      so a renamed/missing filter cannot silently make step 4 vacuous.
+ *   4. Runs a NEGATIVE CONTROL against a deliberately corrupt fixture
  *      (packages/core/tests/__fixtures__/corrupt/corrupt.docx). If that file
  *      passes, the gate itself is broken and the run fails - a gate that never
  *      says "no" is worse than no gate.
@@ -18,7 +20,8 @@
  *   node scripts/docx-validity.mjs [--require-soffice] [--keep]
  *
  * Behaviour when LibreOffice is missing:
- *   - locally: steps 1 and 3a still run, step 2 is reported as SKIPPED, exit 0.
+ *   - locally: step 1 and the structural half of step 4 still run; steps 2, 3
+ *     and the LibreOffice half of step 4 are reported as SKIPPED, exit 0.
  *   - in CI (`$CI` set) or with --require-soffice: hard failure, exit 1.
  *
  * Env:
@@ -38,7 +41,7 @@ import {
   statSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, relative, resolve } from "node:path";
+import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -53,6 +56,17 @@ const GENERATED_DIRS = [
 
 /** The deliberately-broken file used to prove the gate can fail. */
 const CORRUPT_FIXTURE = "packages/core/tests/__fixtures__/corrupt/corrupt.docx";
+
+/**
+ * Forces LibreOffice's WordprocessingML import filter.
+ *
+ * Without it LibreOffice sniffs the content, falls back to its plain text
+ * filter and happily "converts" a text file, which would make the negative
+ * control meaningless. The filter name is validated at runtime by a positive
+ * control (see `4a)` below) so that a renamed/unavailable filter fails loudly
+ * instead of silently turning the negative control into a no-op.
+ */
+const DOCX_INFILTER = ["--infilter=MS Word 2007 XML"];
 
 /** Candidate locations for the LibreOffice binary. */
 const SOFFICE_CANDIDATES = [
@@ -146,14 +160,24 @@ function findSoffice() {
  * concurrent or repeated runs silently reuse a locked profile and "succeed"
  * while producing nothing.
  *
+ * `outDir` MUST be unique per invocation. LibreOffice names its output after
+ * the input's basename, and it sometimes exits 0 while producing nothing - so a
+ * leftover PDF from an earlier file with the same basename would be mistaken
+ * for this file's output and turn a failure into a pass. The target is also
+ * deleted up front as a second line of defence.
+ *
  * @param {string} soffice
  * @param {string} file
- * @param {string} outDir
+ * @param {string} outDir unique output directory for this one conversion
  * @param {string[]} extraArgs e.g. forcing an import filter
  */
 function convertToPdf(soffice, file, outDir, extraArgs = []) {
   mkdirSync(outDir, { recursive: true });
   const profile = mkdtempSync(join(tmpdir(), "downword-lo-"));
+
+  const base = basename(file).replace(/\.docx$/i, "");
+  const pdf = join(outDir, `${base}.pdf`);
+  rmSync(pdf, { force: true });
 
   const argv = [
     `-env:UserInstallation=${pathToFileURL(profile).href}`,
@@ -172,12 +196,6 @@ function convertToPdf(soffice, file, outDir, extraArgs = []) {
   ];
 
   const proc = spawnSync(soffice, argv, { encoding: "utf8", timeout: 180_000 });
-
-  const base = file
-    .split("/")
-    .pop()
-    .replace(/\.docx$/i, "");
-  const pdf = join(outDir, `${base}.pdf`);
 
   let pdfOk = false;
   let pdfSize = 0;
@@ -285,36 +303,75 @@ if (soffice === null) {
   console.log(`   using: ${soffice}\n`);
   const outRoot = mkdtempSync(join(tmpdir(), "downword-pdf-"));
 
+  /** Every conversion gets its own directory - see convertToPdf's doc comment. */
+  let conversionSeq = 0;
+  const nextOutDir = (label) => join(outRoot, `${label}-${conversionSeq++}`);
+
+  const describeFailure = (result) =>
+    `soffice exit=${result.exitCode}, pdf=${existsSync(result.pdf) ? `${result.pdfSize} bytes` : "not produced"}` +
+    (result.stderr ? `\n         stderr: ${result.stderr}` : "") +
+    (result.stdout ? `\n         stdout: ${result.stdout}` : "");
+
   for (const file of generated) {
     const rel = relative(REPO_ROOT, file);
-    const result = convertToPdf(soffice, file, join(outRoot, "valid"));
+    const result = convertToPdf(soffice, file, nextOutDir("valid"));
     if (result.ok) {
       record("PASS", rel, `-> pdf (${result.pdfSize} bytes)`);
     } else {
-      record(
-        "FAIL",
-        rel,
-        `soffice exit=${result.exitCode}, pdf=${existsSync(result.pdf) ? `${result.pdfSize} bytes` : "not produced"}` +
-          (result.stderr ? `\n         stderr: ${result.stderr}` : "") +
-          (result.stdout ? `\n         stdout: ${result.stdout}` : ""),
-      );
+      record("FAIL", rel, describeFailure(result));
     }
   }
 
-  // Negative control through LibreOffice. The MS Word 2007 XML import filter is
-  // forced: without it LibreOffice sniffs the content, falls back to its plain
-  // text filter and happily "converts" a text file, which would make the
-  // negative control meaningless.
-  console.log("\n4) Negative control - LibreOffice must REFUSE the corrupt fixture");
+  // --- 3b. positive control for the forced import filter -------------------
+  //
+  // The negative control below forces the WordprocessingML import filter. If
+  // that filter name is ever wrong, renamed or missing from the installed
+  // LibreOffice, soffice fails for a reason that has nothing to do with the
+  // file's content - and the negative control would report "correctly refused"
+  // while proving absolutely nothing. Prove the filter works on a file we know
+  // is good, using the exact same arguments, before trusting its refusal.
+  console.log("\n4a) Positive control - the forced import filter must work on a GOOD .docx");
+  const filterProbeFile = generated[0];
+  const filterProbeRel = relative(REPO_ROOT, filterProbeFile);
+  const filterProbe = convertToPdf(
+    soffice,
+    filterProbeFile,
+    nextOutDir("filter-probe"),
+    DOCX_INFILTER,
+  );
+  const filterUsable = filterProbe.ok;
+  if (filterUsable) {
+    record(
+      "PASS",
+      `${DOCX_INFILTER[0]} on ${filterProbeRel}`,
+      `filter is available (-> pdf, ${filterProbe.pdfSize} bytes)`,
+    );
+  } else {
+    record(
+      "FAIL",
+      DOCX_INFILTER[0],
+      "the forced import filter cannot convert a known-good .docx, so the negative " +
+        "control below cannot be trusted - THE GATE IS BROKEN\n         " +
+        describeFailure(filterProbe),
+    );
+  }
+
+  // --- 4. negative control through LibreOffice -----------------------------
+  console.log("\n4b) Negative control - LibreOffice must REFUSE the corrupt fixture");
   if (existsSync(corruptPath)) {
-    const result = convertToPdf(soffice, corruptPath, join(outRoot, "corrupt"), [
-      "--infilter=MS Word 2007 XML",
-    ]);
+    const result = convertToPdf(soffice, corruptPath, nextOutDir("corrupt"), DOCX_INFILTER);
     if (result.ok) {
       record(
         "FAIL",
         CORRUPT_FIXTURE,
         "LibreOffice produced a PDF from a corrupt .docx - THE GATE IS BROKEN",
+      );
+    } else if (!filterUsable) {
+      record(
+        "FAIL",
+        CORRUPT_FIXTURE,
+        `refused (exit=${result.exitCode}), but 4a) already showed the filter is unusable, ` +
+          "so this refusal proves nothing",
       );
     } else {
       record("PASS", CORRUPT_FIXTURE, `correctly refused (exit=${result.exitCode}, no valid pdf)`);

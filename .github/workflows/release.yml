@@ -12,6 +12,9 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  PNPM_VERSION: "10.33.0"
+
 jobs:
   release:
     name: Version or publish
@@ -28,7 +31,7 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: "10.33.0"
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Set up Node 22
         uses: actions/setup-node@v4
@@ -47,6 +50,30 @@ jobs:
           pnpm test
           pnpm build
 
+      # Publish guard.
+      #
+      # `changesets/action` runs its `publish` script on ANY push to main that
+      # has no pending changesets - that is how the merged "Version Packages"
+      # PR triggers a release. While the packages are still on the placeholder
+      # version 0.0.0 that would publish the unfinished T0 scaffold to npm the
+      # first time anything lands on main (`changeset publish` only skips
+      # `private` packages and versions already on the registry - there is no
+      # special case for 0.0.0).
+      #
+      # An empty `publish` input puts the action in version-PR-only mode, so
+      # the guard below disables publishing until the first real version bump
+      # and then gets out of the way permanently.
+      - name: Decide whether publishing is allowed
+        id: gate
+        run: |
+          version="$(node -p "require('./packages/core/package.json').version")"
+          if [ "$version" = "0.0.0" ]; then
+            echo "publish=" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Publish skipped::packages are still at the 0.0.0 scaffold version"
+          else
+            echo "publish=pnpm release" >> "$GITHUB_OUTPUT"
+          fi
+
       # If there are changesets on main, this opens/updates a "Version Packages"
       # PR. When that PR is merged, this same workflow runs `pnpm release`
       # (build + `changeset publish`) and publishes to npm.
@@ -54,7 +81,7 @@ jobs:
         uses: changesets/action@v1
         with:
           version: pnpm version-packages
-          publish: pnpm release
+          publish: ${{ steps.gate.outputs.publish }}
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
         env:

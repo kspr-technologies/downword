@@ -33,21 +33,30 @@ pnpm install
 
 All of these run from the repository root.
 
-| Command              | What it does                                                        |
-| -------------------- | ------------------------------------------------------------------- |
-| `pnpm build`         | `tsup` build of every package in `packages/*` (ESM + CJS + `.d.ts`) |
-| `pnpm test`          | `vitest run` in every package                                       |
-| `pnpm test:watch`    | `vitest` in watch mode, all packages in parallel                    |
-| `pnpm typecheck`     | `tsc --noEmit` per package                                          |
-| `pnpm lint`          | ESLint flat config over the whole repo                              |
-| `pnpm lint:fix`      | …with `--fix`                                                       |
-| `pnpm format`        | Prettier write                                                      |
-| `pnpm format:check`  | Prettier check (what CI would run)                                  |
-| `pnpm size`          | `size-limit` budget for `packages/core`                             |
-| `pnpm examples`      | Runs both examples; the dual ESM/CJS smoke test                     |
-| `pnpm docx:validity` | The LibreOffice `.docx` gate (`scripts/docx-validity.mjs`)          |
-| `pnpm changeset`     | Records a changeset for the next release                            |
-| `pnpm release`       | Build + `changeset publish` (CI only)                               |
+| Command                 | What it does                                                        |
+| ----------------------- | ------------------------------------------------------------------- |
+| `pnpm build`            | `tsup` build of every package in `packages/*` (ESM + CJS + `.d.ts`) |
+| `pnpm test`             | `vitest run` in every package                                       |
+| `pnpm test:watch`       | `vitest` in watch mode, all packages in parallel                    |
+| `pnpm typecheck`        | `tsc --noEmit` per package                                          |
+| `pnpm lint`             | ESLint flat config over the whole repo                              |
+| `pnpm lint:fix`         | …with `--fix`                                                       |
+| `pnpm format`           | Prettier write                                                      |
+| `pnpm format:check`     | Prettier check (what CI would run)                                  |
+| `pnpm size`             | `size-limit` budget for `packages/core`                             |
+| `pnpm examples`         | Runs both examples; the dual ESM/CJS smoke test                     |
+| `pnpm docx:validity`    | The LibreOffice `.docx` gate (`scripts/docx-validity.mjs`)          |
+| `pnpm changeset`        | Records a changeset for the next release                            |
+| `pnpm version-packages` | `changeset version` — applies pending changesets (CI only)          |
+| `pnpm release`          | Build + `changeset publish` (CI only)                               |
+
+That is every script in the root `package.json`. Two more helpers are run
+directly by CI rather than through a script:
+
+```sh
+node scripts/docx-validity.mjs --require-soffice   # `pnpm docx:validity`, but strict
+node scripts/pack-smoke.mjs                        # pack the tarball, import it as ESM + CJS
+```
 
 Scoping to one package:
 
@@ -85,7 +94,9 @@ examples/basic-node/      # ESM consumer  (`import`)
 examples/basic-cjs/       # CJS consumer  (`require`)
 
 scripts/docx-validity.mjs # LibreOffice validity gate (T0.4)
-.github/workflows/ci.yml  # lint → typecheck → test → build → size, pack smoke, docx gate
+scripts/pack-smoke.mjs    # packs the tarball and consumes it as ESM + CJS
+.github/workflows/ci.yml  # lint → typecheck → test → build → examples → size,
+                          #   plus the pack smoke and docx gate jobs
 ```
 
 ## 4. Adding a renderer node type
@@ -200,6 +211,18 @@ hard failure. The gate also runs a **negative control** against
 `packages/core/tests/__fixtures__/corrupt/corrupt.docx`; if that file ever
 converts successfully, the gate reports itself as broken and CI fails.
 
+The negative control forces LibreOffice's `MS Word 2007 XML` import filter,
+because otherwise LibreOffice sniffs the content, falls back to its plain text
+filter and "converts" the fixture anyway. A **positive control** runs that same
+forced filter against a known-good `.docx` first: if the filter is ever renamed
+or missing, the negative control would "refuse" everything for the wrong reason,
+so the gate fails loudly instead of quietly proving nothing.
+
+Every conversion writes to its own temporary directory. LibreOffice names its
+output after the input's basename and sometimes exits `0` while producing
+nothing, so sharing one directory would let a leftover PDF from a same-named
+file turn a failure into a pass.
+
 ## 7. Commit, changesets and releases
 
 - Commit messages: [Conventional Commits](https://www.conventionalcommits.org/)
@@ -218,6 +241,15 @@ converts successfully, the gate reports itself as broken and CI fails.
   npm with **provenance** (`id-token: write` + `npm publish --provenance`).
   Provenance is deliberately _not_ set in `.npmrc`, because that would break
   local `pnpm pack` outside a CI OIDC context.
+
+- **Nothing publishes while the packages are on version `0.0.0`.**
+  `changesets/action` runs its publish script on any push to `main` with no
+  pending changesets, and `changeset publish` has no special case for `0.0.0` —
+  it only skips `private` packages and versions already on the registry. The
+  `Decide whether publishing is allowed` step in `release.yml` therefore blanks
+  out the publish script until the first real version bump. Remove nothing: the
+  guard disarms itself as soon as `packages/core/package.json#version` moves off
+  `0.0.0`.
 
 ## 8. Pull requests
 
