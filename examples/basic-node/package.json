@@ -1,0 +1,14 @@
+{
+  "name": "@downword/example-basic-node",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ESM smoke test: import downword and write out.docx.",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "downword": "workspace:*"
+  }
+}

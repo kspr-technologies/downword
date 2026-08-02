@@ -1,0 +1,154 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PNPM_VERSION: "10.33.0"
+
+jobs:
+  verify:
+    name: verify (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.33.0"
+
+      - name: Set up Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Examples (ESM + CJS dual-format smoke test)
+        run: pnpm examples
+
+      # size-limit@13 declares engines.node ^22.18.0 || ^24 || >=26, so the
+      # budget check only runs on the Node 22 leg.
+      - name: Size budget
+        if: matrix.node == 22
+        run: pnpm size
+
+  pack-smoke:
+    name: pack smoke (tarball, ESM + CJS)
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.33.0"
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Packs packages/core, installs the tarball into a scratch project
+      # outside the workspace, then imports it as ESM and requires it as CJS,
+      # asserting the export shape and that every path in the exports map
+      # actually shipped.
+      - name: Pack and consume the tarball
+        run: node scripts/pack-smoke.mjs
+
+  docx-validity:
+    name: docx validity gate (LibreOffice)
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.33.0"
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install LibreOffice (headless)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-writer libreoffice-core
+          soffice --version
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate .docx fixtures
+        run: |
+          pnpm test
+          pnpm build
+          pnpm examples
+
+      # Converts every generated .docx to PDF with headless LibreOffice and
+      # fails if any conversion errors or produces no readable PDF. Also runs a
+      # negative control against tests/__fixtures__/corrupt/corrupt.docx: if
+      # that converts successfully the gate is broken and this job fails.
+      # --require-soffice turns a missing LibreOffice into a hard failure.
+      - name: Run the validity gate
+        run: node scripts/docx-validity.mjs --require-soffice
+
+      - name: Upload fixtures on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docx-fixtures
+          path: |
+            packages/*/tests/__fixtures__/out/*.docx
+            examples/*/out/*.docx
+          if-no-files-found: ignore
+          retention-days: 7
+
+  ci-ok:
+    name: CI green
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [verify, pack-smoke, docx-validity]
+    steps:
+      - name: Fail if any required job failed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - run: echo "All CI jobs passed."

@@ -1,0 +1,14 @@
+{
+  "name": "@downword/example-basic-cjs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "description": "CommonJS smoke test: require() downword and write out.docx.",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.cjs"
+  },
+  "dependencies": {
+    "downword": "workspace:*"
+  }
+}

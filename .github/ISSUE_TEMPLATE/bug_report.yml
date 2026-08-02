@@ -1,0 +1,120 @@
+name: Bug report
+description: Something converted wrong, crashed, or produced a document Word dislikes.
+title: "[bug]: "
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Conversion bugs are almost impossible to fix
+        without the exact input, so please fill in every required field —
+        especially the markdown and the generated `.docx`.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight
+      options:
+        - label: I searched [existing issues](https://github.com/kspr-technologies/downword/issues?q=is%3Aissue) and this is not a duplicate.
+          required: true
+        - label: I am using the latest released version of downword.
+          required: true
+
+  - type: textarea
+    id: input-markdown
+    attributes:
+      label: Input markdown
+      description: >
+        The **smallest** markdown that reproduces the problem. Paste it verbatim —
+        do not re-type or reformat it, whitespace matters.
+      render: markdown
+      placeholder: |
+        # Heading
+
+        | a | b |
+        | - | - |
+        | 1 | 2 |
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What should the Word document look like?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: >
+        What you got instead. Include the exact error message and stack trace if
+        it threw, and a screenshot of the document if it rendered wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: attachment
+    attributes:
+      label: Generated .docx
+      description: >
+        **Required.** Drag the generated `.docx` into this box to attach it.
+        GitHub does not accept `.docx` directly — zip it first
+        (`zip out.zip out.docx`). If you cannot share the file, say so here and
+        explain why.
+      placeholder: "Attach out.zip here (drag and drop)."
+    validations:
+      required: true
+
+  - type: input
+    id: word-version
+    attributes:
+      label: Word / viewer version
+      description: >
+        Which application opened the document, and which version? e.g.
+        "Microsoft Word for Microsoft 365, 2508 (Build 19127.20222)",
+        "Word for Mac 16.89", "LibreOffice Writer 25.2", "Google Docs".
+      placeholder: "Microsoft Word for Microsoft 365 (Build 19127.20222)"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "Windows 11 24H2 / macOS 15.5 / Ubuntu 24.04"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Where did you run downword?
+      multiple: true
+      options:
+        - Browser (bundled with Vite/webpack/etc.)
+        - Browser (the hosted downword app)
+        - Node.js
+        - downword-cli
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: downword and runtime versions
+      description: Output of `npm ls downword` plus `node -v` (or your browser version).
+      placeholder: "downword@0.1.0, node v22.19.0, Chrome 140"
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Plugins enabled, bundler config, workarounds you tried.
+    validations:
+      required: false

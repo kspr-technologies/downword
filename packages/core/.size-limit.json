@@ -1,0 +1,10 @@
+[
+  {
+    "name": "downword (ESM, excluding the docx OOXML writer)",
+    "path": "dist/index.js",
+    "import": "{ convert }",
+    "ignore": ["docx"],
+    "limit": "150 kB",
+    "gzip": true
+  }
+]

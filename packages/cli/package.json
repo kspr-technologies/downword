@@ -1,0 +1,63 @@
+{
+  "name": "downword-cli",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Command line interface for downword - Markdown to Word (.docx).",
+  "keywords": [
+    "markdown",
+    "docx",
+    "word",
+    "cli",
+    "converter"
+  ],
+  "license": "MIT",
+  "author": "KSPR Technologies",
+  "homepage": "https://github.com/kspr-technologies/downword#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kspr-technologies/downword.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/kspr-technologies/downword/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "downword": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "downword": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "tsup": "8.5.1",
+    "typescript": "^5",
+    "vitest": "4.1.10"
+  }
+}

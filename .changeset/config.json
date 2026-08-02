@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "kspr-technologies/downword" }],
+  "commit": false,
+  "fixed": [["downword", "downword-cli"]],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@downword/example-basic-node", "@downword/example-basic-cjs"],
+  "privatePackages": { "version": false, "tag": false }
+}

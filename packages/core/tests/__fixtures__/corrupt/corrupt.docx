@@ -1,0 +1,6 @@
+This is deliberately NOT a docx.
+
+It is a plain text file with a .docx extension, committed on purpose as a
+negative control for the LibreOffice validity gate (scripts/docx-validity.mjs).
+If the gate ever reports this file as a valid, convertible Word document, the
+gate is broken and CI must fail.

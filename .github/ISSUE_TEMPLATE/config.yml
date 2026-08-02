@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or usage help
+    url: https://github.com/kspr-technologies/downword/discussions
+    about: Ask how to do something with downword. Please do not open an issue for questions.
+  - name: Report a security vulnerability
+    url: https://github.com/kspr-technologies/downword/security/advisories/new
+    about: Report privately. Never open a public issue for a security problem.
+  - name: Code of Conduct
+    url: https://github.com/kspr-technologies/downword/blob/main/CODE_OF_CONDUCT.md
+    about: How we expect everyone to behave here.

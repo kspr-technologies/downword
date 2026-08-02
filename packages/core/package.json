@@ -1,0 +1,109 @@
+{
+  "name": "downword",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Markdown to Word (.docx) converter that runs entirely in your browser. Paste from ChatGPT/Claude, get a real Word document.",
+  "keywords": [
+    "markdown",
+    "docx",
+    "word",
+    "converter",
+    "office",
+    "ooxml",
+    "browser",
+    "chatgpt",
+    "claude"
+  ],
+  "license": "MIT",
+  "author": "KSPR Technologies",
+  "homepage": "https://github.com/kspr-technologies/downword#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kspr-technologies/downword.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/kspr-technologies/downword/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./plugins/math": {
+      "import": {
+        "types": "./dist/plugins/math.d.ts",
+        "default": "./dist/plugins/math.js"
+      },
+      "require": {
+        "types": "./dist/plugins/math.d.cts",
+        "default": "./dist/plugins/math.cjs"
+      }
+    },
+    "./plugins/mermaid": {
+      "import": {
+        "types": "./dist/plugins/mermaid.d.ts",
+        "default": "./dist/plugins/mermaid.js"
+      },
+      "require": {
+        "types": "./dist/plugins/mermaid.d.cts",
+        "default": "./dist/plugins/mermaid.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "size": "size-limit",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "docx": "9.7.1",
+    "markdown-it": "15.0.0",
+    "markdown-it-footnote": "4.0.0",
+    "markdown-it-task-lists": "2.1.1"
+  },
+  "peerDependencies": {
+    "highlight.js": "^11"
+  },
+  "peerDependenciesMeta": {
+    "highlight.js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "13.0.3",
+    "@types/markdown-it": "^14",
+    "@types/node": "^22",
+    "highlight.js": "^11",
+    "jszip": "3.10.1",
+    "size-limit": "13.0.3",
+    "tsup": "8.5.1",
+    "typescript": "^5",
+    "vitest": "4.1.10"
+  }
+}

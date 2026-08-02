@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+pnpm-lock.yaml
+*.tgz
+
+# Generated + golden artifacts must stay byte-stable; never reformat them.
+packages/*/tests/__snapshots__/
+packages/*/tests/**/__snapshots__/
+packages/*/tests/__fixtures__/
+examples/*/out/
+.changeset/*.md
+CHANGELOG.md
+packages/*/CHANGELOG.md

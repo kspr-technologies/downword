@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`downword CLI > prints help and exits 0 > --help 1`] = `
+"downword - Markdown to Word (.docx)
+
+Usage:
+  downword [options] <input.md>
+
+Options:
+  -o, --output <file>   Write the .docx here (default: alongside the input)
+  -v, --version         Print the version and exit
+  -h, --help            Print this help and exit
+
+Status:
+  This is the T0 scaffold. Conversion is not wired into the CLI yet;
+  only --help and --version do anything today.
+
+Docs:  https://github.com/kspr-technologies/downword
+"
+`;
