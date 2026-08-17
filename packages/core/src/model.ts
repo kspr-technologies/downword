@@ -229,10 +229,15 @@ export interface ImageNode extends InlineNodeBase {
 /**
  * Raw inline HTML (markdown-it's `html_inline`), e.g. `<br>`, `<sub>`, `<img>`.
  *
- * Modelled explicitly so the drop/keep decision is *visible* in the pipeline
- * rather than silently made by the parser. The v1 renderer policy is to drop
- * the markup and emit a warning; keeping the node means that policy lives in
- * one place and can be changed without touching the parser.
+ * Modelled explicitly so the escape/keep/drop decision is *visible* in the
+ * pipeline rather than silently made by the parser. Keeping the node means
+ * that policy lives in one place and can be changed without touching the
+ * parser.
+ *
+ * A node of this type only ever exists when {@link ConvertOptions.html} is
+ * `"keep"` or `"drop"`, both of which emit a warning. Under the default,
+ * `"escape"`, markdown-it never produces an HTML token at all: the angle
+ * brackets survive as literal text and nothing reaches this interface.
  */
 export interface HtmlInlineNode extends InlineNodeBase {
   readonly type: "htmlInline";
