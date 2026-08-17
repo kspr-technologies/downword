@@ -52,9 +52,9 @@ import { paragraphs, pStyle, textOf } from "./helpers/xml.js";
  *   image pipeline already defines for SVG, not one invented for the test.
  * - The **real Node path**: no stubs at all, real defaults, no DOM. It warns
  *   and degrades, and the fence survives into the document.
- * - The **real dynamic import** of the optional peer dependency, failing
- *   because mermaid is not installed — which is exactly what a browser with a
- *   missing dependency does.
+ * - The **real dynamic import** of the optional peer dependency, failing at
+ *   module evaluation in a runtime with no `window` — the same one-fact-per-run
+ *   path a browser with a missing dependency takes.
  * - The canvas rasteriser's own logic (scale, clamping, background, export
  *   paths, error handling) against a stubbed `document`.
  *
@@ -469,7 +469,7 @@ describe("mermaid: no DOM (the real Node path, nothing stubbed)", () => {
   });
 });
 
-describe("mermaid: the engine is not installed (the real dynamic import)", () => {
+describe("mermaid: the engine cannot be loaded (the real dynamic import)", () => {
   /** Enough DOM for `detectDomSupport` to choose the real defaults. */
   function stubDom(): void {
     vi.stubGlobal("document", {
@@ -481,8 +481,12 @@ describe("mermaid: the engine is not installed (the real dynamic import)", () =>
 
   it("reports engine-unavailable once and stops, rather than failing per diagram", async () => {
     stubDom();
-    // mermaid is an optional peer dependency and is deliberately not installed
-    // in this repository, so `import("mermaid")` really does fail here.
+    // The real `import("mermaid")` is exercised here and really does fail, but
+    // *not* because the package is absent: pnpm's `autoInstallPeers` installs
+    // declared peers, so mermaid is present in this repository's node_modules.
+    // It fails at module evaluation with `ReferenceError: window is not
+    // defined` — `stubDom` supplies `document` and deliberately not `window`,
+    // which is a fair likeness of a worker, and is a load failure either way.
     const result = await renderMermaid(mermaidDoc(FLOWCHART, SEQUENCE, FLOWCHART));
 
     expect(codes(result.warnings)).toEqual(["engine-unavailable"]);

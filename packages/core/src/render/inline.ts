@@ -260,8 +260,13 @@ function imageOptions(
 
   // `alt`, `title` and `src` all reach `docProps`/`wp:docPr` attributes, which
   // are XML like everything else; see `render/text.ts`.
+  //
+  // `id` is supplied rather than left to docx: its `DocProperties` mints one
+  // from a counter it builds *per instance*, so every drawing in the document
+  // would come out as `wp:docPr id="1"`. See `RenderContext.nextDrawingId`.
   const alt = safeText(node.alt, ctx);
   const altText = {
+    id: String(ctx.nextDrawingId()),
     name: alt !== "" ? alt : "image",
     ...(alt !== "" ? { description: alt } : {}),
     ...(node.title !== null ? { title: safeText(node.title, ctx) } : {}),

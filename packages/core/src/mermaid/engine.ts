@@ -133,14 +133,28 @@ const DEFAULT_CONFIG: MermaidConfig = { startOnLoad: false, securityLevel: "stri
  */
 export const MERMAID_ENGINE_ERROR = "MermaidEngineUnavailableError";
 
-/** Wraps whatever the loader threw in a marked, readable error. */
-export function engineUnavailableError(cause: unknown): Error {
+/**
+ * Which step of bringing the engine up failed.
+ *
+ * Both are one fact about the whole run, so both stop the pass — but they ask
+ * the reader to do opposite things, and saying the wrong one wastes their time.
+ * `"load"` means the module never arrived, so "install mermaid" is the fix.
+ * `"initialize"` means it arrived and then rejected the configuration or the
+ * document it was given; telling someone to install a package they demonstrably
+ * already have is worse than saying nothing.
+ */
+export type EngineFailureStage = "load" | "initialize";
+
+/** Wraps whatever the loader or `initialize` threw in a marked, readable error. */
+export function engineUnavailableError(cause: unknown, stage: EngineFailureStage = "load"): Error {
   const detail = cause instanceof Error ? cause.message : String(cause);
-  const error = new Error(
-    `mermaid could not be loaded (${detail}). It is an optional peer dependency: ` +
-      `install it with \`npm install mermaid\`, or pass your own renderer.`,
-    { cause },
-  );
+  const message =
+    stage === "load"
+      ? `mermaid could not be loaded (${detail}). It is an optional peer dependency: ` +
+        `install it with \`npm install mermaid\`, or pass your own renderer.`
+      : `mermaid was loaded but could not be initialised (${detail}). This is usually a ` +
+        `bad \`config\`, or a DOM it cannot use; pass your own renderer to take over.`;
+  const error = new Error(message, { cause });
   error.name = MERMAID_ENGINE_ERROR;
   return error;
 }
@@ -194,14 +208,27 @@ export function createBrowserMermaidRenderer(
   const ready = (): Promise<MermaidApi> => {
     if (engine === null) {
       engine = (async () => {
-        const api = unwrapMermaid(await load());
-        api.initialize(config);
+        // The two steps are wrapped separately so the diagnostic can name the
+        // one that actually failed. Reporting "install mermaid" at a host whose
+        // mermaid loaded perfectly well and then threw inside `initialize` sends
+        // them after the wrong bug.
+        let api: MermaidApi;
+        try {
+          api = unwrapMermaid(await load());
+        } catch (error: unknown) {
+          throw engineUnavailableError(error, "load");
+        }
+        try {
+          api.initialize(config);
+        } catch (error: unknown) {
+          throw engineUnavailableError(error, "initialize");
+        }
         return api;
       })().catch((error: unknown) => {
-        // Do not cache a failed load: a host that installs mermaid and retries
-        // (or one whose CDN blipped) should get a second chance.
+        // Do not cache a failure: a host that installs mermaid and retries (or
+        // one whose CDN blipped) should get a second chance.
         engine = null;
-        throw engineUnavailableError(error);
+        throw error;
       });
     }
     return engine;

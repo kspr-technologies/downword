@@ -110,7 +110,7 @@ import assert from "node:assert/strict";
 import * as downword from "downword";
 import { createHighlighter } from "downword/highlight";
 import { createNodeImageResolver } from "downword/images/node";
-import { mathPlugin } from "downword/plugins/math";
+import { convertWithMath, mathPlugin } from "downword/plugins/math";
 import { renderMermaid, countMermaidDiagrams } from "downword/plugins/mermaid";
 
 const required = ${JSON.stringify(REQUIRED_EXPORTS)};
@@ -150,7 +150,40 @@ assert.deepEqual(warnings, [], "clean markdown must not warn");
 const blob = await downword.convertToBlob("# Hello");
 assert.equal(blob.type, downword.DOCX_MIME_TYPE, "convertToBlob must tag the mime type");
 
-console.log("[esm] ok - downword@" + downword.VERSION + ", " + bytes.byteLength + " bytes");
+// Both plugin entries are *driven*, not merely imported. This scratch project
+// deliberately has neither temml/mathml2omml nor a DOM, so it pins the
+// documented degradation: an equation becomes its TeX source and a diagram
+// stays a code block, and in both cases a real .docx still comes out.
+const mathWarnings = [];
+const mathBytes = await convertWithMath("# Math\\n\\nInline $E=mc^2$ and:\\n\\n$$\\\\frac{1}{3}$$\\n", {
+  math: { onWarning: (warning) => mathWarnings.push(warning.code) },
+});
+assert.deepEqual([...mathBytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "math docx must be a zip");
+assert.ok(mathBytes.byteLength > 1000, "math docx looks too small");
+assert.ok(
+  mathWarnings.includes("engine-unavailable"),
+  "without temml/mathml2omml the math plugin must say so, not fail silently: " +
+    JSON.stringify(mathWarnings),
+);
+
+const parsed = downword.parseMarkdown("# Diagram\\n\\n\`\`\`mermaid\\nflowchart LR\\n  A --> B\\n\`\`\`\\n");
+assert.equal(countMermaidDiagrams(parsed), 1, "the fence must be seen as a diagram");
+const rendered = await renderMermaid(parsed);
+assert.equal(rendered.rendered, 0, "no DOM here, so nothing may render");
+assert.deepEqual(
+  rendered.warnings.map((warning) => warning.code),
+  ["no-dom"],
+  "a DOM-less runtime must report exactly no-dom",
+);
+const mermaidBytes = await downword.convert(
+  "# Diagram\\n\\n\`\`\`mermaid\\nflowchart LR\\n  A --> B\\n\`\`\`\\n",
+);
+assert.deepEqual([...mermaidBytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "mermaid docx is a zip");
+
+console.log(
+  "[esm] ok - downword@" + downword.VERSION + ", " + bytes.byteLength + " bytes; " +
+    "math " + mathBytes.byteLength + " bytes, mermaid " + mermaidBytes.byteLength + " bytes",
+);
 `;
 
 const CJS_CHECK = `
@@ -189,17 +222,38 @@ assert.equal(
   "downword/plugins/mermaid must export renderMermaid",
 );
 
-downword
-  .convert("# Hello\\n\\nfrom require().")
-  .then((bytes) => {
-    assert.ok(bytes instanceof Uint8Array, "convert must resolve to a Uint8Array");
-    assert.deepEqual([...bytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "must be a zip");
-    console.log("[cjs] ok - downword@" + downword.VERSION + ", " + bytes.byteLength + " bytes");
-  })
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+async function main() {
+  const bytes = await downword.convert("# Hello\\n\\nfrom require().");
+  assert.ok(bytes instanceof Uint8Array, "convert must resolve to a Uint8Array");
+  assert.deepEqual([...bytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "must be a zip");
+
+  // The same two plugin entries, driven through require(). A subpath that
+  // resolves under import but not under require is a real and common packaging
+  // bug, and importing without calling would not catch a broken interop shape.
+  const mathBytes = await math.convertWithMath("# Math\\n\\n$E=mc^2$\\n");
+  assert.deepEqual([...mathBytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "math docx must be a zip");
+
+  const parsed = downword.parseMarkdown(
+    "# Diagram\\n\\n\`\`\`mermaid\\nflowchart LR\\n  A --> B\\n\`\`\`\\n",
+  );
+  assert.equal(mermaid.countMermaidDiagrams(parsed), 1, "the fence must be seen as a diagram");
+  const rendered = await mermaid.renderMermaid(parsed);
+  assert.deepEqual(
+    rendered.warnings.map((warning) => warning.code),
+    ["no-dom"],
+    "a DOM-less runtime must report exactly no-dom",
+  );
+
+  console.log(
+    "[cjs] ok - downword@" + downword.VERSION + ", " + bytes.byteLength + " bytes; " +
+      "math " + mathBytes.byteLength + " bytes",
+  );
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
 `;
 
 const TYPES_CHECK = `

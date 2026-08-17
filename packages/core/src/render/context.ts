@@ -162,6 +162,18 @@ export interface RenderContext {
    * by every heading rather than only once that feature lands.
    */
   readonly nextBookmarkId: () => number;
+  /**
+   * Allocates the next unused `wp:docPr/@id` for a drawing.
+   *
+   * Exactly the {@link RenderContext.nextBookmarkId} story, in a second id
+   * space. `wp:docPr/@id` is an `ST_DrawingElementId` that must be unique
+   * across the document, and docx 9.7.1 builds its `DocProperties` counter
+   * *inside the constructor* (`docPropertiesUniqueNumericIdGen()`), so every
+   * drawing it numbers for itself comes out as `id="1"`. Two pictures in one
+   * document is enough to hit it, and a `mermaid` pass that turns fences into
+   * pictures makes it the common case — so the renderer supplies the id.
+   */
+  readonly nextDrawingId: () => number;
   /** The document's footnotes; see {@link FootnoteIndex}. */
   readonly footnotes: FootnoteIndex;
   readonly highlights: HighlightMap | null;

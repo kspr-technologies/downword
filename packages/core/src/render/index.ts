@@ -394,23 +394,37 @@ function toBookmarkName(slug: string, used: Set<string>): string {
 const FIRST_BOOKMARK_ID = 1;
 
 /**
- * The document's one bookmark-id counter.
+ * The first `wp:docPr/@id` a drawing may take.
  *
- * §17.13.6.2 requires `CT_Bookmark/@w:id` to be unique within the part: it is
- * what pairs a `<w:bookmarkStart>` with its `<w:bookmarkEnd>`, and what Word's
- * Bookmarks dialog, `REF` cross-references and `TOC` fields address a heading
- * by. docx's own `Bookmark` allocates from a counter it creates *per instance*
- * and therefore stamps `w:id="1"` on every bookmark in the document (9.7.1,
- * `bookmarkUniqueNumericIdGen()` inside the constructor) — which is why the
- * renderer writes `BookmarkStart`/`BookmarkEnd` itself.
- *
- * One allocator per `renderDocument` call, and deliberately the *same function
- * object* the heading pre-pass and {@link RenderContext.nextBookmarkId} both
- * call: there is exactly one code path minting ids, so every heading in every
- * test exercises the seam a Phase 2 `TOC` field or cross-reference will use.
+ * `ST_DrawingElementId` is an `xsd:unsignedInt`; Word numbers its own drawings
+ * from 1, and matching that keeps a generated file unremarkable to a reader.
  */
-function createBookmarkAllocator(): () => number {
-  let next = FIRST_BOOKMARK_ID;
+const FIRST_DRAWING_ID = 1;
+
+/**
+ * A monotonic id counter, one per `renderDocument` call.
+ *
+ * Two OOXML id spaces need this and both need it for the *same* reason, which
+ * is worth stating once: docx 9.7.1 builds its unique-id generators **inside
+ * the constructor** of the component that uses them, so each instance gets a
+ * fresh counter and every element it numbers comes out as `1`.
+ *
+ * - `CT_Bookmark/@w:id` (§17.13.6.2) must be unique within the part — it pairs
+ *   a `<w:bookmarkStart>` with its `<w:bookmarkEnd>` and is what Word's
+ *   Bookmarks dialog, `REF` cross-references and `TOC` fields address a heading
+ *   by. docx's `bookmarkUniqueNumericIdGen()` has the flaw, which is why the
+ *   renderer writes `BookmarkStart`/`BookmarkEnd` itself.
+ * - `wp:docPr/@id` must be unique across the document. docx's
+ *   `docPropertiesUniqueNumericIdGen()` has it too, so two pictures both come
+ *   out as `id="1"`; the renderer therefore passes `altText.id` explicitly.
+ *
+ * Each allocator is deliberately shared as the *same function object* by every
+ * site that mints from its space — the heading pre-pass and
+ * {@link RenderContext.nextBookmarkId} draw from one counter, not two — so a
+ * feature that invents an id cannot collide with one that already existed.
+ */
+function createIdAllocator(first: number): () => number {
+  let next = first;
   return () => {
     const id = next;
     next += 1;
@@ -711,7 +725,8 @@ export function renderDocument(doc: DocumentNode, options: RenderOptions = {}): 
   const resolved = resolveOptions(options);
   const onWarning = options.onWarning;
 
-  const nextBookmarkId = createBookmarkAllocator();
+  const nextBookmarkId = createIdAllocator(FIRST_BOOKMARK_ID);
+  const nextDrawingId = createIdAllocator(FIRST_DRAWING_ID);
   // Degradations that are a property of the *document* rather than of one node
   // report once: a 30-level list would otherwise raise twenty identical
   // `indent-clamped` notices and drown everything else in the stream.
@@ -731,6 +746,7 @@ export function renderDocument(doc: DocumentNode, options: RenderOptions = {}): 
     numbering: createNumberingRegistry(theme),
     bookmarks: buildBookmarks(doc, nextBookmarkId),
     nextBookmarkId,
+    nextDrawingId,
     // Built before anything is rendered, for the same reason the bookmark table
     // is: the first `[^x]` in the document has to know whether the definition
     // that answers it exists, and it may well be written below.
