@@ -1,7 +1,18 @@
 # downword
 
-> Markdown to Word (.docx) converter that runs entirely in your browser.
+**Your LLM answers in markdown. The person who asked for it wants a Word document.**
+
+> markdown → Word (`.docx`), entirely in your browser.
 > Paste from ChatGPT/Claude, get a real Word document.
+
+[![CI](https://github.com/kspr-technologies/downword/actions/workflows/ci.yml/badge.svg)](https://github.com/kspr-technologies/downword/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/downword?color=cb3837&logo=npm&label=npm)](https://www.npmjs.com/package/downword)
+[![core bundle](https://img.shields.io/badge/core-74.2%20kB%20min%2Bgzip-1f6feb)](.size-limit.json)
+[![license](https://img.shields.io/badge/license-MIT-1f6feb)](../../LICENSE)
+
+Nothing to install, if you only want the output:
+**[the hosted web tool](https://ksprtech.com/tools/markdown-to-word?utm_source=github&utm_medium=readme)**
+is this library running in your browser tab.
 
 Every "markdown to Word" tool either uploads your document to somebody's server
 or hands you an HTML file with a `.doc` extension that Word complains about.
@@ -499,12 +510,83 @@ console.log(outline); // [{ level: 1, id: "title" }, { level: 2, id: "section" }
 const bytes = new Uint8Array(await Packer.toArrayBuffer(renderDocument(document)));
 ```
 
+## Limitations
+
+Every item here is measured or reproduced, not guessed. Several are properties
+of OOXML or of the web rather than bugs, but they will all surprise somebody, so
+they are written down.
+
+**Remote images fail on many hosts, by design of the web.** `allowRemoteImages:
+true` turns egress on, but in a browser that is a cross-origin `fetch`, and a
+host that does not send `Access-Control-Allow-Origin` refuses it — which plenty
+of image hosts and CDNs do not send. `fetch` rejects with a deliberately vague
+`TypeError` in that case, so downword cannot even report that it was CORS
+specifically. The image degrades to a visible placeholder and one `error`
+warning; the document is never lost. Node has no CORS, so `downword/images/node`
+and the CLI are unaffected, subject to their SSRF guard.
+
+**`convert()` is not byte-reproducible.** See
+[The two-stage pipeline](#the-two-stage-pipeline) above: the reproducible unit is
+the part, not the package. Same markdown, two runs, two different files.
+
+**Packing is super-linear.** Measured on Node 22.19 (Apple silicon) over a mixed
+prose/list/table corpus:
+
+| Markdown | `parseMarkdown` | `renderDocument` | **pack** | total   |
+| -------- | --------------- | ---------------- | -------- | ------- |
+| 1 MB     | 0.28 s          | 0.41 s           | 2.1 s    | 2.6 s   |
+| 2 MB     | 0.50 s          | 0.62 s           | 6.5 s    | 7.3 s   |
+| 4 MB     | 0.96 s          | 1.13 s           | 24.9 s   | 26.1 s  |
+| 8 MB     | —               | —                | —        | **OOM** |
+
+Both exported stages are linear and cheap. `Packer.toArrayBuffer` — `docx`'s own
+XML serialisation and zipping — dominates and grows roughly as n^1.8, and at
+8 MB it exhausts Node's default heap (~4.3 GB on that machine). ~2 MB is
+comfortable; past 4 MB you want `--max-old-space-size`. Absolute times are
+machine-dependent, the shape of the curve is not. In a browser, convert in a
+worker so the tab stays responsive.
+
+**`math: "image"` needs a rasterizer you supply**, because turning MathML into
+pixels needs a layout engine and this package does not contain one. Without one
+it reports `image-no-rasterizer` and falls back to OMML rather than pretending.
+
+**N-ary operators (∫, ∑) draw an empty placeholder box.** `$\int_0^1 x^2 dx$`
+yields an `<m:nary>` whose body `<m:e/>` is empty, with the integrand following
+as a sibling, so readers show the dotted "empty slot" box after the operator.
+The equation is complete and fully editable; the box is cosmetic. The cause is
+upstream — `temml` emits `<msubsup>` plus siblings, and `mathml2omml` has nothing
+to hoist into `<m:e>`.
+
+**Mermaid needs a browser.** In Node the fence survives as a code block and the
+pass raises one `no-dom` notice. See [Diagrams (mermaid)](#diagrams-mermaid).
+
+**The TOC field arrives empty** until the reader updates it. See
+[Table of contents](#table-of-contents).
+
+**Raw HTML has no lossless answer** — only the three honest ones under
+[Raw HTML](#raw-html).
+
+## Fidelity
+
+CI opens every generated `.docx` with headless LibreOffice and converts it to
+PDF, with a positive control on the import filter and a negative control on a
+deliberately corrupt file. That proves the container is well-formed and that one
+real implementation parses it end to end — **not** that a heading looks like a
+heading or that an equation typesets.
+
+How the output actually renders in Word (Windows, Mac, Online), Google Docs,
+LibreOffice Writer and Apple Pages is tracked in
+[docs/fidelity-matrix.md](https://github.com/kspr-technologies/downword/blob/main/docs/fidelity-matrix.md).
+Every cell there is currently marked "awaiting manual verification", because it
+is: the library has never been opened in Microsoft Word.
+
 ## Size and support
 
-The whole public surface of the `.` entry is **under 70 kB min+gzip** excluding
+The whole public surface of the `.` entry is **74.2 kB min+gzip** excluding
 `docx`, against a **150 kB** budget enforced in CI by `size-limit`. `docx`
-itself adds ~102 kB gzip and is budgeted separately: it is a pre-bundled,
-non-tree-shakeable blob, so no amount of care here shrinks it.
+itself adds ~110 kB gzip — the same entry measured _including_ it comes to
+184.7 kB — and is budgeted separately, because it is a pre-bundled,
+non-tree-shakeable blob that no amount of care here shrinks.
 
 Nothing heavy is reachable from the main entry — highlight.js, and later
 `temml` and `mermaid`, all live behind subpath exports. That is not a promise:

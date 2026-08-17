@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import ts from "typescript";
@@ -248,4 +248,66 @@ describe("README samples", () => {
       expect(targets[0]).toMatch(/[/\\]dist[/\\].*\.d\.ts$/);
     }
   });
+});
+
+/**
+ * Relative links in the READMEs point at files that exist.
+ *
+ * A README is a landing page, and a 404 on it costs more credibility than a
+ * typo in the prose. Nothing else in the suite reads the prose, so a renamed
+ * `docs/` file or a moved package would otherwise go unnoticed until a reader
+ * clicked it.
+ *
+ * Scope is deliberately narrow: inline `[text](target)` links to paths on disk.
+ * Absolute URLs are somebody else's uptime, and `#anchor` fragments would need
+ * this test to reimplement GitHub's heading-slug rules — a second, subtly
+ * different implementation of which is a worse bug than the one it catches.
+ */
+describe("README links", () => {
+  /** `[text](target)`, ignoring the `!` of an image and any `"title"` suffix. */
+  const INLINE_LINK = /\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+
+  /**
+   * Removes everything that *looks* like a link but is not one.
+   *
+   * Three sources of false positives, all of them present in these files: an
+   * HTML comment (the hero-GIF TODO names a path that does not exist yet, on
+   * purpose), a fenced block (sample code contains markdown), and an inline
+   * code span (the conversion table documents `[text](url)` as syntax).
+   *
+   * Code spans are stripped **per line**, not across the whole file. Pairing
+   * backtick runs document-wide drifts the moment one line contains an odd
+   * number of them — ``` | `` `code` ``, ` ```lang ` | ``` does — after which a
+   * single "span" swallows the rest of the file and every real link with it.
+   * Fenced blocks are already gone by then, so nothing legitimate spans lines.
+   */
+  function stripNonLinks(markdown: string): string {
+    return markdown
+      .replace(/<!--[\s\S]*?-->/g, "")
+      .replace(/^(\s*)(`{3,})[\s\S]*?^\s*\2\s*$/gm, "")
+      .split("\n")
+      .map((line) => line.replace(/(`+)[^`]*?\1/g, ""))
+      .join("\n");
+  }
+
+  for (const { label, path } of READMES) {
+    it(`${label} has no broken relative links`, () => {
+      const markdown = stripNonLinks(readFileSync(path, "utf8"));
+      const base = dirname(path);
+      const broken: string[] = [];
+
+      for (const [, target] of markdown.matchAll(INLINE_LINK)) {
+        if (target === undefined) continue;
+        if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(target)) continue;
+
+        const [pathPart = ""] = target.split("#");
+        if (pathPart === "") continue;
+
+        const resolved = resolve(base, decodeURIComponent(pathPart));
+        if (!existsSync(resolved)) broken.push(`${target} -> ${resolved}`);
+      }
+
+      expect(broken, `${label} links to files that do not exist`).toEqual([]);
+    });
+  }
 });
