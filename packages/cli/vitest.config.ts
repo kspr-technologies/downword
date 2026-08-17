@@ -12,7 +12,10 @@ export default defineConfig({
   test: {
     include: ["tests/**/*.test.ts"],
     environment: "node",
-    // The CLI test builds the binary on demand (see tests/cli.test.ts).
+    // Every test file here drives the *built* binary, and CI runs `test` before
+    // `build`. The global setup builds `packages/core` and this package on
+    // demand — once per run, rather than once per worker.
+    globalSetup: ["./tests/global-setup.ts"],
     testTimeout: 120_000,
     hookTimeout: 120_000,
   },

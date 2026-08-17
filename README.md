@@ -9,9 +9,9 @@
      packages/core/tests/readme.test.ts. -->
 
 > [!WARNING]
-> **Status: pre-release.** The library is real and green — parser, renderer,
-> images, highlighting and the public API all land here — but nothing is
-> published to npm yet. Math (`downword/plugins/math`) produces native,
+> **Status: pre-release.** The library and the CLI are real and green — parser,
+> renderer, images, highlighting, the public API and the `downword` binary all
+> land here — but nothing is published to npm yet. Math (`downword/plugins/math`) produces native,
 > editable Word equations and needs two optional peer dependencies (`temml`,
 > `mathml2omml`). Mermaid diagrams (`downword/plugins/mermaid`) are real but
 > need a DOM: in Node they degrade to the fenced source plus a warning rather
@@ -61,6 +61,17 @@ const bytes = await convert("```ts\nconst x = 1;\n```", {
 ````
 
 Full API, options and behaviour: **[packages/core/README.md](packages/core/README.md)**.
+
+At the command line:
+
+```sh
+npx downword notes.md                        # -> notes.docx
+npx downword "docs/**/*.md" --outdir build/  # one .docx per file
+cat notes.md | npx downword > notes.docx     # stdin -> stdout
+```
+
+Flags, defaults and exit codes:
+**[packages/cli/README.md](packages/cli/README.md)**.
 
 ## Why
 

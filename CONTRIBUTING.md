@@ -87,8 +87,15 @@ packages/core/            # the `downword` package
   .size-limit.json        # bundle budget
 
 packages/cli/             # the `downword-cli` package (bin: downword)
-  src/index.ts            # node:util parseArgs, no CLI framework dependency
-  tests/cli.test.ts       # spawns the built binary
+  src/index.ts            # the process: exit code, unhandled rejections
+  src/run.ts              # argv -> exit code; takes its streams as an argument
+  src/options.ts          # node:util parseArgs, no CLI framework dependency
+  src/convert.ts          # the only module that imports `downword` (lazily)
+  src/glob.ts             # fs.promises.glob where Node has it, matcher where not
+  tests/cli.test.ts       # help, version and every usage error
+  tests/e2e.test.ts       # spawns the binary, then opens the .docx it produced
+  tests/startup.test.ts   # NODE_V8_COVERAGE: what the process really loaded
+  scripts/ensure-core-build.mjs   # `typecheck`/`test` need packages/core/dist
 
 examples/basic-node/      # ESM consumer  (`import`)
 examples/basic-cjs/       # CJS consumer  (`require`)

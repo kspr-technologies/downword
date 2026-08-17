@@ -1,7 +1,22 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+/**
+ * `--help`, and the one-line nudge printed after a usage error.
+ *
+ * The text is a snapshot test (`tests/cli.test.ts`), which is the point: help
+ * output is the CLI's actual documentation, and a flag that changes behaviour
+ * without changing this file will fail the build.
+ *
+ * Two things it says out loud rather than leaving to be discovered:
+ *
+ *  - **the network is off**, and `--no-remote-images` names the default rather
+ *    than only existing as the inverse of an opt-in nobody read; and
+ *  - **mermaid needs a browser**, so a fence that comes back as a code block is
+ *    a documented outcome rather than a bug report.
+ *
+ * Kept under 80 columns so it survives a narrow terminal without reflowing.
+ */
 
-exports[`downword --help > prints help and exits 0 > --help 1`] = `
-"downword — Markdown to Word (.docx)
+/** The `--help` text. Ends with a newline; write it verbatim. */
+export const HELP = `downword — Markdown to Word (.docx)
 
 Usage:
   downword [options] <input.md>...
@@ -70,5 +85,7 @@ Exit codes: 0 ok · 64 bad usage · 66 input not found · 70 conversion
 failed · 73 cannot write output.
 
 Docs: https://github.com/kspr-technologies/downword
-"
 `;
+
+/** Printed under a usage error, so the reader is one command from the answer. */
+export const TRY_HELP = "Try 'downword --help' for the full list of options.";

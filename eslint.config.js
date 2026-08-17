@@ -47,7 +47,7 @@ export default tseslint.config(
   },
   {
     // Node-flavoured scripts and configs.
-    files: ["scripts/**/*.mjs", "**/*.config.{js,ts,mjs}", "examples/**/*.{mjs,cjs,js}"],
+    files: ["**/scripts/**/*.mjs", "**/*.config.{js,ts,mjs}", "examples/**/*.{mjs,cjs,js}"],
     languageOptions: {
       globals: {
         console: "readonly",
