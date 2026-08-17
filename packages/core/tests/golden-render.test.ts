@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 
 import { listDocxParts, renderParts, writeFixture } from "./helpers/docx.js";
-import { kitchenSink, minimalDocument } from "./helpers/fixtures.js";
+import {
+  footnoteEdgeCases,
+  kitchenSink,
+  minimalDocument,
+  outlineDocument,
+} from "./helpers/fixtures.js";
 import { normalizeOoxml } from "./helpers/normalize.js";
-import { concreteNums } from "./helpers/xml.js";
+import { concreteNums, footnoteIds, footnoteReferenceIds, textOf } from "./helpers/xml.js";
 
 /**
  * Golden tests for the model -> docx renderer.
@@ -69,6 +74,91 @@ describe("golden: styles", () => {
     // to it: one abstract, one concrete instance, both docx's own.
     expect(concreteNums(parts.numbering ?? "")).toHaveLength(1);
     expect([...(parts.numbering ?? "").matchAll(/<w:abstractNum /g)]).toHaveLength(1);
+  });
+});
+
+describe("golden: footnotes", () => {
+  it("matches the committed word/document.xml", async () => {
+    const parts = await renderParts(footnoteEdgeCases());
+    await writeFixture("golden-render-footnotes.docx", parts.bytes);
+
+    expect(normalizeOoxml(parts.document)).toMatchSnapshot("word/document.xml");
+  });
+
+  it("matches the committed word/footnotes.xml", async () => {
+    const parts = await renderParts(footnoteEdgeCases());
+    expect(parts.footnotes).not.toBeNull();
+    expect(normalizeOoxml(parts.footnotes ?? "")).toMatchSnapshot("word/footnotes.xml");
+  });
+
+  it("keeps every reference pointed at a note, and every note out of the body", async () => {
+    const parts = await renderParts(footnoteEdgeCases());
+
+    // The acceptance criterion, asserted rather than snapshotted: the snapshot
+    // normaliser scrubs `w:id`, so only this can prove the two parts agree.
+    const defined = new Set(footnoteIds(parts.footnotes ?? ""));
+    expect(defined.size).toBeGreaterThan(0);
+    for (const id of footnoteReferenceIds(parts.document)) expect(defined).toContain(id);
+
+    const body = textOf(parts.document);
+    for (const note of [
+      "Referenced from two places.",
+      "A note with",
+      "The inner note.",
+      "Nothing points at me.",
+    ]) {
+      expect(body).not.toContain(note);
+    }
+  });
+
+  it("matches the committed inlined rendering", async () => {
+    const parts = await renderParts(footnoteEdgeCases(), { footnotes: false });
+    await writeFixture("golden-render-footnotes-inline.docx", parts.bytes);
+
+    expect(footnoteIds(parts.footnotes ?? "")).toEqual([]);
+    expect(normalizeOoxml(parts.document)).toMatchSnapshot("word/document.xml (footnotes: false)");
+  });
+
+  it("reports exactly the expected warnings", async () => {
+    const parts = await renderParts(footnoteEdgeCases());
+    expect(parts.warnings).toMatchSnapshot("warnings");
+  });
+});
+
+describe("golden: document niceties", () => {
+  const niceties = {
+    toc: { minLevel: 1, maxLevel: 3 },
+    pageNumbers: { format: "page-x-of-y", alignment: "center" },
+    titleBlock: true,
+    subject: "Golden niceties",
+  } as const;
+
+  it("matches the committed word/document.xml", async () => {
+    const parts = await renderParts(outlineDocument(), niceties);
+    await writeFixture("golden-render-document-niceties.docx", parts.bytes);
+
+    expect(normalizeOoxml(parts.document)).toMatchSnapshot("word/document.xml");
+  });
+
+  it("matches the committed word/footer1.xml", async () => {
+    const parts = await renderParts(outlineDocument(), niceties);
+    expect(parts.footer).not.toBeNull();
+    expect(normalizeOoxml(parts.footer ?? "")).toMatchSnapshot("word/footer1.xml");
+  });
+
+  it("matches the committed word/settings.xml", async () => {
+    const parts = await renderParts(outlineDocument(), niceties);
+    expect(normalizeOoxml(parts.settings ?? "")).toMatchSnapshot("word/settings.xml");
+  });
+
+  it("matches the committed docProps/core.xml", async () => {
+    const parts = await renderParts(outlineDocument(), niceties);
+    expect(normalizeOoxml(parts.coreProperties ?? "")).toMatchSnapshot("docProps/core.xml");
+  });
+
+  it("reports exactly the expected warnings", async () => {
+    const parts = await renderParts(outlineDocument(), niceties);
+    expect(parts.warnings).toMatchSnapshot("warnings");
   });
 });
 

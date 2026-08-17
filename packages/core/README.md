@@ -103,8 +103,10 @@ Every field is optional; the default is in the last column.
 | `direction`         | `"ltr" \| "rtl"`                         | `"ltr"`      |
 | `tabSize`           | `number` (integer, 0–64)                 | `4`          |
 | `titleBlock`        | `boolean`                                | `false`      |
+| `toc`               | `boolean \| TocInit`                     | `false`      |
+| `pageNumbers`       | `boolean \| PageNumbersInit`             | `false`      |
 | `metadata`          | `ConvertMetadata`                        | none         |
-| `footnotes`         | `boolean`                                | `true`       |
+| `footnotes`         | `boolean \| "inline"`                    | `true`       |
 | `html`              | `"escape" \| "keep" \| "drop"`           | `"escape"`   |
 | `linkify`           | `boolean`                                | `true`       |
 | `typographer`       | `boolean`                                | `false`      |
@@ -133,6 +135,56 @@ await convert("# Hello", {
   },
 });
 ```
+
+### Table of contents
+
+`toc` emits a **native Word `TOC` field** — not a list of headings frozen at
+conversion time, but the instruction Word itself writes, so the entries stay
+correct as the document is edited and each one links to its heading.
+
+```ts
+import { convert } from "downword";
+
+await convert("# One\n\n## Two\n", {
+  toc: { minLevel: 1, maxLevel: 3, title: "Contents" },
+  pageNumbers: { format: "page-x-of-y" },
+});
+```
+
+**The field is empty until the reader updates it.** OOXML stores the
+instruction, not the entries, and the entries are computed by the word processor
+from the document's heading outline. downword marks the field dirty and sets
+`<w:updateFields/>`, which is everything the format allows a generator to do —
+after that it is up to the reader:
+
+- **Word** — answer yes to _"This document contains fields that may refer to
+  other files. Update?"_ on open, or right-click the field → **Update Field**
+  (or select it and press **F9**).
+- **LibreOffice Writer** — Tools → Update → Indexes and Tables.
+- **Google Docs, Pages, Quick Look, most converters** — they do not run fields
+  at all, and will show nothing there.
+
+Every document that gets a TOC raises one `toc-needs-update` notice so a host
+can say this in its own words. Page numbers need no such step: `PAGE` and
+`NUMPAGES` are computed during layout by every reader that paginates.
+
+### Footnotes
+
+`[^1]` becomes a real Word footnote — a superscript, clickable reference in the
+body and the note in `word/footnotes.xml`, which Word numbers, positions and
+renumbers itself. The body and the footnotes part are written as a matched pair:
+no reference points at a note that is not there, and no note sits there with no
+reference pointing at it.
+
+`footnotes: "inline"` splices each note into the sentence that cited it, in
+parentheses, for a reader with no footnote pane. `footnotes: false` is a
+different answer again — the syntax is not parsed at all and `[^1]` stays
+literal text.
+
+Word cannot draw a footnote inside a footnote, so a `[^y]` written inside note
+`x` is spliced into `x`'s text the same way rather than becoming a reference
+into nothing. Two notes that cite each other stop after one expansion and say
+so.
 
 ### Right-to-left documents
 

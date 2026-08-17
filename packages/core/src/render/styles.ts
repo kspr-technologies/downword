@@ -27,9 +27,10 @@
  * `Title`, `Heading1..6`, `Strong`, `ListParagraph`, `Hyperlink`,
  * `FootnoteReference`, `FootnoteText` and `FootnoteTextChar` are all keys of
  * docx's `styles.default`, i.e. Word built-ins whose style *ids* Word already
- * recognises. `Quote`, `Normal` and `DefaultParagraphFont` are **not**
- * `styles.default` keys even though Word treats all three as built-ins, so they
- * are declared by hand with an explicit `id`/`name`. Everything else
+ * recognises. `Quote`, `Normal`, `DefaultParagraphFont`, `TOCHeading` and
+ * `Footer` are **not** `styles.default` keys even though Word treats all five
+ * as built-ins, so they are declared by hand with an explicit `id`/`name`
+ * spelled exactly as Word spells them. Everything else
  * (`CodeBlock`, `CodeChar`, …) is ours, named so that it reads sensibly in
  * Word's style gallery.
  *
@@ -97,6 +98,16 @@ export const STYLE_IDS = {
   footnoteReference: "FootnoteReference",
   /** Built-in paragraph style for footnote bodies. */
   footnoteText: "FootnoteText",
+  /**
+   * Built-in. The heading Word prints above a `TOC` field.
+   *
+   * Looks like `Heading1` and is *not* an outline heading: `<w:outlineLvl
+   * w:val="9"/>` is OOXML's "body text" level, which is what keeps the word
+   * "Contents" from becoming the first entry of the contents it introduces.
+   */
+  tocHeading: "TOCHeading",
+  /** Built-in paragraph style for footer content, e.g. the page number. */
+  footer: "Footer",
   /** Ours: inline `` `code` ``. */
   codeChar: "CodeChar",
   /** Ours: one paragraph per line of a fenced code block. */
@@ -369,6 +380,36 @@ export function buildStyles(theme: ThemeInit | Theme = {}): IStylesOptions {
       next: STYLE_IDS.normal,
       uiPriority: 36,
       run: { italics: true, color: t.colors.muted },
+    },
+    {
+      // Word knows this id, and knows to leave it out of the contents it heads.
+      // `outlineLevel: 9` is `<w:outlineLvl w:val="9"/>`, OOXML's "body text"
+      // level: without it a `TOC \o "1-3"` field lists the word "Contents" as
+      // its own first entry, because the style is based on `Heading1` and would
+      // otherwise inherit its outline level 0.
+      id: STYLE_IDS.tocHeading,
+      name: "TOC Heading",
+      basedOn: headingStyleId(1),
+      next: STYLE_IDS.normal,
+      uiPriority: 39,
+      quickFormat: true,
+      paragraph: { outlineLevel: 9 },
+    },
+    {
+      // Word's own footer style. The page number paragraph carries its
+      // alignment directly, because which side it sits on is an option rather
+      // than a property of the style.
+      id: STYLE_IDS.footer,
+      name: "footer",
+      basedOn: STYLE_IDS.normal,
+      next: STYLE_IDS.normal,
+      semiHidden: true,
+      unhideWhenUsed: true,
+      uiPriority: 99,
+      paragraph: {
+        spacing: { before: 0, after: 0, line: 240, lineRule: LineRuleType.AUTO },
+      },
+      run: { ...sized(t.sizes.footnote), color: t.colors.muted },
     },
   ];
 

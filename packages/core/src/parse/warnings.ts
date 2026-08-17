@@ -43,6 +43,16 @@ export type ParseWarningCode =
    */
   | "unrepresentable-character"
   /**
+   * A `[^x]: …` definition that nothing in the document references.
+   *
+   * `markdown-it-footnote` only emits the definitions its `footnote_tail` rule
+   * finds in `env.footnotes.list`, and a label enters that list the first time
+   * a `[^x]` *reference* is resolved against it. A definition nobody cites is
+   * therefore filtered out of the token stream before any token for it exists —
+   * its text is gone, and the parser is the only place that can still say so.
+   */
+  | "footnote-unreferenced"
+  /**
    * Blocks nested deeper than markdown-it's ceiling (`MAX_BLOCK_NESTING`, 100
    * containers). markdown-it stops tokenizing at that depth and **discards the
    * rest of the enclosing region** — `">".repeat(120) + " text"` parses to an
@@ -62,6 +72,7 @@ const PARSE_WARNING_SEVERITY: Readonly<Record<ParseWarningCode, WarningSeverity>
   "unexpected-token": "error",
   // markdown-it threw the source lines away before a token ever existed.
   "nesting-limit": "error",
+  "footnote-unreferenced": "error",
   // The text is all present; only its representation changed.
   "raw-html": "notice",
   "unrepresentable-character": "notice",

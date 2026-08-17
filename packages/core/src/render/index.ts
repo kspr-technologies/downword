@@ -52,7 +52,18 @@
  * one; see `numbering.ts`.
  */
 
-import { Document, Paragraph, TextRun } from "docx";
+import {
+  AlignmentType,
+  Document,
+  Footer,
+  PageNumber,
+  Paragraph,
+  TableOfContents,
+  TextRun,
+  type FileChild,
+  type ISectionOptions,
+  type ParagraphChild,
+} from "docx";
 
 import {
   nodesOfType,
@@ -64,6 +75,7 @@ import {
 import { flag, integer, invalid, oneOf, twips } from "../validate.js";
 import { directionFrame, renderBlocks } from "./blocks.js";
 import {
+  createFootnoteIndex,
   ROOT_BLOCK_CONTEXT,
   type BlockContext,
   type BookmarkAnchor,
@@ -76,10 +88,14 @@ import { resolveTheme } from "./theme.js";
 import { reportRenderWarning } from "./types.js";
 import type {
   PageInit,
+  PageNumbersInit,
+  PageNumberSettings,
   PageSettings,
   RenderOptions,
   RenderWarningCode,
   ResolvedRenderOptions,
+  TocInit,
+  TocSettings,
 } from "./types.js";
 
 /* -------------------------------------------------------------------------- */
@@ -113,6 +129,7 @@ export {
   type ThemeSpacing,
 } from "./theme.js";
 export type {
+  FootnotePolicy,
   HighlightMap,
   Highlighter,
   HighlightSpan,
@@ -120,6 +137,9 @@ export type {
   ImageMap,
   ImageResolver,
   PageInit,
+  PageNumberFormat,
+  PageNumberSettings,
+  PageNumbersInit,
   PageSettings,
   PageSize,
   PrepareOptions,
@@ -130,8 +150,10 @@ export type {
   ResolvedRenderOptions,
   SoftBreakPolicy,
   TextDirection,
+  TocInit,
+  TocSettings,
 } from "./types.js";
-export type { BookmarkAnchor } from "./context.js";
+export type { BookmarkAnchor, FootnoteIndex } from "./context.js";
 export type { BaseWarning, WarningSeverity } from "../warnings.js";
 
 /* -------------------------------------------------------------------------- */
@@ -245,6 +267,72 @@ function resolvePage(init: PageInit | undefined): PageSettings {
  */
 const MAX_TAB_SIZE = 64;
 
+/** The heading printed above a `TOC` field when the caller names none. */
+const DEFAULT_TOC_TITLE = "Contents";
+
+/** Word's own default TOC range, `TOC \o "1-3"`. */
+const DEFAULT_TOC_MIN_LEVEL = 1;
+const DEFAULT_TOC_MAX_LEVEL = 3;
+
+/**
+ * Widens a `boolean | Init` option into the object form, or `null` for "off".
+ *
+ * `true` means "on with every default", which is the shape both
+ * {@link RenderOptions.toc} and {@link RenderOptions.pageNumbers} accept, and
+ * `undefined`/`false` are the same "off" — but a `0`, a string or an array is a
+ * caller mistake and has to say so rather than quietly meaning `false`.
+ */
+function asInit<T extends object>(value: boolean | T | undefined, option: string): T | null {
+  if (value === undefined || value === false) return null;
+  if (value === true) return {} as T;
+  if (typeof value !== "object" || value === null) {
+    throw invalid(`options.${option} must be a boolean or an object, got ${JSON.stringify(value)}`);
+  }
+  return value;
+}
+
+function resolveToc(init: boolean | TocInit | undefined): TocSettings | null {
+  const source = asInit<TocInit>(init, "toc");
+  if (source === null) return null;
+
+  const minLevel = integer(source.minLevel, "toc.minLevel", DEFAULT_TOC_MIN_LEVEL, 1, 6);
+  const maxLevel = integer(source.maxLevel, "toc.maxLevel", DEFAULT_TOC_MAX_LEVEL, 1, 6);
+  if (minLevel > maxLevel) {
+    throw invalid(
+      `options.toc.minLevel (${minLevel}) must not be deeper than options.toc.maxLevel (${maxLevel})`,
+    );
+  }
+
+  const rawTitle = source.title;
+  if (rawTitle !== undefined && rawTitle !== null && typeof rawTitle !== "string") {
+    throw invalid(`options.toc.title must be a string or null, got ${JSON.stringify(rawTitle)}`);
+  }
+
+  return { minLevel, maxLevel, title: rawTitle === undefined ? DEFAULT_TOC_TITLE : rawTitle };
+}
+
+function resolvePageNumbers(
+  init: boolean | PageNumbersInit | undefined,
+): PageNumberSettings | null {
+  const source = asInit<PageNumbersInit>(init, "pageNumbers");
+  if (source === null) return null;
+
+  return {
+    format: oneOf(
+      source.format,
+      ["number", "page-x", "page-x-of-y"] as const,
+      "pageNumbers.format",
+      "number",
+    ),
+    alignment: oneOf(
+      source.alignment,
+      ["left", "center", "right"] as const,
+      "pageNumbers.alignment",
+      "center",
+    ),
+  };
+}
+
 function resolveOptions(options: RenderOptions): ResolvedRenderOptions {
   return {
     html: oneOf(options.html, ["raw", "drop"] as const, "html", "raw"),
@@ -257,6 +345,9 @@ function resolveOptions(options: RenderOptions): ResolvedRenderOptions {
     direction: oneOf(options.direction, ["ltr", "rtl"] as const, "direction", "ltr"),
     tabSize: integer(options.tabSize, "tabSize", 4, 0, MAX_TAB_SIZE),
     titleBlock: flag(options.titleBlock, "titleBlock", true),
+    footnotes: flag(options.footnotes, "footnotes", true),
+    toc: resolveToc(options.toc),
+    pageNumbers: resolvePageNumbers(options.pageNumbers),
   };
 }
 
@@ -413,6 +504,23 @@ const FOOTNOTE_BLOCK_CONTEXT: BlockContext = { ...ROOT_BLOCK_CONTEXT, inFootnote
  *
  * A footnote part can only hold paragraphs, so a table inside one is dropped
  * with a warning rather than producing a file Word refuses to open.
+ *
+ * Each body is rendered with its own number *open* (see
+ * {@link import("./context.js").FootnoteIndex}), which is what turns a `[^y]`
+ * inside footnote `x` into parenthetical text
+ * instead of a footnote reference Word cannot draw, and what stops two notes
+ * that cite each other from recursing.
+ *
+ * Only notes the body actually referenced are written, which makes the two
+ * parts a matched pair in **both** directions: no reference points at a note
+ * that is not there, and no note sits there with no reference pointing at it.
+ * The second half matters less for validity and more for honesty — Word draws a
+ * footnote only where a marker is, and silently drops an unreferenced one on the
+ * next save, so writing one would be pretending the text survived.
+ *
+ * Returns `{}` when {@link RenderOptions.footnotes} is off: no marker became a
+ * reference, because every one of them spliced its note into the sentence that
+ * cited it instead.
  */
 function buildFootnotes(
   definitions: readonly FootnoteDefinitionNode[],
@@ -421,7 +529,29 @@ function buildFootnotes(
   const footnotes: Record<string, { readonly children: readonly Paragraph[] }> = {};
 
   for (const definition of definitions) {
-    const rendered = renderBlocks(definition.children, ctx, FOOTNOTE_BLOCK_CONTEXT);
+    // Duplicate numbers cannot both be kept — `Document({ footnotes })` is a
+    // record keyed by id, so the second could only overwrite the first — and
+    // the index already decided which one the references were resolved against.
+    if (ctx.footnotes.byNumber.get(definition.number) !== definition) {
+      ctx.warn(
+        "footnote-content-dropped",
+        `footnote [^${definition.label}] claims number ${definition.number}, which another ` +
+          `definition already has; a footnote id can hold one note, so this one was dropped`,
+      );
+      continue;
+    }
+    if (!ctx.footnotes.wasReferenced(definition.number)) continue;
+
+    // Opened while its own body renders, so a `[^y]` inside it is spliced into
+    // the text rather than becoming a footnote inside a footnote, and so two
+    // notes citing each other terminate.
+    const opened = ctx.footnotes.open(definition.number);
+    let rendered;
+    try {
+      rendered = renderBlocks(definition.children, ctx, FOOTNOTE_BLOCK_CONTEXT);
+    } finally {
+      if (opened) ctx.footnotes.close(definition.number);
+    }
     const paragraphs = rendered.filter((child): child is Paragraph => child instanceof Paragraph);
 
     if (paragraphs.length !== rendered.length) {
@@ -439,7 +569,127 @@ function buildFootnotes(
     footnotes[String(definition.number)] = { children: paragraphs };
   }
 
+  // Second pass, because the first is what does the inlining: a note cited only
+  // from *inside* another note has its words spliced in there, and is not lost
+  // — but which notes those are is only known once every body has rendered.
+  for (const definition of definitions) {
+    if (ctx.footnotes.wasUsed(definition.number)) continue;
+    if (ctx.footnotes.byNumber.get(definition.number) !== definition) continue;
+    ctx.warn(
+      "footnote-unreferenced",
+      `footnote [^${definition.label}] is never referenced, so nothing in the document leads to ` +
+        `it and its text was dropped; add a [^${definition.label}] marker, or delete the definition`,
+    );
+  }
+
   return footnotes;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Table of contents                                                           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The `TOC` field, and the heading above it.
+ *
+ * What OOXML stores is the **instruction**, not the entries:
+ * `TOC \o "1-3" \h \z \u` tells the word processor to collect every paragraph
+ * whose style declares outline level 1 to 3, hyperlink each entry to it, and
+ * hide the page numbers in web layout. `\u` adds paragraphs that carry an
+ * outline level directly rather than through their style. The entries
+ * themselves are computed on update, so downword emits the field marked dirty
+ * (`<w:fldChar w:fldCharType="begin" w:dirty="true"/>`) and sets
+ * `<w:updateFields/>` in `word/settings.xml`, which is the whole of what the
+ * format lets a generator do. A reader still has to act on it — hence the
+ * `toc-needs-update` warning, whose message says how.
+ *
+ * The heading is `TOCHeading`, whose `<w:outlineLvl w:val="9"/>` is exactly
+ * what stops the word "Contents" becoming the first line of the contents.
+ */
+function buildToc(toc: TocSettings, ctx: RenderContext): readonly FileChild[] {
+  ctx.warn(
+    "toc-needs-update",
+    `a table-of-contents field for heading levels ${toc.minLevel}-${toc.maxLevel} was emitted; ` +
+      `OOXML stores the field, not its entries, so it is empty until the reader updates it ` +
+      `(Word: answer yes to the prompt on open, or right-click the field -> Update Field / F9; ` +
+      `LibreOffice: Tools -> Update -> Indexes and Tables). Readers that do not run fields at all ` +
+      `— Google Docs, Pages, Quick Look, most converters — will show nothing there`,
+  );
+
+  const out: FileChild[] = [];
+  if (toc.title !== null && toc.title !== "") {
+    out.push(
+      new Paragraph({
+        style: STYLE_IDS.tocHeading,
+        ...directionFrame(ctx),
+        children: [
+          new TextRun({
+            text: safeText(toc.title, ctx),
+            ...(ctx.options.direction === "rtl" ? { rightToLeft: true } : {}),
+          }),
+        ],
+      }),
+    );
+  }
+
+  out.push(
+    new TableOfContents(safeText(toc.title ?? DEFAULT_TOC_TITLE, ctx), {
+      headingStyleRange: `${toc.minLevel}-${toc.maxLevel}`,
+      hyperlink: true,
+      useAppliedParagraphOutlineLevel: true,
+      hideTabAndPageNumbersInWebView: true,
+    }),
+  );
+
+  return out;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Page numbers                                                                */
+/* -------------------------------------------------------------------------- */
+
+const FOOTER_ALIGNMENT = {
+  left: AlignmentType.LEFT,
+  center: AlignmentType.CENTER,
+  right: AlignmentType.RIGHT,
+} as const satisfies Readonly<Record<PageNumberSettings["alignment"], string>>;
+
+/**
+ * The footer carrying the page number.
+ *
+ * `PAGE` and `NUMPAGES` are ordinary fields, but unlike `TOC` they are computed
+ * during **layout** rather than on an explicit update: every reader that
+ * paginates at all fills them in, so these need no `updateFields` and no
+ * warning. `PageNumber.CURRENT` / `PageNumber.TOTAL_PAGES` are docx's tokens for
+ * the two, and only mean anything inside a run's `children`.
+ *
+ * The wording is English, and deliberately so rather than accidentally: a
+ * caller who needs another language can leave `format: "number"`, which has no
+ * words in it at all.
+ */
+function buildPageNumberFooter(settings: PageNumberSettings, ctx: RenderContext): Footer {
+  const parts: readonly (string | (typeof PageNumber)[keyof typeof PageNumber])[] =
+    settings.format === "number"
+      ? [PageNumber.CURRENT]
+      : settings.format === "page-x"
+        ? ["Page ", PageNumber.CURRENT]
+        : ["Page ", PageNumber.CURRENT, " of ", PageNumber.TOTAL_PAGES];
+
+  const run: ParagraphChild = new TextRun({
+    children: [...parts],
+    ...(ctx.options.direction === "rtl" ? { rightToLeft: true } : {}),
+  });
+
+  return new Footer({
+    children: [
+      new Paragraph({
+        style: STYLE_IDS.footer,
+        alignment: FOOTER_ALIGNMENT[settings.alignment],
+        ...directionFrame(ctx),
+        children: [run],
+      }),
+    ],
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -467,6 +717,13 @@ export function renderDocument(doc: DocumentNode, options: RenderOptions = {}): 
   // `indent-clamped` notices and drown everything else in the stream.
   const reported = new Set<RenderWarningCode>();
 
+  const body: BlockNode[] = [];
+  const definitions: FootnoteDefinitionNode[] = [];
+  for (const child of doc.children) {
+    if (child.type === "footnoteDefinition") definitions.push(child);
+    else body.push(child);
+  }
+
   const ctx: RenderContext = {
     theme,
     options: resolved,
@@ -474,6 +731,10 @@ export function renderDocument(doc: DocumentNode, options: RenderOptions = {}): 
     numbering: createNumberingRegistry(theme),
     bookmarks: buildBookmarks(doc, nextBookmarkId),
     nextBookmarkId,
+    // Built before anything is rendered, for the same reason the bookmark table
+    // is: the first `[^x]` in the document has to know whether the definition
+    // that answers it exists, and it may well be written below.
+    footnotes: createFootnoteIndex(definitions),
     highlights: options.highlights ?? null,
     highlighter: options.highlighter ?? null,
     images: options.images ?? null,
@@ -487,14 +748,10 @@ export function renderDocument(doc: DocumentNode, options: RenderOptions = {}): 
     },
   };
 
-  const body: BlockNode[] = [];
-  const definitions: FootnoteDefinitionNode[] = [];
-  for (const child of doc.children) {
-    if (child.type === "footnoteDefinition") definitions.push(child);
-    else body.push(child);
-  }
-
   const children = renderBlocks(body, ctx, ROOT_BLOCK_CONTEXT);
+
+  // Front matter, innermost first: title, then contents heading, then the field.
+  if (resolved.toc !== null) children.unshift(...buildToc(resolved.toc, ctx));
 
   if (resolved.titleBlock && doc.metadata.title !== null) {
     children.unshift(
@@ -516,24 +773,31 @@ export function renderDocument(doc: DocumentNode, options: RenderOptions = {}): 
   const footnotes = buildFootnotes(definitions, ctx);
   const numbering = ctx.numbering.build();
 
-  return new Document({
-    sections: [
-      {
-        properties: {
-          page: {
-            size: { width: page.width, height: page.height, orientation: page.orientation },
-            margin: page.margin,
-          },
-        },
-        // A section with no children produces a body Word treats as damaged.
-        children:
-          children.length > 0
-            ? children
-            : [new Paragraph({ style: STYLE_IDS.normal, ...directionFrame(ctx) })],
+  const section: ISectionOptions = {
+    properties: {
+      page: {
+        size: { width: page.width, height: page.height, orientation: page.orientation },
+        margin: page.margin,
       },
-    ],
+    },
+    ...(resolved.pageNumbers === null
+      ? {}
+      : { footers: { default: buildPageNumberFooter(resolved.pageNumbers, ctx) } }),
+    // A section with no children produces a body Word treats as damaged.
+    children:
+      children.length > 0
+        ? children
+        : [new Paragraph({ style: STYLE_IDS.normal, ...directionFrame(ctx) })],
+  };
+
+  return new Document({
+    sections: [section],
     styles: buildStyles(theme),
     ...(numbering === null ? {} : { numbering }),
+    // `<w:updateFields/>`: makes Word offer to fill the TOC in on open. Only
+    // set when there is a field that needs it — it prompts the reader, and a
+    // document with nothing to update must not.
+    ...(resolved.toc === null ? {} : { features: { updateFields: true } }),
     ...(Object.keys(footnotes).length > 0 ? { footnotes } : {}),
     ...coreProperties(doc.metadata, ctx),
     // `dc:subject` has no model field to come from; see RenderOptions.subject.

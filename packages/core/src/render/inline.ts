@@ -36,6 +36,10 @@ import {
   assertNever,
   findMark,
   hasMark,
+  nodeText,
+  type BlockNode,
+  type FootnoteDefinitionNode,
+  type FootnoteReferenceNode,
   type ImageNode,
   type InlineNode,
   type LinkMark,
@@ -373,6 +377,188 @@ export function importOmml(omml: string): ParagraphChild | null {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Footnotes                                                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Collapses a block's plain text onto one line.
+ *
+ * Only used for the block kinds a spliced footnote has to flatten (a fence, a
+ * thematic break, raw HTML), where the newlines are structure the parenthesis
+ * cannot hold.
+ */
+function oneLine(value: string): string {
+  return value.replace(/\s+/gu, " ").trim();
+}
+
+/**
+ * One block of a footnote body, rendered as runs inside the sentence.
+ *
+ * Prose keeps everything — a link in a spliced footnote is still a link, bold
+ * is still bold — because a paragraph's inline children are exactly what
+ * {@link renderInline} already takes. Blocks that are not prose have no inline
+ * form at all, so they degrade to their text: a fence keeps its monospace, and
+ * quotes and lists recurse so their prose keeps its marks too.
+ */
+function footnoteBlockRuns(
+  block: BlockNode,
+  ctx: RenderContext,
+  availableWidth: number,
+  availableHeight: number,
+): readonly ParagraphChild[] {
+  switch (block.type) {
+    case "paragraph":
+    case "heading":
+      return renderInline(block.children, ctx, availableWidth, availableHeight);
+
+    case "blockquote":
+      return footnoteBlocksRuns(block.children, ctx, availableWidth, availableHeight);
+
+    case "list":
+      return footnoteBlocksRuns(
+        block.children.flatMap((item) => [...item.children]),
+        ctx,
+        availableWidth,
+        availableHeight,
+      );
+
+    case "codeBlock": {
+      const value = oneLine(block.value);
+      return value === ""
+        ? []
+        : [new TextRun({ text: safeText(value, ctx), style: STYLE_IDS.codeChar })];
+    }
+
+    case "table":
+    case "thematicBreak":
+    case "htmlBlock":
+    case "mathBlock": {
+      const value = oneLine(nodeText(block));
+      return value === "" ? [] : [new TextRun({ text: safeText(value, ctx) })];
+    }
+
+    case "footnoteDefinition":
+      // A definition nested inside a definition is not a note; `renderBlocks`
+      // reports the same shape as `footnote-misplaced` on the other path.
+      ctx.warn(
+        "footnote-misplaced",
+        `footnote definition [^${block.label}] was nested inside another footnote and was dropped`,
+      );
+      return [];
+
+    default:
+      return assertNever(block, "block node");
+  }
+}
+
+/** {@link footnoteBlockRuns} over a run of blocks, separated by single spaces. */
+function footnoteBlocksRuns(
+  blocks: readonly BlockNode[],
+  ctx: RenderContext,
+  availableWidth: number,
+  availableHeight: number,
+): readonly ParagraphChild[] {
+  const out: ParagraphChild[] = [];
+
+  for (const block of blocks) {
+    const runs = footnoteBlockRuns(block, ctx, availableWidth, availableHeight);
+    if (runs.length === 0) continue;
+    if (out.length > 0) out.push(new TextRun({ text: " " }));
+    out.push(...runs);
+  }
+
+  return out;
+}
+
+/**
+ * Splices a footnote into the sentence that cited it, in parentheses.
+ *
+ * Two situations reach here, and they want the same thing. `footnotes: false`
+ * asks for it outright — the note goes where a reader with no footnote pane
+ * (a converter, a plain-text extraction, a slide) will still see it. And a
+ * `[^y]` met *inside* footnote `x` has no other legal home: Word cannot draw a
+ * footnote inside a footnote, so the inner note joins the outer one's text
+ * rather than becoming a reference `word/footnotes.xml` would have to resolve
+ * against itself.
+ *
+ * The open set is also the cycle guard. `[^a]` and `[^b]` citing each other
+ * would otherwise recurse until the stack ran out; the second visit to a note
+ * that is already open drops the marker and says so.
+ */
+function inlineFootnote(
+  definition: FootnoteDefinitionNode,
+  ctx: RenderContext,
+  availableWidth: number,
+  availableHeight: number,
+): readonly ParagraphChild[] {
+  if (!ctx.footnotes.open(definition.number)) {
+    ctx.warn(
+      "footnote-content-dropped",
+      `footnote [^${definition.label}] cites itself, directly or through another note; ` +
+        `the repeated marker was dropped rather than expanded forever`,
+    );
+    return [];
+  }
+  // The note's words are now somewhere a reader can see them, which is what
+  // stops `buildFootnotes` reporting it as one nothing points at.
+  ctx.footnotes.markInlined(definition.number);
+
+  try {
+    const body = footnoteBlocksRuns(definition.children, ctx, availableWidth, availableHeight);
+    // An empty note has nothing to say, and " ()" says it worse than nothing.
+    if (body.length === 0) return [];
+    return [new TextRun({ text: " (" }), ...body, new TextRun({ text: ")" })];
+  } finally {
+    ctx.footnotes.close(definition.number);
+  }
+}
+
+/**
+ * A `[^x]` marker: a real Word footnote reference, or the note itself inline.
+ *
+ * The dangling case is the one that matters for file validity. A
+ * `<w:footnoteReference w:id="7"/>` whose footnote is not in
+ * `word/footnotes.xml` is a reference into nothing — so a marker with no
+ * definition never becomes one. It is drawn as superscript text carrying the
+ * label the author wrote, which looks the same on the page, resolves to
+ * nothing, and cannot corrupt the part.
+ */
+function renderFootnoteReference(
+  node: FootnoteReferenceNode,
+  ctx: RenderContext,
+  availableWidth: number,
+  availableHeight: number,
+  props: IRunPropertiesOptions,
+): readonly ParagraphChild[] {
+  const definition = ctx.footnotes.byNumber.get(node.number);
+
+  if (definition === undefined) {
+    ctx.warn(
+      "footnote-unresolved",
+      `footnote reference [^${node.label}] has no definition; the marker was drawn as plain ` +
+        `superscript text rather than as a reference into an empty footnote`,
+    );
+    return [
+      new TextRun({
+        text: safeText(node.label, ctx),
+        ...props,
+        style: STYLE_IDS.footnoteReference,
+      }),
+    ];
+  }
+
+  if (!ctx.options.footnotes || ctx.footnotes.depth() > 0) {
+    return inlineFootnote(definition, ctx, availableWidth, availableHeight);
+  }
+
+  // Emits <w:rStyle w:val="FootnoteReference"/> + <w:footnoteReference w:id="N"/>.
+  // Recorded so `buildFootnotes` writes the note this now points at, and only
+  // the notes something points at.
+  ctx.footnotes.markReferenced(node.number);
+  return [new FootnoteReferenceRun(node.number)];
+}
+
+/* -------------------------------------------------------------------------- */
 /* Inline dispatch                                                             */
 /* -------------------------------------------------------------------------- */
 
@@ -424,8 +610,7 @@ function renderInlineNode(
     }
 
     case "footnoteReference":
-      // Emits <w:rStyle w:val="FootnoteReference"/> + <w:footnoteReference/>.
-      return [new FootnoteReferenceRun(node.number)];
+      return renderFootnoteReference(node, ctx, availableWidth, availableHeight, props);
 
     case "mathInline": {
       if (node.omml !== null) {
@@ -439,6 +624,29 @@ function renderInlineNode(
 
     default:
       return assertNever(node, "inline node");
+  }
+}
+
+/**
+ * Percent-decodes an `#anchor` before it is looked up.
+ *
+ * Not cosmetic: markdown-it normalises every destination through `mdurl.encode`,
+ * so `[jump](#café-setup)` arrives as `#caf%C3%A9-setup` while the heading's
+ * slug — which `slugify` builds from `\p{L}`, deliberately keeping every script
+ * — is still `café-setup`. Without this, *no* internal link to a heading
+ * containing a non-ASCII letter ever resolved, and every such link silently
+ * degraded to plain text with a `link-unresolved` notice blaming the author.
+ *
+ * A malformed escape (`%zz`, a lone `%`) makes `decodeURIComponent` throw; the
+ * raw text is the better guess then, and a bookmark named after it simply will
+ * not be found.
+ */
+function decodeAnchor(anchor: string): string {
+  if (!anchor.includes("%")) return anchor;
+  try {
+    return decodeURIComponent(anchor);
+  } catch {
+    return anchor;
   }
 }
 
@@ -473,7 +681,7 @@ function resolveLinkTarget(link: LinkMark | null, ctx: RenderContext): LinkTarge
 
   if (!href.startsWith("#")) return { kind: "external", href: link.href };
 
-  const anchor = ctx.bookmarks.get(href.slice(1));
+  const anchor = ctx.bookmarks.get(decodeAnchor(href.slice(1)));
   if (anchor === undefined) {
     ctx.warn(
       "link-unresolved",

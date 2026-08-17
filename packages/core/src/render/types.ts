@@ -151,7 +151,11 @@ export type RenderWarningCode =
   | "link-title-dropped"
   /** A fence's info-string metadata (` ```ts title="a.ts" `) has nowhere to go. */
   | "code-meta-dropped"
-  /** A footnote body contained a block a footnote cannot hold (e.g. a table). */
+  /**
+   * Part of a footnote was dropped: a block a footnote cannot hold (a table),
+   * a second definition claiming a number that is already taken, or a marker
+   * that would have expanded a note into itself.
+   */
   | "footnote-content-dropped"
   /** A footnote definition appeared somewhere other than the document root. */
   | "footnote-misplaced"
@@ -160,6 +164,13 @@ export type RenderWarningCode =
    * drawn, but there is no note behind it — see {@link RenderOptions.footnotes}.
    */
   | "footnote-unresolved"
+  /**
+   * A `[^x]: …` definition that nothing leads to — neither a marker in the body
+   * nor one inside another note. Word draws a footnote only where a reference
+   * is, and drops an unreferenced one on the next save, so its text was not
+   * written rather than written somewhere no reader would ever reach.
+   */
+  | "footnote-unreferenced"
   /**
    * A `TableOfContents` field was emitted. **A `TOC` field has no entries until
    * the reader updates it**; see {@link RenderOptions.toc}.
@@ -211,6 +222,7 @@ const RENDER_WARNING_SEVERITY: Readonly<Record<RenderWarningCode, WarningSeverit
   "footnote-content-dropped": "error",
   "footnote-misplaced": "error",
   "footnote-unresolved": "error",
+  "footnote-unreferenced": "error",
   "table-empty": "error",
   // Everything the reader can still see, expressed differently.
   "html-block": "notice",
@@ -378,7 +390,7 @@ export interface TocInit {
    * Heading printed above the field, or `null` for none. Defaults to
    * `"Contents"`.
    *
-   * Styled `TocHeading` — Word's own style for exactly this, based on
+   * Styled `TOCHeading` — Word's own style id for exactly this, based on
    * `Heading1` but with `<w:outlineLvl w:val="9"/>` so the contents heading
    * does not list itself.
    */
@@ -538,4 +550,9 @@ export interface ResolvedRenderOptions {
   readonly direction: TextDirection;
   readonly tabSize: number;
   readonly titleBlock: boolean;
+  readonly footnotes: FootnotePolicy;
+  /** `null` when no table of contents was asked for. */
+  readonly toc: TocSettings | null;
+  /** `null` when the footer carries no page number. */
+  readonly pageNumbers: PageNumberSettings | null;
 }

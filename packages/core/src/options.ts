@@ -27,6 +27,7 @@ import type {
   HtmlPolicy,
   ImageResolver,
   PageInit,
+  PageNumbersInit,
   PageSize,
   RenderOptions,
   RenderWarning,
@@ -34,6 +35,7 @@ import type {
   TextDirection,
   Theme,
   ThemeInit,
+  TocInit,
 } from "./render/index.js";
 import { DEFAULT_THEME, resolveTheme } from "./render/index.js";
 import type { ImageDiagnostic } from "./images/index.js";
@@ -254,13 +256,52 @@ export interface ConvertOptions {
    * heading — which would then appear twice.)
    */
   readonly titleBlock?: boolean | undefined;
+  /**
+   * Put a native Word table-of-contents field at the top. Defaults to `false`.
+   *
+   * `true` means `{ minLevel: 1, maxLevel: 3, title: "Contents" }`; pass a
+   * {@link TocInit} to change the range or the heading.
+   *
+   * **The field is empty until the reader updates it.** OOXML stores a `TOC`
+   * field as an instruction, not as a list of entries, and the entries are
+   * computed by the word processor from the document's heading outline.
+   * downword marks the field dirty and sets `<w:updateFields/>`, which is
+   * everything the format allows a generator to do — Word then offers to update
+   * on open (or right-click the field -> **Update Field**, or **F9**);
+   * LibreOffice needs Tools -> Update -> Indexes and Tables; Google Docs, Pages
+   * and most converters do not run fields at all and will show nothing.
+   *
+   * Every document that gets one raises a `toc-needs-update` notice, so a host
+   * can say this in its own words.
+   */
+  readonly toc?: boolean | TocInit | undefined;
+  /**
+   * Put a page number in the footer of every page. Defaults to `false`.
+   *
+   * `true` means `{ format: "number", alignment: "center" }`. Unlike
+   * {@link ConvertOptions.toc}, `PAGE`/`NUMPAGES` are computed during layout by
+   * every reader that paginates, so these need no update step and raise no
+   * warning.
+   */
+  readonly pageNumbers?: boolean | PageNumbersInit | undefined;
 
   /* --- content ---------------------------------------------------------- */
 
   /** Core document properties. See {@link ConvertMetadata}. Defaults to none. */
   readonly metadata?: ConvertMetadata | undefined;
-  /** Parse `[^1]` footnotes. Defaults to `true`; when off, the syntax stays literal text. */
-  readonly footnotes?: boolean | undefined;
+  /**
+   * What `[^1]` footnotes become. Defaults to `true`.
+   *
+   * - `true` — real Word footnotes: a superscript, clickable reference in the
+   *   body and the note's text in `word/footnotes.xml`, which Word numbers,
+   *   positions and renumbers itself.
+   * - `"inline"` — the syntax is still parsed, but each note is spliced into
+   *   the sentence that cited it, in parentheses. For a document destined for
+   *   a reader with no footnote pane: a converter, a plain-text extraction, a
+   *   slide.
+   * - `false` — the syntax is not parsed at all and `[^1]` stays literal text.
+   */
+  readonly footnotes?: boolean | "inline" | undefined;
   /** Raw-HTML handling. Defaults to `"escape"`. See {@link HtmlHandling}. */
   readonly html?: HtmlHandling | undefined;
   /**
@@ -367,6 +408,28 @@ const SOFT_BREAKS: Readonly<Record<LineBreakHandling, SoftBreakPolicy>> = {
   collapse: "space",
   preserve: "break",
 };
+
+/**
+ * Splits {@link ConvertOptions.footnotes} across the two stages that answer it.
+ *
+ * One option, two decisions, and they are not the same decision: the *parser*
+ * decides whether `[^1]` is syntax at all, and the *renderer* decides what the
+ * resulting node becomes. `"inline"` is the combination the two-boolean shape
+ * could not express — parse the syntax, then splice each note into the sentence
+ * that cited it instead of putting it in `word/footnotes.xml`.
+ *
+ * `false` turns the parser off, and the renderer's own policy is then moot:
+ * there are no footnote nodes for it to have an opinion about.
+ */
+function resolveFootnotes(value: boolean | "inline" | undefined): {
+  readonly parse: boolean;
+  readonly render: boolean;
+} {
+  if (value === undefined || value === true) return { parse: true, render: true };
+  if (value === false) return { parse: false, render: true };
+  if (value === "inline") return { parse: true, render: false };
+  throw invalid(`options.footnotes must be true, false or "inline", got ${JSON.stringify(value)}`);
+}
 
 const ORIENTATIONS = ["portrait", "landscape"] as const;
 
@@ -478,6 +541,7 @@ export function resolveConvertOptions(
   const margin = resolveMargins(options.margins);
   const rawSubject = options.metadata?.subject;
   const subject = rawSubject === undefined ? undefined : safe(rawSubject);
+  const footnotes = resolveFootnotes(options.footnotes);
 
   const page: PageInit = {
     size: resolvePageSize(options.pageSize),
@@ -489,7 +553,7 @@ export function resolveConvertOptions(
     html: html.parse,
     linkify: options.linkify ?? true,
     typographer: options.typographer ?? false,
-    footnotes: options.footnotes ?? true,
+    footnotes: footnotes.parse,
     metadata: resolveMetadata(options.metadata),
     ...(options.plugins === undefined ? {} : { plugins: options.plugins }),
     onWarning: (warning: ParseWarning) => {
@@ -508,6 +572,11 @@ export function resolveConvertOptions(
     ...(options.direction === undefined ? {} : { direction: options.direction }),
     ...(options.tabSize === undefined ? {} : { tabSize: options.tabSize }),
     titleBlock: options.titleBlock ?? false,
+    footnotes: footnotes.render,
+    // Both left to `resolveOptions` in the renderer to validate, for the same
+    // reason `direction` is: one definition of a legal value, not two.
+    ...(options.toc === undefined ? {} : { toc: options.toc }),
+    ...(options.pageNumbers === undefined ? {} : { pageNumbers: options.pageNumbers }),
     ...(subject === undefined ? {} : { subject }),
     onWarning: (warning: RenderWarning) => {
       emit({ ...warning, stage: "render" });

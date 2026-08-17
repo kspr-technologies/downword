@@ -13,6 +13,7 @@
  *    leak back up when a branch finishes rendering.
  */
 
+import type { FootnoteDefinitionNode } from "../model.js";
 import type { Theme } from "./theme.js";
 import type { NumberingRegistry } from "./numbering.js";
 import type {
@@ -42,6 +43,102 @@ export interface BookmarkAnchor {
   readonly id: number;
 }
 
+/**
+ * Everything the renderer needs to know about the document's footnotes.
+ *
+ * Built once, before anything is rendered, because a `[^x]` marker has to know
+ * three things the node itself cannot tell it: whether a definition for it
+ * exists at all (a dangling reference must not become a `<w:footnoteReference>`
+ * pointing at a footnote that is not in the part), what that definition *says*
+ * (so `footnotes: false` can splice it into the sentence), and whether a
+ * footnote body is being rendered right now.
+ *
+ * That last one is what makes nesting safe. OOXML's content model permits a
+ * `<w:footnoteReference>` inside `word/footnotes.xml`, but Word cannot author or
+ * display a footnote inside a footnote, so downword never writes one: a `[^y]`
+ * met while footnote `x` is open is spliced into `x`'s text in parentheses
+ * instead — the same degradation `footnotes: false` applies everywhere. The
+ * open set doubles as the cycle guard for `[^a]` and `[^b]` that cite each
+ * other, which would otherwise recurse until the stack ran out.
+ */
+export interface FootnoteIndex {
+  /**
+   * Definition by its docx footnote id, i.e. {@link FootnoteDefinitionNode.number}.
+   *
+   * Only definitions at the document root are here — one nested inside another
+   * block is a `footnote-misplaced` warning, not a note.
+   */
+  readonly byNumber: ReadonlyMap<number, FootnoteDefinitionNode>;
+  /** How many footnote bodies are being rendered right now; 0 in the body. */
+  readonly depth: () => number;
+  /**
+   * Marks `number` as open, or returns `false` if it already was — which only
+   * happens when a footnote cites itself, directly or through a cycle.
+   */
+  readonly open: (number: number) => boolean;
+  /** Undoes one successful {@link FootnoteIndex.open}. */
+  readonly close: (number: number) => void;
+  /**
+   * Records that a real `<w:footnoteReference w:id="N"/>` was written.
+   *
+   * This is what decides whether the note goes into `word/footnotes.xml` at
+   * all. A `<w:footnote>` nothing points at is one Word never draws and drops
+   * on the next save, so downword writes the part and the body as a matched
+   * pair: every id in one is an id in the other, in both directions.
+   */
+  readonly markReferenced: (number: number) => void;
+  /** Whether {@link FootnoteIndex.markReferenced} was called for `number`. */
+  readonly wasReferenced: (number: number) => boolean;
+  /** Records that the note's text was spliced into the flow instead. */
+  readonly markInlined: (number: number) => void;
+  /**
+   * Whether the note reached the reader at all, by either route.
+   *
+   * A definition that is neither referenced nor inlined is one whose words are
+   * in no part of the output, which is the whole of `footnote-unreferenced`.
+   */
+  readonly wasUsed: (number: number) => boolean;
+}
+
+/**
+ * Builds a {@link FootnoteIndex} over one document's root-level definitions.
+ *
+ * @param definitions - Root-level definitions, in document order. A duplicate
+ *   number keeps the first: `Document({ footnotes })` is keyed by id, so a
+ *   second definition claiming the same one could only overwrite it.
+ */
+export function createFootnoteIndex(definitions: readonly FootnoteDefinitionNode[]): FootnoteIndex {
+  const byNumber = new Map<number, FootnoteDefinitionNode>();
+  for (const definition of definitions) {
+    if (!byNumber.has(definition.number)) byNumber.set(definition.number, definition);
+  }
+
+  const openNumbers = new Set<number>();
+  const referenced = new Set<number>();
+  const inlined = new Set<number>();
+
+  return {
+    byNumber,
+    depth: () => openNumbers.size,
+    open: (number: number) => {
+      if (openNumbers.has(number)) return false;
+      openNumbers.add(number);
+      return true;
+    },
+    close: (number: number) => {
+      openNumbers.delete(number);
+    },
+    markReferenced: (number: number) => {
+      referenced.add(number);
+    },
+    wasReferenced: (number: number) => referenced.has(number),
+    markInlined: (number: number) => {
+      inlined.add(number);
+    },
+    wasUsed: (number: number) => referenced.has(number) || inlined.has(number),
+  };
+}
+
 /** State shared by the whole render. */
 export interface RenderContext {
   readonly theme: Theme;
@@ -65,6 +162,8 @@ export interface RenderContext {
    * by every heading rather than only once that feature lands.
    */
   readonly nextBookmarkId: () => number;
+  /** The document's footnotes; see {@link FootnoteIndex}. */
+  readonly footnotes: FootnoteIndex;
   readonly highlights: HighlightMap | null;
   readonly highlighter: Highlighter | null;
   readonly images: ImageMap | null;

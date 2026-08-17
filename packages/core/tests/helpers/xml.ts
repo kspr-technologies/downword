@@ -88,6 +88,96 @@ export function indent(xml: ParagraphXml): Record<string, string> | null {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Footnotes                                                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The `w:id` of every `<w:footnoteReference>` in `word/document.xml`, in order.
+ *
+ * These are the ids the body actually points at, and every one of them has to
+ * be a member of {@link footnoteIds} or the reference goes nowhere.
+ */
+export function footnoteReferenceIds(documentXml: string): number[] {
+  return [...documentXml.matchAll(/<w:footnoteReference w:id="(-?\d+)"\/>/g)].map((m) =>
+    Number(m[1]),
+  );
+}
+
+/**
+ * The `w:id` of every real note in `word/footnotes.xml`.
+ *
+ * docx always writes the two separator notes (`w:id="-1"` and `w:id="0"`,
+ * carrying `w:type="separator"` / `"continuationSeparator"`); they are not
+ * content, so they are filtered out here and a test can compare ids directly.
+ */
+export function footnoteIds(footnotesXml: string): number[] {
+  return [...footnotesXml.matchAll(/<w:footnote((?:\s[^>]*)?)>/g)]
+    .filter((m) => !(m[1] ?? "").includes("w:type="))
+    .map((m) => Number(/w:id="(-?\d+)"/.exec(m[1] ?? "")?.[1] ?? Number.NaN));
+}
+
+/** One `<w:footnote w:id="N">…</w:footnote>` element, by id. */
+export function footnoteById(footnotesXml: string, id: number): string | null {
+  const pattern = new RegExp(`<w:footnote w:id="${id}">[\\s\\S]*?</w:footnote>`);
+  return pattern.exec(footnotesXml)?.[0] ?? null;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Fields                                                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Every field instruction in a part, unescaped (`TOC \o "1-3" \h`, `PAGE`, …).
+ *
+ * A `TOC` field has no entries until a reader updates it, so the instruction —
+ * and the switches in it — is the only thing a generator can be held to.
+ */
+export function fieldInstructions(xml: string): string[] {
+  return [...xml.matchAll(/<w:instrText[^>]*>([\s\S]*?)<\/w:instrText>/g)].map((m) =>
+    (m[1] ?? "").replace(/&quot;/g, '"').replace(/&amp;/g, "&"),
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Bookmarks                                                                   */
+/* -------------------------------------------------------------------------- */
+
+/** One `<w:bookmarkStart>`: the name links resolve against, and its `w:id`. */
+export interface BookmarkStartXml {
+  readonly id: number;
+  readonly name: string;
+}
+
+/**
+ * Every `<w:bookmarkStart>` in a part, in document order.
+ *
+ * Attribute order is deliberately not assumed: docx 9.7.1 writes
+ * `<w:bookmarkStart w:name="setup" w:id="2"/>`, name first, and pinning the
+ * other order is a test failing on output that is perfectly correct.
+ */
+export function bookmarkStarts(xml: string): BookmarkStartXml[] {
+  return [...xml.matchAll(/<w:bookmarkStart\s([^/>]*)\/>/g)].map((m) => {
+    const attrs = m[1] ?? "";
+    return {
+      id: Number(/w:id="(\d+)"/.exec(attrs)?.[1] ?? Number.NaN),
+      name: /w:name="([^"]*)"/.exec(attrs)?.[1] ?? "",
+    };
+  });
+}
+
+/**
+ * The `w:anchor` of every `<w:hyperlink>` that targets a bookmark, in order.
+ *
+ * Same caveat as {@link bookmarkStarts}: docx puts `w:history="1"` before
+ * `w:anchor`, so the attribute is matched wherever in the tag it sits.
+ */
+export function internalAnchors(xml: string): string[] {
+  return [...xml.matchAll(/<w:hyperlink\s([^>]*)>/g)]
+    .map((m) => /w:anchor="([^"]*)"/.exec(m[1] ?? "")?.[1])
+    .filter((anchor): anchor is string => anchor !== undefined);
+}
+
+/* -------------------------------------------------------------------------- */
 /* styles.xml                                                                  */
 /* -------------------------------------------------------------------------- */
 

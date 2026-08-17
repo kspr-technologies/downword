@@ -77,7 +77,51 @@ export function parseMarkdown(source: string, options: ParseOptions = {}): Docum
     });
   }
 
-  return parseTokens(md.parse(text, env), resolved);
+  const tokens = md.parse(text, env);
+  reportUnreferencedFootnotes(env, resolved);
+  return parseTokens(tokens, resolved);
+}
+
+/**
+ * Reports `[^x]: …` definitions that `markdown-it-footnote` threw away.
+ *
+ * A definition only reaches the token stream if some `[^x]` resolved against
+ * it: `footnote_def` records the label as `env.footnotes.refs[":x"] = -1` and
+ * parks its tokens, `footnote_ref` promotes it to an index into
+ * `env.footnotes.list`, and `footnote_tail` re-emits only what is in that list.
+ * A label still sitting at `-1` when parsing finishes is one whose whole body —
+ * possibly several paragraphs of it — was filtered out of the stream, silently,
+ * before the parser saw a single token. Nothing downstream can notice, because
+ * from its point of view the definition was never written.
+ *
+ * The `env` shape is markdown-it's, not ours, so every field is checked at
+ * runtime: an author who disables footnotes, or replaces the plugin, must get
+ * silence rather than a crash.
+ */
+function reportUnreferencedFootnotes(env: Env, options: ResolvedParseOptions): void {
+  const onWarning = options.onWarning;
+  if (onWarning === null) return;
+
+  const footnotes: unknown = (env as Record<string, unknown>)["footnotes"];
+  if (typeof footnotes !== "object" || footnotes === null) return;
+
+  const refs: unknown = (footnotes as Record<string, unknown>)["refs"];
+  if (typeof refs !== "object" || refs === null) return;
+
+  for (const [key, index] of Object.entries(refs as Record<string, unknown>)) {
+    if (index !== -1) continue;
+    // markdown-it-footnote prefixes the key with ':' to keep labels off
+    // Object.prototype.
+    const label = key.startsWith(":") ? key.slice(1) : key;
+    onWarning({
+      code: "footnote-unreferenced",
+      severity: parseWarningSeverity("footnote-unreferenced"),
+      message:
+        `the footnote definition [^${label}] is never referenced, so markdown-it discarded it; ` +
+        `add a [^${label}] marker in the text, or delete the definition`,
+      line: null,
+    });
+  }
 }
 
 /**

@@ -45,13 +45,21 @@ export async function packDocument(file: Document): Promise<Uint8Array> {
   return new Uint8Array(await Packer.toArrayBuffer(file));
 }
 
-/** The three OOXML parts the renderer's golden tests care about. */
+/** The OOXML parts the renderer's tests care about. */
 export interface RenderedParts {
   readonly bytes: Uint8Array;
   readonly document: string;
   readonly styles: string;
   readonly numbering: string | null;
   readonly footnotes: string | null;
+  /** `word/footer1.xml`; absent unless the section declares a footer. */
+  readonly footer: string | null;
+  /** `word/settings.xml`, which is where `<w:updateFields/>` lands. */
+  readonly settings: string | null;
+  /** `docProps/core.xml`: title, author, keywords, description. */
+  readonly coreProperties: string | null;
+  /** `docProps/custom.xml`: everything frontmatter had no core property for. */
+  readonly customProperties: string | null;
   readonly warnings: readonly RenderWarning[];
 }
 
@@ -88,6 +96,10 @@ export async function renderParts(
     styles: await readDocxPart(bytes, "word/styles.xml"),
     numbering: await optional("word/numbering.xml"),
     footnotes: await optional("word/footnotes.xml"),
+    footer: await optional("word/footer1.xml"),
+    settings: await optional("word/settings.xml"),
+    coreProperties: await optional("docProps/core.xml"),
+    customProperties: await optional("docProps/custom.xml"),
     warnings,
   };
 }

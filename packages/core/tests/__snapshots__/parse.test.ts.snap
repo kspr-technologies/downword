@@ -6471,7 +6471,16 @@ footnote[3] id=3 label=3
   p "defined right here, with no label""
 `;
 
-exports[`parseMarkdown: fixtures > 23-footnotes.md > warnings 1`] = `[]`;
+exports[`parseMarkdown: fixtures > 23-footnotes.md > warnings 1`] = `
+[
+  {
+    "code": "footnote-unreferenced",
+    "line": null,
+    "message": "the footnote definition [^unused] is never referenced, so markdown-it discarded it; add a [^unused] marker in the text, or delete the definition",
+    "severity": "error",
+  },
+]
+`;
 
 exports[`parseMarkdown: fixtures > 24-html-blocks-and-inline.md > model 1`] = `
 {
