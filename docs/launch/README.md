@@ -183,6 +183,15 @@ and the looser version is what a reader will hold you to.
     benchmark against a named competitor that was not actually run. If you want
     a number that is not here, measure it first.
 
+13. **No counts of things that keep changing.** This bit an earlier draft: the
+    LinkedIn post called this "the ninth free tool on ksprtech.com" when the
+    registry held sixteen and the home page rendered "16 free browser tools".
+    A count of the tools, the themes or the supported constructs is a fact with
+    a shelf life, and a draft can sit for weeks before anybody posts it. Either
+    read the number off the source of truth the morning you post —
+    `src/lib/tools-registry.ts` for the tool count — or write the sentence so
+    it does not need one.
+
 ---
 
 ## Links, and tracking parameters on them

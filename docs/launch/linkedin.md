@@ -46,8 +46,8 @@ The conversion runs inside your browser tab. Your document is never uploaded,
 which is the part that mattered to us, because most of what we convert is client
 work.
 
-No signup, no limits, no upsell. It is the ninth free tool on ksprtech.com and,
-like the rest, it exists because we needed it.
+No signup, no limits, no upsell. It joins the other free tools on ksprtech.com
+and, like the rest, it exists because we needed it.
 
 #Markdown #MicrosoftWord #ProductivityTools #WebDevelopment
 
