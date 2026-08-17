@@ -11,8 +11,11 @@
 > [!WARNING]
 > **Status: pre-release.** The library is real and green — parser, renderer,
 > images, highlighting and the public API all land here — but nothing is
-> published to npm yet, and math (`downword/plugins/math`) and mermaid
-> (`downword/plugins/mermaid`) are still stubs.
+> published to npm yet. Math (`downword/plugins/math`) produces native,
+> editable Word equations and needs two optional peer dependencies (`temml`,
+> `mathml2omml`). Mermaid diagrams (`downword/plugins/mermaid`) are real but
+> need a DOM: in Node they degrade to the fenced source plus a warning rather
+> than rendering.
 
 ## Packages
 

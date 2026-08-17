@@ -38,6 +38,10 @@ import type {
   TocInit,
 } from "./render/index.js";
 import { DEFAULT_THEME, resolveTheme } from "./render/index.js";
+// The presets themselves, straight from the module that owns them: they are
+// theme *values*, and `render/index.ts` re-exports the theme machinery rather
+// than every table built with it.
+import { ACADEMIC_DOUBLE_THEME, ACADEMIC_THEME, GITHUB_THEME } from "./render/theme.js";
 import type { ImageDiagnostic } from "./images/index.js";
 import { sanitizeXmlText } from "./xml-text.js";
 
@@ -48,31 +52,52 @@ import { sanitizeXmlText } from "./xml-text.js";
 /**
  * A built-in theme.
  *
- * - `"default"` — Word's own Office style set for headings and body text, with
- *   a GitHub-flavoured palette for the things Word has no opinion about (code,
- *   tables, quotes). Its code inks clear WCAG **AA** (4.5:1) against the code
- *   block's own shading; the floor is 4.74:1.
- * - `"print"` — the same, with the syntax-highlighting palette **replaced** by
+ * Three of the five are *looks* — the same document, dressed differently — and
+ * two are variants of one of those. All five differ **only in the generated
+ * `word/styles.xml`**, with the two documented exceptions listed on
+ * `GITHUB_THEME` in `render/theme.ts`; `tests/themes.test.ts` renders one
+ * fixture under each and asserts the `word/document.xml` it produces is the
+ * same file. That is what makes a converted document restylable in Word rather
+ * than merely pre-styled.
+ *
+ * - `"default"` — Word's own look: Aptos with a Calibri fallback, Word's
+ *   heading blues, 1.15 leading. A GitHub-flavoured palette covers the things
+ *   Word has no opinion about (code, tables, quotes); its code inks clear WCAG
+ *   **AA** (4.5:1) against the code block's own shading, floor 4.74:1.
+ * - `"github"` — a README as Word can render one: Segoe UI (fallback Arial),
+ *   near-black headings rather than tinted ones, single leading and smaller
+ *   gaps throughout.
+ * - `"academic"` — Times New Roman 12 pt (fallback Cambria), black headings,
+ *   1.5 leading, Courier New for code.
+ * - `"academic-double"` — the same, double-spaced. One token (`spacing.line`,
+ *   480), because that is what a thesis office asks for and nothing else about
+ *   the manuscript should move with it.
+ * - `"print"` — `"default"` with the syntax-highlighting palette **replaced** by
  *   one measured against that shading rather than against white: every ink
  *   clears WCAG **AAA** (7:1), the floor being 7.13:1. Scopes it does not name
  *   fall through to the code block's own near-black (13.76:1) rather than
  *   inheriting a screen ink. Use it for documents that get printed or
  *   photocopied.
  *
- * Either way the palette governs a `highlighter`'s output too, so
+ * The palette is a separate axis from the look, and composes with it:
+ * `{ ...THEMES.academic, codePalette: THEMES.print.codePalette }`. Whichever
+ * you pick governs a `highlighter`'s output too, so
  * `convert(md, { theme, highlighter: createHighlighter() })` colours real code
  * blocks with the theme you asked for. Weight and slant (bold keywords, italic
- * comments) come from the highlighter under both themes, because a `.docx` is a
+ * comments) come from the highlighter under every theme, because a `.docx` is a
  * print artefact whichever palette it uses.
  *
  * Pass a {@link ThemeInit} instead to override individual tokens; pass a
  * resolved {@link Theme} (including one of {@link THEMES}) to start from it.
  */
-export type ThemeName = "default" | "print";
+export type ThemeName = "default" | "github" | "academic" | "academic-double" | "print";
 
 /** The built-in themes, resolved. See {@link ThemeName}. */
 export const THEMES: Readonly<Record<ThemeName, Theme>> = Object.freeze({
   default: DEFAULT_THEME,
+  github: GITHUB_THEME,
+  academic: ACADEMIC_THEME,
+  "academic-double": ACADEMIC_DOUBLE_THEME,
   // `codePalette` replaces rather than merges (see ThemeInit), which is what
   // keeps the AAA floor above true: a merge left eight screen inks in place,
   // the darkest of which (116329, 6.94:1) missed it.

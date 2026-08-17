@@ -74,7 +74,7 @@ packages/core/            # the `downword` package
     convert.ts            # convert() — the conversion entry point
     types.ts              # public types (ConvertOptions, DownwordPlugin, …)
     plugins/math.ts       # `downword/plugins/math`    (stub)
-    plugins/mermaid.ts    # `downword/plugins/mermaid` (stub)
+    plugins/mermaid.ts    # `downword/plugins/mermaid` -> src/mermaid/**
   tests/
     convert.test.ts       # unit tests
     golden.test.ts        # golden/snapshot tests over word/document.xml

@@ -31,12 +31,56 @@ export type HighlightColorValue = (typeof HighlightColor)[keyof typeof Highlight
 /** One of the ~70 `<w:numFmt>` values OOXML allows for a numbering level. */
 export type LevelFormatValue = (typeof LevelFormat)[keyof typeof LevelFormat];
 
+/**
+ * A per-script font chain: one face per OOXML script slot.
+ *
+ * OOXML has no font *stack* — `w:rFonts` names one face per script, and a
+ * reader that cannot resolve it falls back to whatever its own substitution
+ * table says. What the element does give is four slots, and naming a second,
+ * more widely installed face in `cs` is the closest thing to a fallback the
+ * format has: a reader without Aptos still gets Calibri for complex-script
+ * text rather than a default nobody chose, and the pair documents the
+ * designer's intent in the file itself.
+ *
+ * `eastAsia` is deliberately **not** part of this type. Leaving the slot unset
+ * is what keeps CJK text on a CJK-capable face; pinning it to a Latin face (as
+ * a bare `string` font does, because `docx` copies the name into all four
+ * slots) is how CJK ends up rendered in a font that has no glyphs for it.
+ */
+export interface ThemeFontStack {
+  /** Latin text. `w:ascii`. */
+  readonly ascii: string;
+  /** High-ANSI text. `w:hAnsi`. Normally the same face as {@link ThemeFontStack.ascii}. */
+  readonly hAnsi: string;
+  /** Complex-script text (Arabic, Hebrew, Thai), and the documented fallback face. `w:cs`. */
+  readonly cs: string;
+}
+
+/**
+ * One face, or a {@link ThemeFontStack}.
+ *
+ * A bare string is the ergonomic form and what `docx` expands into all four
+ * script slots; a stack is what a theme uses to name a preferred face and a
+ * fallback.
+ */
+export type ThemeFont = string | ThemeFontStack;
+
+/**
+ * Builds a two-face {@link ThemeFontStack}.
+ *
+ * @param preferred - The face to use for Latin text.
+ * @param fallback - The more widely installed face, written to `w:cs`.
+ */
+export function fontStack(preferred: string, fallback: string): ThemeFontStack {
+  return { ascii: preferred, hAnsi: preferred, cs: fallback };
+}
+
 /** Typefaces used across the document. */
 export interface ThemeFonts {
   /** Body text; becomes `docDefaults`' `w:rFonts`. */
-  readonly body: string;
+  readonly body: ThemeFont;
   /** Headings and the title. */
-  readonly heading: string;
+  readonly heading: ThemeFont;
   /** Preferred monospace face for code (`w:ascii`/`w:hAnsi`). */
   readonly mono: string;
   /**
@@ -258,8 +302,12 @@ const HEADING_DEEP_COLOR = "1F3864";
  */
 export const DEFAULT_THEME: Theme = {
   fonts: {
-    body: "Calibri",
-    heading: "Calibri Light",
+    // Word's own pairing, current and previous: Microsoft 365 defaults to
+    // Aptos / Aptos Display since 2024, and every build older than that (plus
+    // LibreOffice, Pages and Google Docs) has Calibri / Calibri Light. Naming
+    // both is what a `w:rFonts` can express of a fallback; see ThemeFontStack.
+    body: { ascii: "Aptos", hAnsi: "Aptos", cs: "Calibri" },
+    heading: { ascii: "Aptos Display", hAnsi: "Aptos Display", cs: "Calibri Light" },
     mono: "Consolas",
     monoFallback: "Courier New",
     symbol: "Segoe UI Symbol",
@@ -481,6 +529,170 @@ export function resolveTheme(init: ThemeInit = {}): Theme {
     codePalette: init.codePalette ?? DEFAULT_THEME.codePalette,
   };
 }
+
+/* -------------------------------------------------------------------------- */
+/* Presets                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * ## What a preset may and may not change
+ *
+ * A theme is meant to be a `styles.xml` swap and nothing else: the same
+ * markdown under two presets must produce the *same document* differently
+ * dressed, so that everything Word does with a style — Design → Style Set, the
+ * Navigation pane, "update Heading 2 everywhere" — keeps working, and so that
+ * two conversions can be diffed against each other.
+ *
+ * Most theme tokens honour that for free, because `styles.ts` is the only
+ * reader. A short list does not, because OOXML has no style that could hold
+ * them, and `render/blocks.ts` / `render/inline.ts` therefore stamp them onto
+ * elements in `word/document.xml` (or into `word/numbering.xml`):
+ *
+ * | token | where it lands | why it cannot be a style |
+ * | --- | --- | --- |
+ * | `spacing.listIndent`, `spacing.listHanging` | `w:ind` on every list paragraph, and `numbering.xml` | the indent depends on the item's level |
+ * | `spacing.listItemAfter` | `w:spacing` on a *loose* list's items | looseness is a property of the list, not the style |
+ * | `spacing.quoteIndent` | `w:ind` on a nested quote | depends on nesting depth |
+ * | `colors.quoteBorder`, `spacing.quoteBorderSize`, `spacing.quoteBorderSpace` | `w:pBdr` on a nested quote | ditto |
+ * | `sizes.body` | table column widths (`w:gridCol`, `w:tcW`) | a column width is a measurement, not a style |
+ * | `spacing.tableCellPadding*`, `colors.tableBorder`, `spacing.tableBorderSize`, `colors.tableHeaderBackground` | `w:tblPr` / `w:tcPr` | downword emits no table *style* |
+ * | `taskGlyphs.*`, `fonts.symbol`, `bulletLevels`, `orderedFormats` | `numbering.xml`, and the task-list glyph run | list markers live in the numbering part |
+ * | `highlightColor` | `w:highlight` on a `==marked==` run | OOXML's fixed 17-colour palette, no style |
+ * | `codePalette` | `w:color` per highlighted span | a span's scope is content, not style |
+ * | `colors.link` | `w:color` on a run that is *both* inline code and a link | one `w:rStyle` per run, and `CodeChar` took the slot |
+ *
+ * So the three presets below hold every one of those constant, with two
+ * deliberate exceptions that are documented, measured and asserted in
+ * `tests/themes.test.ts`:
+ *
+ *  - **`academic` changes `sizes.body`** (22 → 24 half-points). Twelve-point
+ *    Times is the entire point of the preset, and the column heuristic in
+ *    `computeColumnWidths` reads the body size, so a document *with a table*
+ *    differs from `default` in its `w:gridCol`/`w:tcW` values and in nothing
+ *    else.
+ *  - **every preset changes `colors.link`.** It reaches `document.xml` only for
+ *    the one construct that is both inline code and a link; ordinary links take
+ *    it from the `Hyperlink` character style, which is where a link colour
+ *    belongs. Fixing that would mean teaching `render/inline.ts` to compose the
+ *    two, not freezing a colour every theme wants to own.
+ *
+ * The code inks are the third thing held constant, for a different reason:
+ * `codePalette` and `colors.code*` are a *measured pair* (every ink clears WCAG
+ * AA against `codeBackground`), so a preset that moved the shading would
+ * silently invalidate a contrast guarantee the docs make. Swapping the palette
+ * is a separate axis — `{ ...THEMES.academic, codePalette: THEMES.print.codePalette }`
+ * composes the two.
+ */
+
+/**
+ * GitHub-flavoured: the system sans, near-black headings, tighter leading.
+ *
+ * What a README looks like on github.com, as far as a Word document can: the
+ * heading colour is the body colour (GitHub does not tint headings), the
+ * leading is single rather than Word's 1.15, and paragraph spacing is smaller
+ * throughout. Segoe UI is the Windows system face at the head of GitHub's own
+ * font stack; Arial is the fallback, being the one sans every reader has.
+ */
+export const GITHUB_THEME: Theme = resolveTheme({
+  fonts: {
+    body: fontStack("Segoe UI", "Arial"),
+    heading: fontStack("Segoe UI", "Arial"),
+  },
+  colors: {
+    // GitHub Primer: fg.default for headings, fg.muted for the quiet text.
+    heading: "1F2328",
+    headingDeep: "1F2328",
+    link: "0969DA",
+    muted: "59636E",
+    quoteText: "59636E",
+    rule: "D1D9E0",
+  },
+  sizes: {
+    // `body` is deliberately Word's 11pt: see the note above on why the body
+    // size is the one size a preset cannot move without moving table columns.
+    title: 48,
+  },
+  spacing: {
+    paragraphAfter: 120,
+    line: 240,
+    quoteSpacing: 100,
+    codeSpacing: 100,
+    ruleSpacing: 200,
+    tableSpacing: 120,
+    figureSpacing: 100,
+  },
+  headings: {
+    1: { size: 32, color: "1F2328", spaceBefore: 320, spaceAfter: 80 },
+    2: { size: 26, color: "1F2328", spaceBefore: 280, spaceAfter: 80 },
+    3: { size: 24, color: "1F2328", spaceBefore: 240, spaceAfter: 60 },
+    4: { size: 22, color: "1F2328", bold: true, italics: false, spaceBefore: 240, spaceAfter: 60 },
+    5: { size: 22, color: "1F2328", bold: true, spaceBefore: 240, spaceAfter: 60 },
+    6: { size: 22, color: "59636E", bold: true, italics: false, spaceBefore: 240, spaceAfter: 60 },
+  },
+});
+
+/**
+ * Times New Roman at 12 pt, 1.5 leading, black headings.
+ *
+ * The manuscript default: no colour anywhere a printer would have to render in
+ * grey, a serif body, and Courier New for code (the face a monospace listing
+ * has had in a typeset paper for forty years) with Consolas as the fallback.
+ * Cambria is the body fallback because it is the serif every Office install
+ * has, including the ones with no Times New Roman licence.
+ *
+ * See {@link ACADEMIC_DOUBLE_THEME} for the double-spaced variant.
+ */
+export const ACADEMIC_THEME: Theme = resolveTheme({
+  fonts: {
+    body: fontStack("Times New Roman", "Cambria"),
+    heading: fontStack("Times New Roman", "Cambria"),
+    mono: "Courier New",
+    monoFallback: "Consolas",
+  },
+  colors: {
+    heading: "000000",
+    headingDeep: "000000",
+    // Dark enough to read as ink on paper, blue enough to read as a link.
+    link: "1F4E79",
+    muted: "3C3C3C",
+    quoteText: "262626",
+    rule: "808080",
+  },
+  sizes: {
+    // 12 pt. The one document.xml-reaching token a preset moves; see above.
+    body: 24,
+    title: 36,
+    code: 22,
+    footnote: 20,
+  },
+  spacing: {
+    paragraphAfter: 120,
+    // 1.5 lines. `ACADEMIC_DOUBLE_THEME` is this and 480.
+    line: 360,
+  },
+  headings: {
+    1: { size: 28, color: "000000", spaceBefore: 240, spaceAfter: 120 },
+    2: { size: 26, color: "000000", spaceBefore: 240, spaceAfter: 120 },
+    3: { size: 24, color: "000000", spaceBefore: 240, spaceAfter: 120 },
+    4: { size: 24, color: "000000", bold: false, italics: true, spaceBefore: 240, spaceAfter: 120 },
+    5: { size: 24, color: "000000", bold: false, italics: true, spaceBefore: 240, spaceAfter: 120 },
+    6: { size: 24, color: "000000", bold: false, italics: true, spaceBefore: 240, spaceAfter: 120 },
+  },
+});
+
+/**
+ * {@link ACADEMIC_THEME}, double-spaced.
+ *
+ * The submission format most journals and every thesis office ask for, and the
+ * reason it is a preset rather than an option: `line: 480` with
+ * `lineRule="auto"` is *the* difference — one token, in `styles.xml`, reaching
+ * `docDefaults` and every style that restates the leading. Nothing else moves,
+ * which is exactly what a reader who switches between the two should see.
+ */
+export const ACADEMIC_DOUBLE_THEME: Theme = {
+  ...ACADEMIC_THEME,
+  spacing: { ...ACADEMIC_THEME.spacing, line: 480 },
+};
 
 /**
  * Resolves a highlight scope to a colour, walking `a.b.c` -> `a.b` -> `a`.

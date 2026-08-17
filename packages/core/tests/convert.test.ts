@@ -406,7 +406,11 @@ describe("options: markdown dialect", () => {
 
 describe("options: theme", () => {
   it("defaults to the default theme", async () => {
-    expect(await partOf("hi", "word/styles.xml")).toContain('w:ascii="Calibri"');
+    // Word's own pairing, both halves of it: Aptos for Latin text, Calibri in
+    // the `w:cs` slot for the readers that have never heard of Aptos.
+    expect(await partOf("hi", "word/styles.xml")).toContain(
+      '<w:rFonts w:ascii="Aptos" w:cs="Calibri" w:hAnsi="Aptos"/>',
+    );
   });
 
   it("merges a partial ThemeInit over the default", async () => {
@@ -414,7 +418,7 @@ describe("options: theme", () => {
 
     expect(styles).toContain('w:ascii="Georgia"');
     // Untouched tokens still come from the default theme.
-    expect(styles).toContain('w:ascii="Calibri Light"');
+    expect(styles).toContain('w:ascii="Aptos Display"');
   });
 
   it("accepts a built-in theme by name", async () => {

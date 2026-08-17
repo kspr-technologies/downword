@@ -2637,7 +2637,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:docDefaults>
 <w:rPrDefault>
 <w:rPr>
-<w:rFonts w:ascii="Calibri" w:cs="Calibri" w:eastAsia="Calibri" w:hAnsi="Calibri"/>
+<w:rFonts w:ascii="Aptos" w:cs="Calibri" w:hAnsi="Aptos"/>
 <w:sz w:val="22"/>
 <w:szCs w:val="22"/>
 </w:rPr>
@@ -2658,7 +2658,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:spacing w:after="240" w:before="0" w:line="276" w:lineRule="auto"/>
 </w:pPr>
 <w:rPr>
-<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:rFonts w:ascii="Aptos Display" w:cs="Calibri Light" w:hAnsi="Aptos Display"/>
 <w:color w:val="2F5496"/>
 <w:sz w:val="56"/>
 <w:szCs w:val="56"/>
@@ -2677,7 +2677,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:outlineLvl w:val="0"/>
 </w:pPr>
 <w:rPr>
-<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:rFonts w:ascii="Aptos Display" w:cs="Calibri Light" w:hAnsi="Aptos Display"/>
 <w:b/>
 <w:bCs/>
 <w:i w:val="false"/>
@@ -2700,7 +2700,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:outlineLvl w:val="1"/>
 </w:pPr>
 <w:rPr>
-<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:rFonts w:ascii="Aptos Display" w:cs="Calibri Light" w:hAnsi="Aptos Display"/>
 <w:b/>
 <w:bCs/>
 <w:i w:val="false"/>
@@ -2723,7 +2723,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:outlineLvl w:val="2"/>
 </w:pPr>
 <w:rPr>
-<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:rFonts w:ascii="Aptos Display" w:cs="Calibri Light" w:hAnsi="Aptos Display"/>
 <w:b/>
 <w:bCs/>
 <w:i w:val="false"/>
@@ -2746,7 +2746,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:outlineLvl w:val="3"/>
 </w:pPr>
 <w:rPr>
-<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:rFonts w:ascii="Aptos Display" w:cs="Calibri Light" w:hAnsi="Aptos Display"/>
 <w:b/>
 <w:bCs/>
 <w:i/>
@@ -2769,7 +2769,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:outlineLvl w:val="4"/>
 </w:pPr>
 <w:rPr>
-<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:rFonts w:ascii="Aptos Display" w:cs="Calibri Light" w:hAnsi="Aptos Display"/>
 <w:b w:val="false"/>
 <w:bCs w:val="false"/>
 <w:i w:val="false"/>
@@ -2792,7 +2792,7 @@ exports[`golden: styles > matches the committed word/styles.xml > word/styles.xm
 <w:outlineLvl w:val="5"/>
 </w:pPr>
 <w:rPr>
-<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:rFonts w:ascii="Aptos Display" w:cs="Calibri Light" w:hAnsi="Aptos Display"/>
 <w:b w:val="false"/>
 <w:bCs w:val="false"/>
 <w:i/>

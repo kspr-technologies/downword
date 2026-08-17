@@ -27,5 +27,28 @@
     "ignore": ["highlight.js"],
     "limit": "10 kB",
     "gzip": true
+  },
+  {
+    "name": "downword/plugins/mermaid: excluding mermaid, which is loaded lazily",
+    "path": "dist/plugins/mermaid.js",
+    "import": "{ renderMermaid }",
+    "ignore": ["mermaid"],
+    "limit": "10 kB",
+    "gzip": true
+  },
+  {
+    "name": "downword/plugins/math: the math machinery alone, excluding docx, markdown-it and the lazy TeX engines",
+    "path": "dist/plugins/math.js",
+    "import": "{ convertDocumentMath, mathMarkdownIt }",
+    "ignore": ["docx", "markdown-it", "markdown-it-footnote", "temml", "mathml2omml"],
+    "limit": "15 kB",
+    "gzip": true
+  },
+  {
+    "name": "downword/plugins/math: the whole entry, which re-exports the core pipeline, excluding docx and the lazy TeX engines",
+    "path": "dist/plugins/math.js",
+    "ignore": ["docx", "temml", "mathml2omml"],
+    "limit": "100 kB",
+    "gzip": true
   }
 ]

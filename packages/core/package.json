@@ -107,10 +107,22 @@
     "markdown-it-footnote": "4.0.0"
   },
   "peerDependencies": {
-    "highlight.js": "^11"
+    "highlight.js": "^11",
+    "mathml2omml": "^0.5",
+    "mermaid": "^10 || ^11",
+    "temml": "^0.13"
   },
   "peerDependenciesMeta": {
     "highlight.js": {
+      "optional": true
+    },
+    "mathml2omml": {
+      "optional": true
+    },
+    "mermaid": {
+      "optional": true
+    },
+    "temml": {
       "optional": true
     }
   },

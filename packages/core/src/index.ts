@@ -22,7 +22,8 @@
  * | --- | --- |
  * | `downword/highlight` | highlight.js is an **optional peer dependency**; importing it here would put 62 lazily-loaded grammar chunks into every consumer's build. |
  * | `downword/images/node` | the only module that touches `node:fs`/`node:dns`. Keeping it out means a browser bundler never has to resolve them. |
- * | `downword/plugins/math`, `downword/plugins/mermaid` | stubs today, and both pull a heavy engine (`temml`, `mermaid`) when they land. |
+ * | `downword/plugins/math` | `temml` and `mathml2omml` are **optional peer dependencies**, dynamically imported; the entry also carries the async pass that fills each equation's `omml` slot. |
+ * | `downword/plugins/mermaid` | mermaid is a ~500 kB **optional peer dependency**, dynamically imported, and the pass needs a DOM. |
  *
  * @module
  */

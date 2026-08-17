@@ -357,6 +357,63 @@ cannot hold costs exactly one placeholder and one warning — never the document
 SVG needs a rasteriser, because OOXML stores an SVG _plus_ a raster twin; pass
 one as `rasterizer`, or the image degrades to the placeholder.
 
+## Diagrams (mermaid)
+
+````ts
+import { parseMarkdown, renderDocument } from "downword";
+import { renderMermaid } from "downword/plugins/mermaid";
+
+const parsed = parseMarkdown("# Design\n\n```mermaid\nflowchart LR\n  A --> B\n```\n");
+const { document, warnings } = await renderMermaid(parsed);
+
+const file = renderDocument(document);
+````
+
+Each ` ```mermaid ` fence becomes a centred figure: mermaid draws an SVG,
+the SVG is rastered at **twice** its display size, and the PNG is embedded with
+alt text. The info string is the caption — ` ```mermaid The request pipeline `
+— and so is mermaid's own `title:` frontmatter; with one, an italic caption
+paragraph follows the picture.
+
+Three things are worth knowing before you reach for it.
+
+**It needs a browser.** mermaid measures text by laying it out, so there is no
+headless path that is not a headless browser. In Node the pass leaves every
+fence exactly as it found it — the diagram's source is still in the document, as
+a code block — and reports one `no-dom` warning saying so. Nothing throws and
+nothing disappears. To render in Node, supply both seams: a `renderer` (mermaid
+driven through jsdom, or a headless browser) and a `rasterizer` (`resvg`,
+`sharp`, `@napi-rs/canvas`).
+
+**mermaid is an optional peer dependency**, ~500 kB, loaded through
+`await import("mermaid")` on the first diagram. A document with none fetches
+nothing, and a project that never imports this subpath does not pay for it —
+which `tests/bundle.test.ts` proves by bundling the main entry and failing if
+mermaid appears in its import graph.
+
+**What lands in the file is a picture.** OOXML cannot hold a bare SVG: it stores
+a raster _plus_ an `asvg:svgBlip` extension, and `docx`'s `ImageRun` requires the
+raster twin. `embed: "svg"` ships both halves, so Word 2016+ draws the vector and
+everything else draws the same PNG.
+
+```ts
+import { parseMarkdown } from "downword";
+import { renderMermaid } from "downword/plugins/mermaid";
+
+const { document, diagrams, rendered, warnings } = await renderMermaid(parseMarkdown("# hi"), {
+  embed: "svg",
+  scale: 3,
+  caption: false,
+  config: { theme: "neutral" },
+  onWarning: (warning) => console.warn(`${warning.code}: ${warning.message}`),
+});
+```
+
+A warning is a `notice` when the environment could never have rendered the
+diagram (`no-dom`, `engine-unavailable`) and an `error` when downword tried and
+failed (`render-failed`, `rasterize-failed`, …). Either way the fence survives,
+so a diagram is never silently missing.
+
 ## Themes
 
 Every number, colour, font and glyph the renderer can emit is a theme token.
@@ -380,6 +437,25 @@ await convert("# Hello", {
   theme: { ...THEMES.print, spacing: { ...THEMES.print.spacing, paragraphAfter: 240 } },
 });
 ```
+
+Five built-ins, and the three that are _looks_ differ **only in the generated
+`styles.xml`** — the same markdown produces the same `document.xml`, dressed
+differently. That is what makes the output restylable in Word (Design → Style
+Set rewrites style definitions, so anything stamped onto an element instead is
+beyond its reach), and `tests/themes.test.ts` proves it by rendering one fixture
+under each and diffing the parts.
+
+| Theme               | What it is                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| `"default"`         | Word's own look: Aptos with a Calibri fallback, Word's heading blues, 1.15 leading              |
+| `"github"`          | a README as Word can render one: Segoe UI (fallback Arial), near-black headings, single leading |
+| `"academic"`        | Times New Roman 12 pt (fallback Cambria), black headings, 1.5 leading, Courier New for code     |
+| `"academic-double"` | the same, double-spaced                                                                         |
+| `"print"`           | `"default"` with the AAA-contrast code palette                                                  |
+
+OOXML has no font stack, so a theme names a preferred face and a fallback in the
+`w:cs` slot rather than a list: `fonts: { body: { ascii: "Aptos", hAnsi: "Aptos", cs: "Calibri" } }`.
+A plain string still works and is expanded into every script slot.
 
 Colours are `RRGGBB` without a leading `#`; sizes are half-points (`24` = 12pt);
 spacing is twips. Every group is merged one level deep except the three that are
@@ -448,8 +524,8 @@ Subpath entry points:
 | `downword`                 | `convert` and everything above                      |
 | `downword/highlight`       | the highlight.js adapter (optional peer dependency) |
 | `downword/images/node`     | the filesystem + SSRF-guarded image resolver        |
-| `downword/plugins/math`    | TeX → OMML (stub)                                   |
-| `downword/plugins/mermaid` | mermaid diagrams (stub)                             |
+| `downword/plugins/math`    | `$…$` → native Word equations (optional peers)      |
+| `downword/plugins/mermaid` | mermaid diagrams (optional peer dependency)         |
 
 ---
 

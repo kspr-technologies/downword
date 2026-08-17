@@ -111,7 +111,7 @@ import * as downword from "downword";
 import { createHighlighter } from "downword/highlight";
 import { createNodeImageResolver } from "downword/images/node";
 import { mathPlugin } from "downword/plugins/math";
-import { mermaidPlugin } from "downword/plugins/mermaid";
+import { renderMermaid, countMermaidDiagrams } from "downword/plugins/mermaid";
 
 const required = ${JSON.stringify(REQUIRED_EXPORTS)};
 const missing = required.filter((name) => !(name in downword));
@@ -130,7 +130,12 @@ assert.equal(
   "downword/images/node must export createNodeImageResolver",
 );
 assert.equal(typeof mathPlugin, "function", "downword/plugins/math must export mathPlugin");
-assert.equal(typeof mermaidPlugin, "function", "downword/plugins/mermaid must export mermaidPlugin");
+assert.equal(typeof renderMermaid, "function", "downword/plugins/mermaid must export renderMermaid");
+assert.equal(
+  countMermaidDiagrams({ type: "document", metadata: {}, children: [] }),
+  0,
+  "countMermaidDiagrams must work without a DOM",
+);
 
 const warnings = [];
 const bytes = await downword.convert("# Hello\\n\\nfrom the packed tarball.\\n\\n- a\\n- b", {
@@ -179,9 +184,9 @@ assert.equal(
 );
 assert.equal(typeof math.mathPlugin, "function", "downword/plugins/math must export mathPlugin");
 assert.equal(
-  typeof mermaid.mermaidPlugin,
+  typeof mermaid.renderMermaid,
   "function",
-  "downword/plugins/mermaid must export mermaidPlugin",
+  "downword/plugins/mermaid must export renderMermaid",
 );
 
 downword
