@@ -16,17 +16,20 @@ const { convert, DOCX_MIME_TYPE, VERSION } = require("downword");
 const markdown = `# Hello from CommonJS
 
 downword ${VERSION} generated this file with \`require("downword")\`.
+
+> Nothing left the process to build it.
 `;
 
 async function main() {
-  const { bytes, mimeType, warnings } = await convert(markdown, {
-    title: "downword CJS example",
-    creator: "KSPR Technologies",
-  });
-
-  if (mimeType !== DOCX_MIME_TYPE) {
-    throw new Error(`unexpected mime type: ${mimeType}`);
+  if (typeof DOCX_MIME_TYPE !== "string" || !DOCX_MIME_TYPE.includes("wordprocessingml")) {
+    throw new Error(`unexpected mime type constant: ${DOCX_MIME_TYPE}`);
   }
+
+  const warnings = [];
+  const bytes = await convert(markdown, {
+    metadata: { title: "downword CJS example", author: "KSPR Technologies" },
+    onWarning: (warning) => warnings.push(warning),
+  });
 
   const outDir = path.join(__dirname, "out");
   mkdirSync(outDir, { recursive: true });
@@ -35,7 +38,7 @@ async function main() {
 
   console.log(`[cjs] downword ${VERSION} -> ${outFile} (${bytes.byteLength} bytes)`);
   for (const warning of warnings) {
-    console.log(`[cjs] warning: ${warning}`);
+    console.log(`[cjs] ${warning.stage} warning (${warning.code}): ${warning.message}`);
   }
 }
 

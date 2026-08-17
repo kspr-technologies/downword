@@ -1,10 +1,31 @@
 [
   {
-    "name": "downword (ESM, excluding the docx OOXML writer)",
+    "name": "downword: the \".\" entry, whole public surface, excluding docx",
+    "path": "dist/index.js",
+    "ignore": ["docx"],
+    "limit": "150 kB",
+    "gzip": true
+  },
+  {
+    "name": "downword: convert() only, excluding docx",
     "path": "dist/index.js",
     "import": "{ convert }",
     "ignore": ["docx"],
-    "limit": "150 kB",
+    "limit": "100 kB",
+    "gzip": true
+  },
+  {
+    "name": "downword: the \".\" entry INCLUDING docx 9.7.1 (a pre-bundled, non-tree-shakeable blob)",
+    "path": "dist/index.js",
+    "limit": "195 kB",
+    "gzip": true
+  },
+  {
+    "name": "downword/highlight: excluding highlight.js, which is loaded lazily",
+    "path": "dist/highlight.js",
+    "import": "{ createHighlighter }",
+    "ignore": ["highlight.js"],
+    "limit": "10 kB",
     "gzip": true
   }
 ]

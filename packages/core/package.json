@@ -43,6 +43,26 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./highlight": {
+      "import": {
+        "types": "./dist/highlight.d.ts",
+        "default": "./dist/highlight.js"
+      },
+      "require": {
+        "types": "./dist/highlight.d.cts",
+        "default": "./dist/highlight.cjs"
+      }
+    },
+    "./images/node": {
+      "import": {
+        "types": "./dist/images/node.d.ts",
+        "default": "./dist/images/node.js"
+      },
+      "require": {
+        "types": "./dist/images/node.d.cts",
+        "default": "./dist/images/node.cjs"
+      }
+    },
     "./plugins/math": {
       "import": {
         "types": "./dist/plugins/math.d.ts",
@@ -84,8 +104,7 @@
   "dependencies": {
     "docx": "9.7.1",
     "markdown-it": "15.0.0",
-    "markdown-it-footnote": "4.0.0",
-    "markdown-it-task-lists": "2.1.1"
+    "markdown-it-footnote": "4.0.0"
   },
   "peerDependencies": {
     "highlight.js": "^11"
@@ -99,9 +118,13 @@
     "@size-limit/preset-small-lib": "13.0.3",
     "@types/markdown-it": "^14",
     "@types/node": "^22",
+    "esbuild": "0.28.1",
     "highlight.js": "^11",
     "jszip": "3.10.1",
+    "markdown-it-task-lists": "2.1.1",
+    "mathml2omml": "0.5.0",
     "size-limit": "13.0.3",
+    "temml": "0.13.4",
     "tsup": "8.5.1",
     "typescript": "^5",
     "vitest": "4.1.10"

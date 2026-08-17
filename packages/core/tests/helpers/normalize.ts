@@ -47,6 +47,15 @@ const SCRUBBERS: readonly Scrubber[] = [
     replacement: TOKEN,
   },
   {
+    // docx mints external-hyperlink relationship ids as "rId" + nanoid(21), so
+    // they differ on every render of identical input. Image and header
+    // relationships use sequential numeric ids and are deliberately NOT
+    // scrubbed here - those have to stay stable.
+    what: "nanoid-suffixed relationship ids (external hyperlinks)",
+    pattern: /\br:id="rId[A-Za-z0-9_-]{21}"/g,
+    replacement: `r:id="rId${TOKEN}"`,
+  },
+  {
     what: "nanoid-style ids emitted by the docx writer",
     pattern: /"[A-Za-z0-9_-]{21}"/g,
     replacement: `"${TOKEN}"`,

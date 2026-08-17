@@ -59,7 +59,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.1.10
-        version: 4.1.10(@types/node@22.20.1)(vite@8.2.0(@types/node@22.20.1)(esbuild@0.27.7))
+        version: 4.1.10(@types/node@22.20.1)(vite@8.2.0(@types/node@22.20.1)(esbuild@0.28.1))
 
   packages/core:
     dependencies:
@@ -72,9 +72,6 @@ importers:
       markdown-it-footnote:
         specifier: 4.0.0
         version: 4.0.0
-      markdown-it-task-lists:
-        specifier: 2.1.1
-        version: 2.1.1
     devDependencies:
       '@size-limit/preset-small-lib':
         specifier: 13.0.3
@@ -85,15 +82,27 @@ importers:
       '@types/node':
         specifier: ^22
         version: 22.20.1
+      esbuild:
+        specifier: 0.28.1
+        version: 0.28.1
       highlight.js:
         specifier: ^11
         version: 11.11.1
       jszip:
         specifier: 3.10.1
         version: 3.10.1
+      markdown-it-task-lists:
+        specifier: 2.1.1
+        version: 2.1.1
+      mathml2omml:
+        specifier: 0.5.0
+        version: 0.5.0
       size-limit:
         specifier: 13.0.3
         version: 13.0.3
+      temml:
+        specifier: 0.13.4
+        version: 0.13.4
       tsup:
         specifier: 8.5.1
         version: 8.5.1(postcss@8.5.25)(typescript@5.9.3)
@@ -1537,6 +1546,9 @@ packages:
     resolution: {integrity: sha512-Lf8ajvVNdRpzSNB4VegxNy7gjs8gU35l4b4+ET49LrQC5PKYwLZ72u60LeJ9gv3qiaesuYjJWCyVeQmv/QWKQw==}
     hasBin: true
 
+  mathml2omml@0.5.0:
+    resolution: {integrity: sha512-4eLs37a+TH+CL/M5XZZrlc75SNRJNPiZzIaeSSvH0UFCRaCdSYRHWvrlA7MUbeQks/z4sVhfg+GlcZhVVUHzqg==}
+
   mdurl@2.1.0:
     resolution: {integrity: sha512-1+HBaOx0zi/dQWht8rNv9MYf9qqpqL/kxI0hXImU6Y547zM6Sni8BQibt7ifgMcYtQg41ao3Ivd6cnSM86inpg==}
 
@@ -1865,6 +1877,10 @@ packages:
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
+
+  temml@0.13.4:
+    resolution: {integrity: sha512-k1yolMBswx34Jw9hZn5Xh2/GBlwqlW+wiN7QaUYUMhSa1ypfti6rlCfSmCxWyooxH1G32C/Z+qVvgAsBOELZBQ==}
+    engines: {node: '>=18.13.0'}
 
   term-size@2.2.1:
     resolution: {integrity: sha512-wK0Ri4fOGjv/XPy8SBHZChl8CM7uMc5VML7SqiQ0zG7+J5Vr+RMQDoHa2CNT6KHUnTGIXH34UDMkPzAUyapBZg==}
@@ -2826,14 +2842,6 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.1
 
-  '@vitest/mocker@4.1.10(vite@8.2.0(@types/node@22.20.1)(esbuild@0.27.7))':
-    dependencies:
-      '@vitest/spy': 4.1.10
-      estree-walker: 3.0.3
-      magic-string: 0.30.21
-    optionalDependencies:
-      vite: 8.2.0(@types/node@22.20.1)(esbuild@0.27.7)
-
   '@vitest/mocker@4.1.10(vite@8.2.0(@types/node@22.20.1)(esbuild@0.28.1))':
     dependencies:
       '@vitest/spy': 4.1.10
@@ -3410,6 +3418,8 @@ snapshots:
       punycode.js: 2.3.1
       uc.micro: 3.0.0
 
+  mathml2omml@0.5.0: {}
+
   mdurl@2.1.0: {}
 
   merge2@1.4.1: {}
@@ -3714,6 +3724,8 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
+  temml@0.13.4: {}
+
   term-size@2.2.1: {}
 
   thenify-all@1.6.0:
@@ -3815,18 +3827,6 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@8.2.0(@types/node@22.20.1)(esbuild@0.27.7):
-    dependencies:
-      lightningcss: 1.33.0
-      picomatch: 4.0.5
-      postcss: 8.5.25
-      rolldown: 1.2.1
-      tinyglobby: 0.2.17
-    optionalDependencies:
-      '@types/node': 22.20.1
-      esbuild: 0.27.7
-      fsevents: 2.3.3
-
   vite@8.2.0(@types/node@22.20.1)(esbuild@0.28.1):
     dependencies:
       lightningcss: 1.33.0
@@ -3838,33 +3838,6 @@ snapshots:
       '@types/node': 22.20.1
       esbuild: 0.28.1
       fsevents: 2.3.3
-
-  vitest@4.1.10(@types/node@22.20.1)(vite@8.2.0(@types/node@22.20.1)(esbuild@0.27.7)):
-    dependencies:
-      '@vitest/expect': 4.1.10
-      '@vitest/mocker': 4.1.10(vite@8.2.0(@types/node@22.20.1)(esbuild@0.27.7))
-      '@vitest/pretty-format': 4.1.10
-      '@vitest/runner': 4.1.10
-      '@vitest/snapshot': 4.1.10
-      '@vitest/spy': 4.1.10
-      '@vitest/utils': 4.1.10
-      es-module-lexer: 2.3.1
-      expect-type: 1.4.0
-      magic-string: 0.30.21
-      obug: 2.1.4
-      pathe: 2.0.3
-      picomatch: 4.0.5
-      std-env: 4.2.0
-      tinybench: 2.9.0
-      tinyexec: 1.3.0
-      tinyglobby: 0.2.17
-      tinyrainbow: 3.1.1
-      vite: 8.2.0(@types/node@22.20.1)(esbuild@0.27.7)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 22.20.1
-    transitivePeerDependencies:
-      - msw
 
   vitest@4.1.10(@types/node@22.20.1)(vite@8.2.0(@types/node@22.20.1)(esbuild@0.28.1)):
     dependencies:

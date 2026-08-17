@@ -8,23 +8,25 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-import { convert, DOCX_MIME_TYPE, VERSION } from "downword";
+import { convert, VERSION } from "downword";
 
 const markdown = `# Hello from ESM
 
 downword ${VERSION} generated this file with \`import { convert } from "downword"\`.
 
-Paste your ChatGPT or Claude answer here and you get a real Word document.
+- Paste your ChatGPT or Claude answer
+- Get a real Word document
+
+| Runs offline | Real .docx |
+| ------------ | ---------- |
+| yes          | yes        |
 `;
 
-const { bytes, mimeType, warnings } = await convert(markdown, {
-  title: "downword ESM example",
-  creator: "KSPR Technologies",
+const warnings = [];
+const bytes = await convert(markdown, {
+  metadata: { title: "downword ESM example", author: "KSPR Technologies" },
+  onWarning: (warning) => warnings.push(warning),
 });
-
-if (mimeType !== DOCX_MIME_TYPE) {
-  throw new Error(`unexpected mime type: ${mimeType}`);
-}
 
 const outDir = fileURLToPath(new URL("./out/", import.meta.url));
 await mkdir(outDir, { recursive: true });
@@ -33,5 +35,5 @@ await writeFile(outFile, bytes);
 
 console.log(`[esm] downword ${VERSION} -> ${outFile} (${bytes.byteLength} bytes)`);
 for (const warning of warnings) {
-  console.log(`[esm] warning: ${warning}`);
+  console.log(`[esm] ${warning.stage} warning (${warning.code}): ${warning.message}`);
 }

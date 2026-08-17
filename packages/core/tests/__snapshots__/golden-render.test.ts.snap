@@ -1,0 +1,2536 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`golden: kitchen sink > matches the committed word/document.xml > word/document.xml 1`] = `
+"<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document mc:Ignorable="w14 w15 wp14" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" xmlns:cx2="http://schemas.microsoft.com/office/drawing/2015/10/21/chartex" xmlns:cx3="http://schemas.microsoft.com/office/drawing/2016/5/9/chartex" xmlns:cx4="http://schemas.microsoft.com/office/drawing/2016/5/10/chartex" xmlns:cx5="http://schemas.microsoft.com/office/drawing/2016/5/11/chartex" xmlns:cx6="http://schemas.microsoft.com/office/drawing/2016/5/12/chartex" xmlns:cx7="http://schemas.microsoft.com/office/drawing/2016/5/13/chartex" xmlns:cx8="http://schemas.microsoft.com/office/drawing/2016/5/14/chartex" xmlns:aink="http://schemas.microsoft.com/office/drawing/2016/ink" xmlns:am3d="http://schemas.microsoft.com/office/drawing/2017/model3d" xmlns:w16cex="http://schemas.microsoft.com/office/word/2018/wordml/cex" xmlns:w16cid="http://schemas.microsoft.com/office/word/2016/wordml/cid" xmlns:w16="http://schemas.microsoft.com/office/word/2018/wordml" xmlns:w16sdtdh="http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash" xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex">
+<w:body>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Title"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">Downword Golden Fixture</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading1"/>
+</w:pPr>
+<w:bookmarkStart w:name="inline_marks" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Inline marks</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">plain </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:b/>
+<w:bCs/>
+</w:rPr>
+<w:t xml:space="preserve">bold</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:i/>
+<w:iCs/>
+</w:rPr>
+<w:t xml:space="preserve">italic</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:strike/>
+</w:rPr>
+<w:t xml:space="preserve">struck</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="CodeChar"/>
+</w:rPr>
+<w:t xml:space="preserve">code</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:vertAlign w:val="superscript"/>
+</w:rPr>
+<w:t xml:space="preserve">sup</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:vertAlign w:val="subscript"/>
+</w:rPr>
+<w:t xml:space="preserve">sub</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:highlight w:val="yellow"/>
+<w:highlightCs w:val="yellow"/>
+</w:rPr>
+<w:t xml:space="preserve">marked</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">composed: </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:b/>
+<w:bCs/>
+<w:i/>
+<w:iCs/>
+<w:strike/>
+</w:rPr>
+<w:t xml:space="preserve">bold italic struck</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> and </w:t>
+</w:r>
+<w:hyperlink w:history="1" r:id="rId__NORMALIZED__">
+<w:r>
+<w:rPr>
+<w:rStyle w:val="CodeChar"/>
+<w:b/>
+<w:bCs/>
+<w:color w:val="0563C1"/>
+<w:u w:val="single"/>
+</w:rPr>
+<w:t xml:space="preserve">linked bold code</w:t>
+</w:r>
+</w:hyperlink>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">a </w:t>
+</w:r>
+<w:hyperlink w:history="1" r:id="rId__NORMALIZED__">
+<w:r>
+<w:rPr>
+<w:rStyle w:val="Hyperlink"/>
+</w:rPr>
+<w:t xml:space="preserve">split </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="Hyperlink"/>
+</w:rPr>
+<w:t xml:space="preserve">across </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="Hyperlink"/>
+</w:rPr>
+<w:t xml:space="preserve">runs</w:t>
+</w:r>
+</w:hyperlink>
+<w:r>
+<w:t xml:space="preserve"> then </w:t>
+</w:r>
+<w:hyperlink w:history="1" w:anchor="tables">
+<w:r>
+<w:rPr>
+<w:rStyle w:val="Hyperlink"/>
+</w:rPr>
+<w:t xml:space="preserve">an internal jump</w:t>
+</w:r>
+</w:hyperlink>
+<w:r>
+<w:t xml:space="preserve"> and a </w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">dangling anchor</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">hard break here</w:t>
+</w:r>
+<w:r>
+<w:br/>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">second line</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">soft break joined</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">raw </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="HtmlChar"/>
+</w:rPr>
+<w:t xml:space="preserve">&lt;kbd&gt;</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">Esc</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="HtmlChar"/>
+</w:rPr>
+<w:t xml:space="preserve">&lt;/kbd&gt;</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> tag</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading1"/>
+</w:pPr>
+<w:bookmarkStart w:name="level_one" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Level one</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="level_two" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Level two</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading3"/>
+</w:pPr>
+<w:bookmarkStart w:name="level_three" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Level three</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading4"/>
+</w:pPr>
+<w:bookmarkStart w:name="level_four" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Level four</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading5"/>
+</w:pPr>
+<w:bookmarkStart w:name="level_five" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Level five</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading6"/>
+</w:pPr>
+<w:bookmarkStart w:name="level_six" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Level six</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="a_b" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">A-B</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="a_b_2" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">A_B</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="bullets" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Bullets</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">level 0</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="1"/>
+<w:numId w:val="2"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">level 1</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="2"/>
+<w:numId w:val="2"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">level 2</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">level 0, second item</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+<w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">a continuation paragraph inside the item</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="ordered" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Ordered</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="3"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">first</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="1"/>
+<w:numId w:val="3"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">nested a</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="2"/>
+<w:numId w:val="3"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">nested i</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="1"/>
+<w:numId w:val="3"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">nested b</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="3"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">second</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">A separating paragraph.</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="4"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">restarted first</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="4"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">restarted second</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="5"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">starts at five</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="tasks" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Tasks</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="6"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">done</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="7"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">not done</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="8"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">not a checkbox</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="7"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">nested tasks</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="1"/>
+<w:numId w:val="6"/>
+</w:numPr>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">deep done</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="loose" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Loose</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:spacing w:after="120"/>
+<w:contextualSpacing w:val="false"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">loose one</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:spacing w:after="120"/>
+<w:contextualSpacing w:val="false"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">loose two</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+</w:pPr>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="CodeBlock"/>
+<w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">no leading paragraph</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="tables" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Tables</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:tbl>
+<w:tblPr>
+<w:tblW w:type="dxa" w:w="9026"/>
+<w:tblBorders>
+<w:top w:val="single" w:color="BFBFBF" w:sz="4"/>
+<w:left w:val="single" w:color="BFBFBF" w:sz="4"/>
+<w:bottom w:val="single" w:color="BFBFBF" w:sz="4"/>
+<w:right w:val="single" w:color="BFBFBF" w:sz="4"/>
+<w:insideH w:val="single" w:color="BFBFBF" w:sz="4"/>
+<w:insideV w:val="single" w:color="BFBFBF" w:sz="4"/>
+</w:tblBorders>
+<w:tblLayout w:type="fixed"/>
+<w:tblCellMar>
+<w:top w:type="dxa" w:w="60"/>
+<w:left w:type="dxa" w:w="108"/>
+<w:bottom w:type="dxa" w:w="60"/>
+<w:right w:type="dxa" w:w="108"/>
+</w:tblCellMar>
+</w:tblPr>
+<w:tblGrid>
+<w:gridCol w:w="1114"/>
+<w:gridCol w:w="1113"/>
+<w:gridCol w:w="1113"/>
+<w:gridCol w:w="5686"/>
+</w:tblGrid>
+<w:tr>
+<w:trPr>
+<w:cantSplit/>
+<w:tblHeader/>
+</w:trPr>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1114"/>
+<w:shd w:fill="F2F2F2" w:color="auto" w:val="clear"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableHeading"/>
+<w:jc w:val="left"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">Option</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1113"/>
+<w:shd w:fill="F2F2F2" w:color="auto" w:val="clear"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableHeading"/>
+<w:jc w:val="center"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">Centered</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1113"/>
+<w:shd w:fill="F2F2F2" w:color="auto" w:val="clear"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableHeading"/>
+<w:jc w:val="right"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">Numeric</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="5686"/>
+<w:shd w:fill="F2F2F2" w:color="auto" w:val="clear"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableHeading"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">Description</w:t>
+</w:r>
+</w:p>
+</w:tc>
+</w:tr>
+<w:tr>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1114"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+<w:jc w:val="left"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="CodeChar"/>
+</w:rPr>
+<w:t xml:space="preserve">--fast</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1113"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+<w:jc w:val="center"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:b/>
+<w:bCs/>
+</w:rPr>
+<w:t xml:space="preserve">yes</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1113"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+<w:jc w:val="right"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">1.25</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="5686"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">A deliberately long description so the width heuristic has something to weigh, with </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:i/>
+<w:iCs/>
+</w:rPr>
+<w:t xml:space="preserve">emphasis</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> and a </w:t>
+</w:r>
+<w:hyperlink w:history="1" r:id="rId__NORMALIZED__">
+<w:r>
+<w:rPr>
+<w:rStyle w:val="Hyperlink"/>
+</w:rPr>
+<w:t xml:space="preserve">link</w:t>
+</w:r>
+</w:hyperlink>
+<w:r>
+<w:t xml:space="preserve">.</w:t>
+</w:r>
+</w:p>
+</w:tc>
+</w:tr>
+<w:tr>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1114"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+<w:jc w:val="left"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="CodeChar"/>
+</w:rPr>
+<w:t xml:space="preserve">--slow</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1113"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+<w:jc w:val="center"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">no</w:t>
+</w:r>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="1113"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+<w:jc w:val="right"/>
+</w:pPr>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="5686"/>
+<w:vAlign w:val="top"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableText"/>
+</w:pPr>
+</w:p>
+</w:tc>
+</w:tr>
+</w:tbl>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="TableSpacing"/>
+</w:pPr>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="quotes" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Quotes</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Quote"/>
+<w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">first level</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Quote"/>
+<w:ind w:left="1440"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">second level</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ListParagraph"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:pBdr>
+<w:left w:val="single" w:color="C8C8C8" w:sz="18" w:space="12"/>
+</w:pBdr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">a list inside a nested quote</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="CodeBlock"/>
+<w:pBdr>
+<w:left w:val="single" w:color="C8C8C8" w:sz="18" w:space="12"/>
+</w:pBdr>
+<w:ind w:left="1440"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">quoted();</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Quote"/>
+<w:ind w:left="720"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">back to the first level</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="code" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Code</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="CodeBlock"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">const answer = 42;</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="CodeBlock"/>
+</w:pPr>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="CodeBlock"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">console.log(&quot;hi&quot;);</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="CodeBlock"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">    with a tab</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="CodeBlock"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:color w:val="CF222E"/>
+</w:rPr>
+<w:t xml:space="preserve">SELECT</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:color w:val="0550AE"/>
+</w:rPr>
+<w:t xml:space="preserve">1</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">;</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="HorizontalRule"/>
+</w:pPr>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="images" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Images</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Figure"/>
+</w:pPr>
+<w:r>
+<w:drawing>
+<wp:inline distT="0" distB="0" distL="0" distR="0">
+<wp:extent cx="76200" cy="38100"/>
+<wp:effectExtent t="0" r="0" b="0" l="0"/>
+<wp:docPr id="__NORMALIZED__" name="The logo" descr="The logo"/>
+<wp:cNvGraphicFramePr>
+<a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+</wp:cNvGraphicFramePr>
+<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+<pic:nvPicPr>
+<pic:cNvPr id="__NORMALIZED__" name="" descr=""/>
+<pic:cNvPicPr>
+<a:picLocks noChangeAspect="1" noChangeArrowheads="1"/>
+</pic:cNvPicPr>
+</pic:nvPicPr>
+<pic:blipFill>
+<a:blip r:embed="rId7" cstate="none"/>
+<a:srcRect/>
+<a:stretch>
+<a:fillRect/>
+</a:stretch>
+</pic:blipFill>
+<pic:spPr bwMode="auto">
+<a:xfrm>
+<a:off x="0" y="0"/>
+<a:ext cx="76200" cy="38100"/>
+</a:xfrm>
+<a:prstGeom prst="rect">
+<a:avLst/>
+</a:prstGeom>
+</pic:spPr>
+</pic:pic>
+</a:graphicData>
+</a:graphic>
+</wp:inline>
+</w:drawing>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Figure"/>
+</w:pPr>
+<w:r>
+<w:drawing>
+<wp:inline distT="0" distB="0" distL="0" distR="0">
+<wp:extent cx="76200" cy="38100"/>
+<wp:effectExtent t="0" r="0" b="0" l="0"/>
+<wp:docPr id="__NORMALIZED__" name="A diagram" descr="A diagram"/>
+<wp:cNvGraphicFramePr>
+<a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+</wp:cNvGraphicFramePr>
+<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+<pic:nvPicPr>
+<pic:cNvPr id="__NORMALIZED__" name="" descr=""/>
+<pic:cNvPicPr>
+<a:picLocks noChangeAspect="1" noChangeArrowheads="1"/>
+</pic:cNvPicPr>
+</pic:nvPicPr>
+<pic:blipFill>
+<a:blip r:embed="rId7" cstate="none">
+<a:extLst>
+<a:ext uri="{96DAC541-7B7A-43D3-8B79-37D633B846F1}">
+<asvg:svgBlip xmlns:asvg="http://schemas.microsoft.com/office/drawing/2016/SVG/main" r:embed="rId8"/>
+</a:ext>
+</a:extLst>
+</a:blip>
+<a:srcRect/>
+<a:stretch>
+<a:fillRect/>
+</a:stretch>
+</pic:blipFill>
+<pic:spPr bwMode="auto">
+<a:xfrm>
+<a:off x="0" y="0"/>
+<a:ext cx="76200" cy="38100"/>
+</a:xfrm>
+<a:prstGeom prst="rect">
+<a:avLst/>
+</a:prstGeom>
+</pic:spPr>
+</pic:pic>
+</a:graphicData>
+</a:graphic>
+</wp:inline>
+</w:drawing>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="ImagePlaceholder"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="ImagePlaceholderChar"/>
+</w:rPr>
+<w:t xml:space="preserve">[image: Not resolved]</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">inline </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="ImagePlaceholderChar"/>
+</w:rPr>
+<w:t xml:space="preserve">[image: also missing]</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> image</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="raw_html" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Raw HTML</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="HtmlBlock"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">&lt;details&gt;</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="HtmlBlock"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">  &lt;summary&gt;Nope&lt;/summary&gt;</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="HtmlBlock"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">&lt;/details&gt;</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Heading2"/>
+</w:pPr>
+<w:bookmarkStart w:name="footnotes" w:id="__NORMALIZED__"/>
+<w:r>
+<w:t xml:space="preserve">Footnotes</w:t>
+</w:r>
+<w:bookmarkEnd w:id="__NORMALIZED__"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="Normal"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">A claim</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="FootnoteReference"/>
+</w:rPr>
+<w:footnoteReference w:id="__NORMALIZED__"/>
+</w:r>
+<w:r>
+<w:t xml:space="preserve"> and another</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="FootnoteReference"/>
+</w:rPr>
+<w:footnoteReference w:id="__NORMALIZED__"/>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">.</w:t>
+</w:r>
+</w:p>
+<w:sectPr>
+<w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/>
+<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
+<w:pgNumType/>
+<w:docGrid w:linePitch="360"/>
+</w:sectPr>
+</w:body>
+</w:document>
+"
+`;
+
+exports[`golden: kitchen sink > matches the committed word/footnotes.xml > word/footnotes.xml 1`] = `
+"<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:footnotes xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 w15 wp14">
+<w:footnote w:type="separator" w:id="-1">
+<w:p>
+<w:pPr>
+<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="FootnoteReference"/>
+</w:rPr>
+<w:footnoteRef/>
+</w:r>
+<w:r>
+<w:separator/>
+</w:r>
+</w:p>
+</w:footnote>
+<w:footnote w:type="__NORMALIZED__" w:id="__NORMALIZED__">
+<w:p>
+<w:pPr>
+<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="FootnoteReference"/>
+</w:rPr>
+<w:footnoteRef/>
+</w:r>
+<w:r>
+<w:continuationSeparator/>
+</w:r>
+</w:p>
+</w:footnote>
+<w:footnote w:id="__NORMALIZED__">
+<w:p>
+<w:pPr>
+<w:pStyle w:val="FootnoteText"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="FootnoteReference"/>
+</w:rPr>
+<w:footnoteRef/>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">The first footnote body.</w:t>
+</w:r>
+</w:p>
+</w:footnote>
+<w:footnote w:id="__NORMALIZED__">
+<w:p>
+<w:pPr>
+<w:pStyle w:val="FootnoteText"/>
+</w:pPr>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="FootnoteReference"/>
+</w:rPr>
+<w:footnoteRef/>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">A labelled footnote with </w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rStyle w:val="CodeChar"/>
+</w:rPr>
+<w:t xml:space="preserve">code</w:t>
+</w:r>
+<w:r>
+<w:t xml:space="preserve">.</w:t>
+</w:r>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pStyle w:val="FootnoteText"/>
+</w:pPr>
+<w:r>
+<w:t xml:space="preserve">And a second paragraph.</w:t>
+</w:r>
+</w:p>
+</w:footnote>
+</w:footnotes>
+"
+`;
+
+exports[`golden: kitchen sink > matches the committed word/numbering.xml > word/numbering.xml 1`] = `
+"<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:numbering mc:Ignorable="w14 w15 wp14" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
+<w:abstractNum w:abstractNumId="1" w15:restartNumberingAfterBreak="0">
+<w:multiLevelType w:val="hybridMultilevel"/>
+<w:lvl w:ilvl="0" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="●"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="720" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="1" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="○"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="1440" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="2" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="■"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="3" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="●"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2880" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="4" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="○"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="3600" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="5" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="■"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="4320" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="6" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="●"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5040" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="7" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="●"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5760" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="8" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="●"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="6480" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+</w:abstractNum>
+<w:abstractNum w:abstractNumId="2" w15:restartNumberingAfterBreak="0">
+<w:multiLevelType w:val="hybridMultilevel"/>
+<w:lvl w:ilvl="0" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val=""/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="720" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Symbol" w:cs="Symbol" w:eastAsia="Symbol" w:hAnsi="Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="1" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="o"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="1440" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="2" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val=""/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Wingdings" w:cs="Wingdings" w:eastAsia="Wingdings" w:hAnsi="Wingdings"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="3" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val=""/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2880" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Symbol" w:cs="Symbol" w:eastAsia="Symbol" w:hAnsi="Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="4" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="o"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="3600" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="5" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val=""/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="4320" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Wingdings" w:cs="Wingdings" w:eastAsia="Wingdings" w:hAnsi="Wingdings"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="6" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val=""/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5040" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Symbol" w:cs="Symbol" w:eastAsia="Symbol" w:hAnsi="Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="7" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="o"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5760" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="8" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val=""/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="6480" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Wingdings" w:cs="Wingdings" w:eastAsia="Wingdings" w:hAnsi="Wingdings"/>
+</w:rPr>
+</w:lvl>
+</w:abstractNum>
+<w:abstractNum w:abstractNumId="3" w15:restartNumberingAfterBreak="0">
+<w:multiLevelType w:val="hybridMultilevel"/>
+<w:lvl w:ilvl="0" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="decimal"/>
+<w:lvlText w:val="%1."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="720" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="1" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerLetter"/>
+<w:lvlText w:val="%2."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="1440" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="2" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerRoman"/>
+<w:lvlText w:val="%3."/>
+<w:lvlJc w:val="right"/>
+<w:pPr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="3" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="decimal"/>
+<w:lvlText w:val="%4."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2880" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="4" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerLetter"/>
+<w:lvlText w:val="%5."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="3600" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="5" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerRoman"/>
+<w:lvlText w:val="%6."/>
+<w:lvlJc w:val="right"/>
+<w:pPr>
+<w:ind w:left="4320" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="6" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="decimal"/>
+<w:lvlText w:val="%7."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5040" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="7" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerLetter"/>
+<w:lvlText w:val="%8."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5760" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="8" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerRoman"/>
+<w:lvlText w:val="%9."/>
+<w:lvlJc w:val="right"/>
+<w:pPr>
+<w:ind w:left="6480" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+</w:abstractNum>
+<w:abstractNum w:abstractNumId="4" w15:restartNumberingAfterBreak="0">
+<w:multiLevelType w:val="hybridMultilevel"/>
+<w:lvl w:ilvl="0" w15:tentative="1">
+<w:start w:val="5"/>
+<w:numFmt w:val="decimal"/>
+<w:lvlText w:val="%1."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="720" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="1" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerLetter"/>
+<w:lvlText w:val="%2."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="1440" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="2" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerRoman"/>
+<w:lvlText w:val="%3."/>
+<w:lvlJc w:val="right"/>
+<w:pPr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="3" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="decimal"/>
+<w:lvlText w:val="%4."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2880" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="4" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerLetter"/>
+<w:lvlText w:val="%5."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="3600" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="5" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerRoman"/>
+<w:lvlText w:val="%6."/>
+<w:lvlJc w:val="right"/>
+<w:pPr>
+<w:ind w:left="4320" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="6" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="decimal"/>
+<w:lvlText w:val="%7."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5040" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="7" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerLetter"/>
+<w:lvlText w:val="%8."/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5760" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+<w:lvl w:ilvl="8" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="lowerRoman"/>
+<w:lvlText w:val="%9."/>
+<w:lvlJc w:val="right"/>
+<w:pPr>
+<w:ind w:left="6480" w:hanging="360"/>
+</w:pPr>
+</w:lvl>
+</w:abstractNum>
+<w:abstractNum w:abstractNumId="5" w15:restartNumberingAfterBreak="0">
+<w:multiLevelType w:val="hybridMultilevel"/>
+<w:lvl w:ilvl="0" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="720" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="1" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="1440" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="2" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="3" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2880" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="4" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="3600" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="5" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="4320" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="6" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5040" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="7" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5760" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="8" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☑"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="6480" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+</w:abstractNum>
+<w:abstractNum w:abstractNumId="6" w15:restartNumberingAfterBreak="0">
+<w:multiLevelType w:val="hybridMultilevel"/>
+<w:lvl w:ilvl="0" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="720" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="1" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="1440" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="2" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="3" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2880" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="4" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="3600" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="5" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="4320" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="6" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5040" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="7" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5760" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="8" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="•"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="6480" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+</w:abstractNum>
+<w:abstractNum w:abstractNumId="7" w15:restartNumberingAfterBreak="0">
+<w:multiLevelType w:val="hybridMultilevel"/>
+<w:lvl w:ilvl="0" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="720" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="1" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="1440" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="2" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2160" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="3" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="2880" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="4" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="3600" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="5" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="4320" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="6" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5040" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="7" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="5760" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+<w:lvl w:ilvl="8" w15:tentative="1">
+<w:start w:val="1"/>
+<w:numFmt w:val="bullet"/>
+<w:lvlText w:val="☐"/>
+<w:lvlJc w:val="left"/>
+<w:pPr>
+<w:ind w:left="6480" w:hanging="360"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Segoe UI Symbol" w:cs="Segoe UI Symbol" w:eastAsia="Segoe UI Symbol" w:hAnsi="Segoe UI Symbol"/>
+</w:rPr>
+</w:lvl>
+</w:abstractNum>
+<w:num w:numId="1">
+<w:abstractNumId w:val="1"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="1"/>
+</w:lvlOverride>
+</w:num>
+<w:num w:numId="2">
+<w:abstractNumId w:val="2"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="1"/>
+</w:lvlOverride>
+</w:num>
+<w:num w:numId="3">
+<w:abstractNumId w:val="3"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="1"/>
+</w:lvlOverride>
+</w:num>
+<w:num w:numId="4">
+<w:abstractNumId w:val="3"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="1"/>
+</w:lvlOverride>
+</w:num>
+<w:num w:numId="5">
+<w:abstractNumId w:val="4"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="5"/>
+</w:lvlOverride>
+</w:num>
+<w:num w:numId="6">
+<w:abstractNumId w:val="5"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="1"/>
+</w:lvlOverride>
+</w:num>
+<w:num w:numId="7">
+<w:abstractNumId w:val="7"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="1"/>
+</w:lvlOverride>
+</w:num>
+<w:num w:numId="8">
+<w:abstractNumId w:val="6"/>
+<w:lvlOverride w:ilvl="0">
+<w:startOverride w:val="1"/>
+</w:lvlOverride>
+</w:num>
+</w:numbering>
+"
+`;
+
+exports[`golden: kitchen sink > reports exactly the expected warnings > warnings 1`] = `
+[
+  {
+    "code": "link-title-dropped",
+    "message": "the link title "Example" was not rendered: docx cannot write w:hyperlink/@w:tooltip",
+    "severity": "notice",
+  },
+  {
+    "code": "link-unresolved",
+    "message": "internal link "#nowhere" does not match any heading; rendered as plain text",
+    "severity": "notice",
+  },
+  {
+    "code": "html-inline",
+    "message": "inline HTML is not converted: <kbd>",
+    "severity": "notice",
+  },
+  {
+    "code": "html-inline",
+    "message": "inline HTML is not converted: </kbd>",
+    "severity": "notice",
+  },
+  {
+    "code": "code-meta-dropped",
+    "message": "the fence metadata "title=\\"demo.ts\\"" has no OOXML equivalent and was not rendered",
+    "severity": "notice",
+  },
+  {
+    "code": "image-unresolved",
+    "message": "image "missing.png" has no bytes; emitted a placeholder",
+    "severity": "error",
+  },
+  {
+    "code": "image-unresolved",
+    "message": "image "missing-inline.png" has no bytes; emitted a placeholder",
+    "severity": "error",
+  },
+  {
+    "code": "html-block",
+    "message": "block-level HTML is not converted: <details>",
+    "severity": "notice",
+  },
+]
+`;
+
+exports[`golden: styles > matches the committed word/styles.xml > word/styles.xml 1`] = `
+"<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles mc:Ignorable="w14 w15" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml">
+<w:docDefaults>
+<w:rPrDefault>
+<w:rPr>
+<w:rFonts w:ascii="Calibri" w:cs="Calibri" w:eastAsia="Calibri" w:hAnsi="Calibri"/>
+<w:sz w:val="22"/>
+<w:szCs w:val="22"/>
+</w:rPr>
+</w:rPrDefault>
+<w:pPrDefault>
+<w:pPr>
+<w:spacing w:after="160" w:line="276" w:lineRule="auto"/>
+</w:pPr>
+</w:pPrDefault>
+</w:docDefaults>
+<w:style w:type="paragraph" w:styleId="Title">
+<w:name w:val="Title"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="10"/>
+<w:qFormat/>
+<w:pPr>
+<w:spacing w:after="240" w:before="0" w:line="276" w:lineRule="auto"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:color w:val="2F5496"/>
+<w:sz w:val="56"/>
+<w:szCs w:val="56"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Heading1">
+<w:name w:val="heading 1"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="9"/>
+<w:qFormat/>
+<w:pPr>
+<w:keepNext/>
+<w:keepLines/>
+<w:spacing w:after="120" w:before="240" w:line="276" w:lineRule="auto"/>
+<w:outlineLvl w:val="0"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:b/>
+<w:bCs/>
+<w:i w:val="false"/>
+<w:iCs w:val="false"/>
+<w:color w:val="2F5496"/>
+<w:sz w:val="32"/>
+<w:szCs w:val="32"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Heading2">
+<w:name w:val="heading 2"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="9"/>
+<w:qFormat/>
+<w:pPr>
+<w:keepNext/>
+<w:keepLines/>
+<w:spacing w:after="100" w:before="200" w:line="276" w:lineRule="auto"/>
+<w:outlineLvl w:val="1"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:b/>
+<w:bCs/>
+<w:i w:val="false"/>
+<w:iCs w:val="false"/>
+<w:color w:val="2F5496"/>
+<w:sz w:val="28"/>
+<w:szCs w:val="28"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Heading3">
+<w:name w:val="heading 3"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="9"/>
+<w:qFormat/>
+<w:pPr>
+<w:keepNext/>
+<w:keepLines/>
+<w:spacing w:after="80" w:before="180" w:line="276" w:lineRule="auto"/>
+<w:outlineLvl w:val="2"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:b/>
+<w:bCs/>
+<w:i w:val="false"/>
+<w:iCs w:val="false"/>
+<w:color w:val="1F3864"/>
+<w:sz w:val="24"/>
+<w:szCs w:val="24"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Heading4">
+<w:name w:val="heading 4"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="9"/>
+<w:qFormat/>
+<w:pPr>
+<w:keepNext/>
+<w:keepLines/>
+<w:spacing w:after="80" w:before="160" w:line="276" w:lineRule="auto"/>
+<w:outlineLvl w:val="3"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:b/>
+<w:bCs/>
+<w:i/>
+<w:iCs/>
+<w:color w:val="2F5496"/>
+<w:sz w:val="22"/>
+<w:szCs w:val="22"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Heading5">
+<w:name w:val="heading 5"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="9"/>
+<w:qFormat/>
+<w:pPr>
+<w:keepNext/>
+<w:keepLines/>
+<w:spacing w:after="80" w:before="160" w:line="276" w:lineRule="auto"/>
+<w:outlineLvl w:val="4"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:b w:val="false"/>
+<w:bCs w:val="false"/>
+<w:i w:val="false"/>
+<w:iCs w:val="false"/>
+<w:color w:val="2F5496"/>
+<w:sz w:val="22"/>
+<w:szCs w:val="22"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Heading6">
+<w:name w:val="heading 6"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="9"/>
+<w:qFormat/>
+<w:pPr>
+<w:keepNext/>
+<w:keepLines/>
+<w:spacing w:after="80" w:before="160" w:line="276" w:lineRule="auto"/>
+<w:outlineLvl w:val="5"/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Calibri Light" w:cs="Calibri Light" w:eastAsia="Calibri Light" w:hAnsi="Calibri Light"/>
+<w:b w:val="false"/>
+<w:bCs w:val="false"/>
+<w:i/>
+<w:iCs/>
+<w:color w:val="1F3864"/>
+<w:sz w:val="22"/>
+<w:szCs w:val="22"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Strong">
+<w:name w:val="Strong"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:qFormat/>
+<w:rPr>
+<w:b/>
+<w:bCs/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="ListParagraph">
+<w:name w:val="List Paragraph"/>
+<w:basedOn w:val="Normal"/>
+<w:uiPriority w:val="34"/>
+<w:qFormat/>
+<w:pPr>
+<w:spacing w:line="276" w:lineRule="auto"/>
+<w:contextualSpacing/>
+</w:pPr>
+</w:style>
+<w:style w:type="character" w:styleId="Hyperlink">
+<w:name w:val="Hyperlink"/>
+<w:basedOn w:val="DefaultParagraphFont"/>
+<w:uiPriority w:val="99"/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:color w:val="0563C1"/>
+<w:u w:val="single"/>
+</w:rPr>
+</w:style>
+<w:style w:type="character" w:styleId="FootnoteReference">
+<w:name w:val="footnote reference"/>
+<w:basedOn w:val="DefaultParagraphFont"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:vertAlign w:val="superscript"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="FootnoteText">
+<w:name w:val="footnote text"/>
+<w:basedOn w:val="Normal"/>
+<w:link w:val="FootnoteTextChar"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+<w:pPr>
+<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
+</w:pPr>
+<w:rPr>
+<w:sz w:val="18"/>
+<w:szCs w:val="18"/>
+</w:rPr>
+</w:style>
+<w:style w:type="character" w:styleId="FootnoteTextChar">
+<w:name w:val="Footnote Text Char"/>
+<w:basedOn w:val="DefaultParagraphFont"/>
+<w:link w:val="FootnoteText"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:sz w:val="18"/>
+<w:szCs w:val="18"/>
+</w:rPr>
+</w:style>
+<w:style w:type="character" w:styleId="EndnoteReference">
+<w:name w:val="endnote reference"/>
+<w:basedOn w:val="DefaultParagraphFont"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:vertAlign w:val="superscript"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="EndnoteText">
+<w:name w:val="endnote text"/>
+<w:basedOn w:val="Normal"/>
+<w:link w:val="EndnoteTextChar"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+<w:pPr>
+<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
+</w:pPr>
+<w:rPr>
+<w:sz w:val="20"/>
+<w:szCs w:val="20"/>
+</w:rPr>
+</w:style>
+<w:style w:type="character" w:styleId="EndnoteTextChar">
+<w:name w:val="Endnote Text Char"/>
+<w:basedOn w:val="DefaultParagraphFont"/>
+<w:link w:val="EndnoteText"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:sz w:val="20"/>
+<w:szCs w:val="20"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Normal">
+<w:name w:val="Normal"/>
+<w:uiPriority w:val="0"/>
+<w:qFormat/>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Quote">
+<w:name w:val="Quote"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="29"/>
+<w:qFormat/>
+<w:pPr>
+<w:pBdr>
+<w:left w:val="single" w:color="C8C8C8" w:sz="18" w:space="12"/>
+</w:pBdr>
+<w:spacing w:after="120" w:before="120" w:line="276" w:lineRule="auto"/>
+</w:pPr>
+<w:rPr>
+<w:color w:val="404040"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="CodeBlock">
+<w:name w:val="Code Block"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="CodeBlock"/>
+<w:uiPriority w:val="30"/>
+<w:pPr>
+<w:keepLines/>
+<w:shd w:fill="F6F8FA" w:color="auto" w:val="clear"/>
+<w:spacing w:after="120" w:before="120" w:line="240" w:lineRule="auto"/>
+<w:contextualSpacing/>
+</w:pPr>
+<w:rPr>
+<w:rFonts w:ascii="Consolas" w:cs="Courier New" w:hAnsi="Consolas"/>
+<w:color w:val="24292F"/>
+<w:sz w:val="20"/>
+<w:szCs w:val="20"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="HtmlBlock">
+<w:name w:val="Raw HTML Block"/>
+<w:basedOn w:val="CodeBlock"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="31"/>
+<w:rPr>
+<w:rFonts w:ascii="Consolas" w:cs="Courier New" w:hAnsi="Consolas"/>
+<w:color w:val="595959"/>
+<w:sz w:val="20"/>
+<w:szCs w:val="20"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="HorizontalRule">
+<w:name w:val="Horizontal Rule"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="32"/>
+<w:pPr>
+<w:pBdr>
+<w:bottom w:val="single" w:color="BFBFBF" w:sz="6" w:space="1"/>
+</w:pBdr>
+<w:spacing w:after="240" w:before="240" w:line="240" w:lineRule="auto"/>
+</w:pPr>
+<w:rPr>
+<w:sz w:val="8"/>
+<w:szCs w:val="8"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="TableText">
+<w:name w:val="Table Text"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="TableText"/>
+<w:uiPriority w:val="33"/>
+<w:pPr>
+<w:spacing w:after="0" w:before="0" w:line="240" w:lineRule="auto"/>
+</w:pPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="TableHeading">
+<w:name w:val="Table Heading"/>
+<w:basedOn w:val="TableText"/>
+<w:next w:val="TableText"/>
+<w:uiPriority w:val="34"/>
+<w:rPr>
+<w:b/>
+<w:bCs/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="TableSpacing">
+<w:name w:val="Table Spacing"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+<w:pPr>
+<w:spacing w:after="160" w:before="0" w:line="240" w:lineRule="auto"/>
+</w:pPr>
+<w:rPr>
+<w:sz w:val="8"/>
+<w:szCs w:val="8"/>
+</w:rPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="Figure">
+<w:name w:val="Figure"/>
+<w:basedOn w:val="Normal"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="35"/>
+<w:pPr>
+<w:spacing w:after="120" w:before="120"/>
+<w:jc w:val="center"/>
+</w:pPr>
+</w:style>
+<w:style w:type="paragraph" w:styleId="ImagePlaceholder">
+<w:name w:val="Image Placeholder"/>
+<w:basedOn w:val="Figure"/>
+<w:next w:val="Normal"/>
+<w:uiPriority w:val="36"/>
+<w:rPr>
+<w:i/>
+<w:iCs/>
+<w:color w:val="595959"/>
+</w:rPr>
+</w:style>
+<w:style w:type="character" w:styleId="DefaultParagraphFont">
+<w:name w:val="Default Paragraph Font"/>
+<w:uiPriority w:val="99"/>
+<w:semiHidden/>
+<w:unhideWhenUsed/>
+</w:style>
+<w:style w:type="character" w:styleId="CodeChar">
+<w:name w:val="Code Char"/>
+<w:basedOn w:val="DefaultParagraphFont"/>
+<w:uiPriority w:val="30"/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:rFonts w:ascii="Consolas" w:cs="Courier New" w:hAnsi="Consolas"/>
+<w:color w:val="24292F"/>
+<w:sz w:val="20"/>
+<w:szCs w:val="20"/>
+<w:shd w:fill="F0F1F3" w:color="auto" w:val="clear"/>
+</w:rPr>
+</w:style>
+<w:style w:type="character" w:styleId="HtmlChar">
+<w:name w:val="Raw HTML Char"/>
+<w:basedOn w:val="CodeChar"/>
+<w:uiPriority w:val="31"/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:rFonts w:ascii="Consolas" w:cs="Courier New" w:hAnsi="Consolas"/>
+<w:color w:val="595959"/>
+<w:sz w:val="20"/>
+<w:szCs w:val="20"/>
+</w:rPr>
+</w:style>
+<w:style w:type="character" w:styleId="ImagePlaceholderChar">
+<w:name w:val="Image Placeholder Char"/>
+<w:basedOn w:val="DefaultParagraphFont"/>
+<w:uiPriority w:val="36"/>
+<w:unhideWhenUsed/>
+<w:rPr>
+<w:i/>
+<w:iCs/>
+<w:color w:val="595959"/>
+</w:rPr>
+</w:style>
+</w:styles>
+"
+`;

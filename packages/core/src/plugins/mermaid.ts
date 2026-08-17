@@ -1,4 +1,4 @@
-import type { DownwordPlugin } from "../types.js";
+import type { DownwordPlugin } from "./types.js";
 
 /** Options for {@link mermaidPlugin}. */
 export interface MermaidPluginOptions {
@@ -22,7 +22,9 @@ export interface MermaidPluginOptions {
  *  - `ImageRun` silently drops `solidFill`.
  *
  * Today this is a typed no-op so that the `downword/plugins/mermaid` export is
- * resolvable and its option shape is locked in.
+ * resolvable and its option shape is locked in. It is **not** accepted by
+ * `convert()` — see `DownwordPlugin` for why the two plugin shapes differ. A
+ * mermaid fence currently renders as an ordinary code block.
  */
 export function mermaidPlugin(_options: MermaidPluginOptions = {}): DownwordPlugin {
   return {

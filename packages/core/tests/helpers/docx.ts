@@ -1,7 +1,11 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
+import { Packer, type Document } from "docx";
 import JSZip from "jszip";
+
+import type { DocumentNode } from "../../src/model.js";
+import { renderDocument, type RenderOptions, type RenderWarning } from "../../src/render/index.js";
 
 /**
  * Directory that golden tests write generated `.docx` files to.
@@ -34,4 +38,56 @@ export async function readDocxPart(bytes: Uint8Array, part: string): Promise<str
 export async function listDocxParts(bytes: Uint8Array): Promise<string[]> {
   const zip = await JSZip.loadAsync(bytes);
   return Object.keys(zip.files).sort();
+}
+
+/** Packs a docx `Document` into `.docx` bytes. */
+export async function packDocument(file: Document): Promise<Uint8Array> {
+  return new Uint8Array(await Packer.toArrayBuffer(file));
+}
+
+/** The three OOXML parts the renderer's golden tests care about. */
+export interface RenderedParts {
+  readonly bytes: Uint8Array;
+  readonly document: string;
+  readonly styles: string;
+  readonly numbering: string | null;
+  readonly footnotes: string | null;
+  readonly warnings: readonly RenderWarning[];
+}
+
+/**
+ * Renders a model document, packs it and unzips the interesting parts.
+ *
+ * Collecting warnings here (rather than in each test) keeps the renderer's
+ * `onWarning` contract exercised on every single golden case, so a rendering
+ * that silently starts dropping content shows up as a warning diff.
+ */
+export async function renderParts(
+  doc: DocumentNode,
+  options: RenderOptions = {},
+): Promise<RenderedParts> {
+  const warnings: RenderWarning[] = [];
+  const file = renderDocument(doc, {
+    ...options,
+    onWarning: (warning) => {
+      warnings.push(warning);
+      options.onWarning?.(warning);
+    },
+  });
+
+  const bytes = await packDocument(file);
+  const zip = await JSZip.loadAsync(bytes);
+  const optional = async (part: string): Promise<string | null> => {
+    const entry = zip.file(part);
+    return entry === null ? null : entry.async("string");
+  };
+
+  return {
+    bytes,
+    document: await readDocxPart(bytes, "word/document.xml"),
+    styles: await readDocxPart(bytes, "word/styles.xml"),
+    numbering: await optional("word/numbering.xml"),
+    footnotes: await optional("word/footnotes.xml"),
+    warnings,
+  };
 }

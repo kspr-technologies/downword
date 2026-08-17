@@ -1,4 +1,4 @@
-import type { DownwordPlugin } from "../types.js";
+import type { DownwordPlugin } from "./types.js";
 
 /** Options for {@link mathPlugin}. */
 export interface MathPluginOptions {
@@ -26,7 +26,11 @@ export interface MathPluginOptions {
  * or equation arrays, so the OMML path is required rather than optional.
  *
  * Today this is a typed no-op so that the `downword/plugins/math` export is
- * resolvable and its option shape is locked in.
+ * resolvable and its option shape is locked in. It is **not** accepted by
+ * `convert()` — see `DownwordPlugin` for why the two plugin shapes differ. To
+ * parse math today, inject the markdown-it half through
+ * `ConvertOptions.plugins`: the tokens become `mathInline`/`mathBlock` nodes
+ * with an empty `omml` slot, and the renderer warns `math-unconverted`.
  */
 export function mathPlugin(_options: MathPluginOptions = {}): DownwordPlugin {
   return {

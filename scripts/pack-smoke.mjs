@@ -81,42 +81,85 @@ run("npm", ["install", "--no-audit", "--no-fund", "--loglevel", "error", tarball
 // 3. Consumer scripts -------------------------------------------------------
 console.log("\n== 3. import as ESM and require as CJS ==");
 
+/**
+ * Runtime exports the published main entry must always carry.
+ *
+ * Deliberately a *subset* check rather than a deepEqual of every key: adding an
+ * export is not a breaking change, and pinning the full list here would turn
+ * every additive release into a red CI run. Removing one of these, however, is
+ * breaking - so these are the ones worth nailing down.
+ */
+const REQUIRED_EXPORTS = [
+  "DOCX_MIME_TYPE",
+  "DEFAULT_THEME",
+  "DownwordError",
+  "NULL_IMAGE_RESOLVER",
+  "THEMES",
+  "VERSION",
+  "convert",
+  "convertToBlob",
+  "convertToDocument",
+  "createImageResolver",
+  "isDownwordError",
+  "parseMarkdown",
+  "renderDocument",
+];
+
 const ESM_CHECK = `
 import assert from "node:assert/strict";
 import * as downword from "downword";
+import { createHighlighter } from "downword/highlight";
+import { createNodeImageResolver } from "downword/images/node";
 import { mathPlugin } from "downword/plugins/math";
 import { mermaidPlugin } from "downword/plugins/mermaid";
 
+const required = ${JSON.stringify(REQUIRED_EXPORTS)};
+const missing = required.filter((name) => !(name in downword));
+assert.deepEqual(missing, [], "downword is missing required exports");
+
 assert.equal(typeof downword.convert, "function", "convert must be a function");
-assert.equal(typeof downword.VERSION, "string", "VERSION must be a string");
 assert.match(downword.VERSION, /^\\d+\\.\\d+\\.\\d+/, "VERSION must look like semver");
 assert.equal(
   downword.DOCX_MIME_TYPE,
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 );
-assert.deepEqual(
-  Object.keys(downword).sort(),
-  ["DOCX_MIME_TYPE", "VERSION", "convert"],
-  "unexpected ESM export shape",
+assert.equal(typeof createHighlighter, "function", "downword/highlight must export createHighlighter");
+assert.equal(
+  typeof createNodeImageResolver,
+  "function",
+  "downword/images/node must export createNodeImageResolver",
 );
 assert.equal(typeof mathPlugin, "function", "downword/plugins/math must export mathPlugin");
 assert.equal(typeof mermaidPlugin, "function", "downword/plugins/mermaid must export mermaidPlugin");
 
-const result = await downword.convert("# Hello\\n\\nfrom the packed tarball.");
-assert.ok(result.bytes instanceof Uint8Array, "bytes must be a Uint8Array");
-assert.deepEqual([...result.bytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "must be a zip");
-assert.ok(result.bytes.byteLength > 1000, "docx looks too small");
-assert.ok(Array.isArray(result.warnings), "warnings must be an array");
+const warnings = [];
+const bytes = await downword.convert("# Hello\\n\\nfrom the packed tarball.\\n\\n- a\\n- b", {
+  metadata: { title: "pack smoke" },
+  onWarning: (warning) => warnings.push(warning),
+});
+assert.ok(bytes instanceof Uint8Array, "convert must resolve to a Uint8Array");
+assert.deepEqual([...bytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "must be a zip");
+assert.ok(bytes.byteLength > 1000, "docx looks too small");
+assert.deepEqual(warnings, [], "clean markdown must not warn");
 
-console.log("[esm] ok - downword@" + downword.VERSION + ", " + result.bytes.byteLength + " bytes");
+const blob = await downword.convertToBlob("# Hello");
+assert.equal(blob.type, downword.DOCX_MIME_TYPE, "convertToBlob must tag the mime type");
+
+console.log("[esm] ok - downword@" + downword.VERSION + ", " + bytes.byteLength + " bytes");
 `;
 
 const CJS_CHECK = `
 "use strict";
 const assert = require("node:assert/strict");
 const downword = require("downword");
+const highlight = require("downword/highlight");
+const nodeImages = require("downword/images/node");
 const math = require("downword/plugins/math");
 const mermaid = require("downword/plugins/mermaid");
+
+const required = ${JSON.stringify(REQUIRED_EXPORTS)};
+const missing = required.filter((name) => !(name in downword));
+assert.deepEqual(missing, [], "downword is missing required exports");
 
 assert.equal(typeof downword.convert, "function", "convert must be a function");
 assert.equal(typeof downword.VERSION, "string", "VERSION must be a string");
@@ -124,10 +167,15 @@ assert.equal(
   downword.DOCX_MIME_TYPE,
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 );
-assert.deepEqual(
-  Object.keys(downword).sort(),
-  ["DOCX_MIME_TYPE", "VERSION", "convert"],
-  "unexpected CJS export shape",
+assert.equal(
+  typeof highlight.createHighlighter,
+  "function",
+  "downword/highlight must export createHighlighter",
+);
+assert.equal(
+  typeof nodeImages.createNodeImageResolver,
+  "function",
+  "downword/images/node must export createNodeImageResolver",
 );
 assert.equal(typeof math.mathPlugin, "function", "downword/plugins/math must export mathPlugin");
 assert.equal(
@@ -138,10 +186,10 @@ assert.equal(
 
 downword
   .convert("# Hello\\n\\nfrom require().")
-  .then((result) => {
-    assert.ok(result.bytes instanceof Uint8Array, "bytes must be a Uint8Array");
-    assert.deepEqual([...result.bytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "must be a zip");
-    console.log("[cjs] ok - downword@" + downword.VERSION + ", " + result.bytes.byteLength + " bytes");
+  .then((bytes) => {
+    assert.ok(bytes instanceof Uint8Array, "convert must resolve to a Uint8Array");
+    assert.deepEqual([...bytes.slice(0, 4)], [0x50, 0x4b, 0x03, 0x04], "must be a zip");
+    console.log("[cjs] ok - downword@" + downword.VERSION + ", " + bytes.byteLength + " bytes");
   })
   .catch((error) => {
     console.error(error);
