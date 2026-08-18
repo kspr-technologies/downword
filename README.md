@@ -63,14 +63,25 @@ and the markdown never reaches a server.
 
 ### 2. The command line
 
+The binary is called `downword`, but it ships in the **`downword-cli`**
+package — `downword` itself is the library and has no executable. So one-shot
+runs name the CLI package:
+
 ```sh
-npx downword notes.md                        # -> notes.docx
-npx downword "docs/**/*.md" --outdir build/  # one .docx per file
-cat notes.md | npx downword > notes.docx     # stdin -> stdout
+npx downword-cli notes.md                        # -> notes.docx
+npx downword-cli "docs/**/*.md" --outdir build/  # one .docx per file
+cat notes.md | npx downword-cli > notes.docx     # stdin -> stdout
 ```
 
 ```sh
-npx downword report.md --theme academic --toc --page-numbers --math omml
+npx downword-cli report.md --theme academic --toc --page-numbers --math omml
+```
+
+Install it once and the command is just `downword`:
+
+```sh
+npm install -g downword-cli
+downword notes.md
 ```
 
 Every flag, default and exit code: **[packages/cli/README.md](packages/cli/README.md)**.

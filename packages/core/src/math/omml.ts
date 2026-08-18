@@ -85,11 +85,87 @@ const ENTITY = /&(?:amp|lt|gt|quot|apos|#[0-9]{1,7}|#x[0-9A-Fa-f]{1,6});/y;
  */
 const BROKEN_STYLE = /<m:sty m:val="undefined"\/>/g;
 
-/** Applies {@link BROKEN_STYLE}. Returns the input unchanged when there is nothing to do. */
+/** An empty n-ary operand, which is what {@link hoistNaryOperands} repairs. */
+const EMPTY_NARY_OPERAND = "<m:e/></m:nary>";
+
+/**
+ * Returns the index just past the element starting at `open`, or -1.
+ *
+ * Depth counting over `m:`-namespaced tags only, which is sound here because
+ * {@link checkOmml} has already refused anything that is not `m:` (plus the
+ * three allowed `w:` run-property elements, which are always balanced inside
+ * an `m:r`). Self-closing tags never change depth.
+ */
+function elementEnd(xml: string, open: number): number {
+  if (xml[open] !== "<") return -1;
+  let depth = 0;
+  let i = open;
+  while (i < xml.length) {
+    const lt = xml.indexOf("<", i);
+    if (lt === -1) return -1;
+    const gt = xml.indexOf(">", lt);
+    if (gt === -1) return -1;
+    const selfClosing = xml[gt - 1] === "/";
+    const closing = xml[lt + 1] === "/";
+    if (!selfClosing && !closing) depth += 1;
+    else if (closing) depth -= 1;
+    if (depth === 0) return gt + 1;
+    i = gt + 1;
+  }
+  return -1;
+}
+
+/**
+ * Moves an n-ary operator's operand inside the operator.
+ *
+ * MathML models `\int_0^1 x^2 dx` as siblings in one `<mrow>` — the `<mo>` and
+ * then the integrand — because the operator does not contain its operand.
+ * OMML models the same expression the other way round: `<m:nary>` *contains*
+ * its operand in `<m:e>`. `mathml2omml` maps the operator faithfully and then
+ * has nothing to put in `<m:e>`, so it emits `<m:e/>` and leaves the integrand
+ * as the n-ary's next sibling.
+ *
+ * That is not merely cosmetic. `m:e` is required, and an empty one is a hole in
+ * the equation: LibreOffice draws a placeholder box, Word shows an empty slot,
+ * and the integral semantically has no integrand. Verified in a rendered PDF —
+ * `∫₀¹ □ x²dx` — which is why this is repaired rather than tolerated.
+ *
+ * The repair hoists exactly ONE following element. For the shapes temml
+ * produces that is the whole operand and nothing more: `∫₀¹(x²)dx = 1/3` and
+ * `∑ₖ₌₁ⁿ(k²) = …` are both what a human would have typed in Word's editor.
+ * Taking more would be a guess about where an integrand ends, and there is no
+ * general answer to that — `dx` is a delimiter by convention, not by markup.
+ * An n-ary with nothing after it is left alone: there is nothing to hoist.
+ */
+function hoistNaryOperands(omml: string): string {
+  let out = omml;
+  let from = 0;
+  for (;;) {
+    const hole = out.indexOf(EMPTY_NARY_OPERAND, from);
+    if (hole === -1) return out;
+    const afterNary = hole + EMPTY_NARY_OPERAND.length;
+    const end = elementEnd(out, afterNary);
+    if (end === -1) {
+      // Nothing balanced follows: leave the hole rather than corrupt the tree.
+      from = afterNary;
+      continue;
+    }
+    const operand = out.slice(afterNary, end);
+    out = out.slice(0, hole) + "<m:e>" + operand + "</m:e></m:nary>" + out.slice(end);
+    from = hole + "<m:e>".length + operand.length + "</m:e></m:nary>".length;
+  }
+}
+
+/**
+ * Applies {@link BROKEN_STYLE} and {@link hoistNaryOperands}.
+ *
+ * Returns the input unchanged when there is nothing to do.
+ */
 export function repairOmml(omml: string): string {
-  return omml.includes('m:val="undefined"')
+  const styled = omml.includes('m:val="undefined"')
     ? omml.replace(BROKEN_STYLE, '<m:sty m:val="p"/>')
     : omml;
+  return styled.includes(EMPTY_NARY_OPERAND) ? hoistNaryOperands(styled) : styled;
 }
 
 /** What {@link checkOmml} decided. */

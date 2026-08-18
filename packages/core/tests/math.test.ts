@@ -329,6 +329,33 @@ describe("math: 'omml' produces editable Word equations", () => {
     expect(ommlElements(document)).toHaveLength(corpus.length);
   });
 
+  it("puts an n-ary operator's operand inside it, so the slot is not an empty box", async () => {
+    // MathML makes the integrand a SIBLING of the operator; OMML requires it
+    // inside <m:e>. mathml2omml maps the operator faithfully and leaves
+    // <m:e/> empty, which LibreOffice draws as a placeholder box and Word
+    // shows as an empty slot. Caught by looking at a rendered PDF, not by any
+    // structural assertion - the XML was well-formed and full of m:oMath the
+    // whole time.
+    expect(repairOmml("<m:nary><m:e/></m:nary><m:r><m:t>x</m:t></m:r>")).toBe(
+      "<m:nary><m:e><m:r><m:t>x</m:t></m:r></m:e></m:nary>",
+    );
+
+    // Nothing to hoist: left alone rather than corrupted.
+    expect(repairOmml("<m:nary><m:e/></m:nary>")).toBe("<m:nary><m:e/></m:nary>");
+
+    for (const tex of [
+      "\\int_0^1 x^2 dx = \\frac{1}{3}",
+      "\\sum_{k=1}^{n} k^2 = 6",
+      "\\int_a^b f(x)dx",
+    ]) {
+      const { document, warnings } = await run(`$$${tex}$$`);
+      expect(warnings).toEqual([]);
+      expect(document).toContain("m:nary");
+      // The regression itself: not one empty operand anywhere.
+      expect(document).not.toContain("<m:e/>");
+    }
+  });
+
   it("repairs the one converter bug that would make Word call the file corrupt", async () => {
     // mathml2omml has no mapping for mathvariant="normal" and emits
     // `<m:sty m:val="undefined"/>`, which is outside OMML's ST_Style

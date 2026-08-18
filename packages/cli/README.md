@@ -4,7 +4,7 @@
 > [downword](https://www.npmjs.com/package/downword).
 
 ```sh
-npx downword notes.md            # -> notes.docx
+npx downword-cli notes.md        # -> notes.docx
 ```
 
 Real Word constructs, not a hand-rolled XML file: heading styles, numbering
@@ -15,7 +15,8 @@ rather than in the text.
 ## Install
 
 ```sh
-npm install -g downword-cli     # or just: npx downword …
+npm install -g downword-cli     # then the command is: downword …
+                                # one-shot, no install: npx downword-cli …
 ```
 
 Nothing else is required. Two features have optional peer dependencies, and each
