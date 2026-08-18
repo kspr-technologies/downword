@@ -3,7 +3,7 @@
  *
  * ```ts
  * import { Packer } from "docx";
- * import { renderDocument } from "@ksprtech/downword/render";
+ * import { renderDocument } from "@ksprtech/downword";
  *
  * const file = renderDocument(model, { onWarning: console.warn });
  * const bytes = await Packer.toArrayBuffer(file);
