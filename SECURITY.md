@@ -5,10 +5,10 @@
 downword is pre-1.0. Only the latest published version of each package receives
 security fixes.
 
-| Package        | Supported           |
-| -------------- | ------------------- |
-| `downword`     | latest release only |
-| `downword-cli` | latest release only |
+| Package                  | Supported           |
+| ------------------------ | ------------------- |
+| `@ksprtech/downword`     | latest release only |
+| `@ksprtech/downword-cli` | latest release only |
 
 ## Reporting a vulnerability
 

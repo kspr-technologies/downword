@@ -2,13 +2,13 @@
 /**
  * Builds `packages/core` if — and only if — its `dist/` is missing or stale.
  *
- * The CLI consumes `downword` the way a published consumer does: through its
+ * The CLI consumes `@ksprtech/downword` the way a published consumer does: through
  * `exports` map, which points at `dist`. That is deliberate (it is the shape
  * that actually ships, and it means the CLI's tests exercise the real package
  * boundary), but it makes two commands order-dependent:
  *
  *   - `pnpm typecheck` — the CLI's types resolve to `dist/*.d.ts`; and
- *   - `pnpm test` — the built binary imports `downword` at runtime.
+ *   - `pnpm test` — the built binary imports `@ksprtech/downword` at runtime.
  *
  * CI runs `typecheck` and `test` **before** `build`, and a fresh clone has no
  * `dist` at all. Rather than reorder the pipeline for one package, the package

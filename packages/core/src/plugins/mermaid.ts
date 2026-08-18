@@ -1,9 +1,9 @@
 /**
- * `downword/plugins/mermaid` — ```` ```mermaid ```` fences become embedded diagrams.
+ * `@ksprtech/downword/plugins/mermaid` — ```` ```mermaid ```` fences become embedded diagrams.
  *
  * ```ts
- * import { parseMarkdown, renderDocument } from "downword";
- * import { renderMermaid } from "downword/plugins/mermaid";
+ * import { parseMarkdown, renderDocument } from "@ksprtech/downword";
+ * import { renderMermaid } from "@ksprtech/downword/plugins/mermaid";
  *
  * const { document, warnings } = await renderMermaid(parseMarkdown(markdown));
  * const file = renderDocument(document);

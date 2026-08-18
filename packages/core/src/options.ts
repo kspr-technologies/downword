@@ -221,7 +221,7 @@ export interface ConvertOptions {
    * level deep over the `"default"` theme. Defaults to `"default"`.
    *
    * ```ts
-   * import { convert, THEMES } from "downword";
+   * import { convert, THEMES } from "@ksprtech/downword";
    * await convert("# hi", { theme: { fonts: { body: "Georgia" } } });
    * await convert("# hi", { theme: { ...THEMES.print, sizes: { ...THEMES.print.sizes, body: 24 } } });
    * ```
@@ -240,7 +240,7 @@ export interface ConvertOptions {
    * `1440` (1 inch), which is Word's own default.
    *
    * ```ts
-   * import { convert, inchesToTwips } from "downword";
+   * import { convert, inchesToTwips } from "@ksprtech/downword";
    * await convert("# hi", { margins: inchesToTwips(0.75) });
    * await convert("# hi", { margins: { left: 2160, right: 2160 } });
    * ```
@@ -348,7 +348,7 @@ export interface ConvertOptions {
    * free of `any`:
    *
    * ```ts
-   * import { convert, type MarkdownItPlugin } from "downword";
+   * import { convert, type MarkdownItPlugin } from "@ksprtech/downword";
    *
    * const deflist: MarkdownItPlugin = (md) => {
    *   md.block.ruler.before("paragraph", "noop", () => false);
@@ -365,8 +365,8 @@ export interface ConvertOptions {
    * monospace and highlight.js is never loaded.
    *
    * ```ts
-   * import { convert } from "downword";
-   * import { createHighlighter } from "downword/highlight";
+   * import { convert } from "@ksprtech/downword";
+   * import { createHighlighter } from "@ksprtech/downword/highlight";
    *
    * await convert("```ts\nconst x = 1;\n```", { highlighter: createHighlighter() });
    * ```
@@ -377,7 +377,7 @@ export interface ConvertOptions {
    *
    * Defaults to `createImageResolver({ allowRemote: allowRemoteImages })`,
    * which reads `data:` and `blob:` URLs only. Pass
-   * `createNodeImageResolver()` from `downword/images/node` to read local
+   * `createNodeImageResolver()` from `@ksprtech/downword/images/node` to read local
    * files, `NULL_IMAGE_RESOLVER` to resolve nothing at all, or your own.
    *
    * Whatever you pass, an image that fails to resolve costs exactly one

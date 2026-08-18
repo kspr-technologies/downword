@@ -1,10 +1,10 @@
 /**
  * mermaid diagrams: the implementation.
  *
- * The public entry point is `downword/plugins/mermaid` (`src/plugins/mermaid.ts`),
+ * The public entry point is `@ksprtech/downword/plugins/mermaid` (`src/plugins/mermaid.ts`),
  * which re-exports this barrel. Everything here is browser-first — see
  * `types.ts` for why a DOM is not negotiable — and nothing in it is reachable
- * from the `downword` entry, which `tests/bundle.test.ts` enforces.
+ * from the `@ksprtech/downword` entry, which `tests/bundle.test.ts` enforces.
  */
 
 export {

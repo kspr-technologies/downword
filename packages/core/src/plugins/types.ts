@@ -1,7 +1,7 @@
 /**
- * The plugin shape the `downword/plugins/*` entry points share.
+ * The plugin shape the `@ksprtech/downword/plugins/*` entry points share.
  *
- * Deliberately **not** re-exported from `downword`'s main entry, and
+ * Deliberately **not** re-exported from `@ksprtech/downword`'s main entry, and
  * deliberately not the same thing as `ConvertOptions.plugins` — which takes
  * plain `MarkdownItPlugin`s, the extension point that works today.
  *

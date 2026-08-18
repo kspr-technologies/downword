@@ -106,8 +106,8 @@ body:
     id: versions
     attributes:
       label: downword and runtime versions
-      description: Output of `npm ls downword` plus `node -v` (or your browser version).
-      placeholder: "downword@0.1.0, node v22.19.0, Chrome 140"
+      description: Output of `npm ls @ksprtech/downword` plus `node -v` (or your browser version).
+      placeholder: "@ksprtech/downword@0.1.0, node v22.19.0, Chrome 140"
     validations:
       required: true
 

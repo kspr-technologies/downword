@@ -32,19 +32,19 @@ importers:
 
   examples/basic-cjs:
     dependencies:
-      downword:
+      '@ksprtech/downword':
         specifier: workspace:*
         version: link:../../packages/core
 
   examples/basic-node:
     dependencies:
-      downword:
+      '@ksprtech/downword':
         specifier: workspace:*
         version: link:../../packages/core
 
   packages/cli:
     dependencies:
-      downword:
+      '@ksprtech/downword':
         specifier: workspace:*
         version: link:../core
     devDependencies:

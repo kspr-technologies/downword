@@ -373,11 +373,11 @@ could make.
   `convert.ts`, `omml.ts`.
 
 ```sh
-npm install downword
+npm install @ksprtech/downword
 ```
 
 ```ts
-import { convertWithMath } from "downword/plugins/math";
+import { convertWithMath } from "@ksprtech/downword/plugins/math";
 
 const bytes = await convertWithMath("Euler: $e^{i\\pi} + 1 = 0$\n", {
   math: { math: "omml", onWarning: (warning) => console.warn(warning.message) },

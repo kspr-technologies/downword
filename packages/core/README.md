@@ -6,7 +6,7 @@
 > Paste from ChatGPT/Claude, get a real Word document.
 
 [![CI](https://github.com/kspr-technologies/downword/actions/workflows/ci.yml/badge.svg)](https://github.com/kspr-technologies/downword/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/downword?color=cb3837&logo=npm&label=npm)](https://www.npmjs.com/package/downword)
+[![npm](https://img.shields.io/npm/v/@ksprtech/downword?color=cb3837&logo=npm&label=npm)](https://www.npmjs.com/package/@ksprtech/downword)
 [![core bundle](https://img.shields.io/badge/core-74.2%20kB%20min%2Bgzip-1f6feb)](.size-limit.json)
 [![license](https://img.shields.io/badge/license-MIT-1f6feb)](../../LICENSE)
 
@@ -21,13 +21,13 @@ their numbering, tables with repeating header rows, footnotes, embedded images,
 styled code — and nothing leaves the process unless you ask it to.
 
 ```sh
-npm install downword
+npm install @ksprtech/downword
 ```
 
 ## Quick start
 
 ```ts
-import { convert } from "downword";
+import { convert } from "@ksprtech/downword";
 
 const bytes = await convert("# Hello\n\nFrom **downword**.");
 ```
@@ -36,7 +36,7 @@ In a browser, `convertToBlob` gives you something you can hand straight to a
 download link:
 
 ```ts
-import { convertToBlob } from "downword";
+import { convertToBlob } from "@ksprtech/downword";
 
 const blob = await convertToBlob("# Hello");
 const link = document.createElement("a");
@@ -49,7 +49,7 @@ In Node:
 
 ```ts
 import { writeFile } from "node:fs/promises";
-import { convert } from "downword";
+import { convert } from "@ksprtech/downword";
 
 await writeFile("hello.docx", await convert("# Hello"));
 ```
@@ -95,7 +95,7 @@ too, where `Blob` is a global.
 
 ```ts
 import { Packer } from "docx";
-import { convertToDocument } from "downword";
+import { convertToDocument } from "@ksprtech/downword";
 
 const file = await convertToDocument("# Hello");
 const base64 = await Packer.toBase64String(file);
@@ -132,7 +132,7 @@ Lengths are in **twips** — twentieths of a point, 1440 to the inch, which is
 what OOXML itself uses. `inchesToTwips` and `pointsToTwips` are exported:
 
 ```ts
-import { convert, inchesToTwips } from "downword";
+import { convert, inchesToTwips } from "@ksprtech/downword";
 
 await convert("# Hello", {
   pageSize: "Letter",
@@ -154,7 +154,7 @@ conversion time, but the instruction Word itself writes, so the entries stay
 correct as the document is edited and each one links to its heading.
 
 ```ts
-import { convert } from "downword";
+import { convert } from "@ksprtech/downword";
 
 await convert("# One\n\n## Two\n", {
   toc: { minLevel: 1, maxLevel: 3, title: "Contents" },
@@ -206,7 +206,7 @@ tables get `<w:bidiVisual/>` so the column order mirrors too. Code blocks, raw
 HTML and display math stay left-to-right, because their content is not prose.
 
 ```ts
-import { convert } from "downword";
+import { convert } from "@ksprtech/downword";
 
 await convert("# مرحبا بالعالم\n\n- عنصر\n- عنصر آخر\n", { direction: "rtl" });
 ```
@@ -247,7 +247,7 @@ source `line`, an image diagnostic carries the `src` that failed. So the common
 case — count them, group them, show the errors — needs no `switch` at all.
 
 ```ts
-import { convert, type ConvertWarning } from "downword";
+import { convert, type ConvertWarning } from "@ksprtech/downword";
 
 const problems: ConvertWarning[] = [];
 
@@ -277,7 +277,7 @@ invisible from here. Those are things only the adapter knows, and
 if you care why a block is uncoloured:
 
 ```ts
-import { createHighlighter } from "downword/highlight";
+import { createHighlighter } from "@ksprtech/downword/highlight";
 
 const highlighter = createHighlighter({
   // "engine-unavailable" | "language-unknown" | "language-load-failed" | ...
@@ -295,7 +295,7 @@ rather than `instanceof`: it is a structural check, so it still works in a
 project that ends up with both the ESM and the CJS build in its graph.
 
 ```ts
-import { convert, isDownwordError } from "downword";
+import { convert, isDownwordError } from "@ksprtech/downword";
 
 try {
   await convert("# Hello");
@@ -314,8 +314,8 @@ highlight.js is an **optional peer dependency** and lives behind its own
 subpath, so a project that does not want it never pays for it. Install it, then:
 
 ````ts
-import { convert } from "downword";
-import { createHighlighter } from "downword/highlight";
+import { convert } from "@ksprtech/downword";
+import { createHighlighter } from "@ksprtech/downword/highlight";
 
 const highlighter = createHighlighter();
 
@@ -345,18 +345,18 @@ you can check, not a promise in a comment: the egress switch is tested with a
 `fetch` spy that must never be called.
 
 ```ts
-import { convert } from "downword";
+import { convert } from "@ksprtech/downword";
 
 // Fetches over the network, capped at 10 MiB and 10 s per image.
 await convert("![logo](https://example.com/logo.png)", { allowRemoteImages: true });
 ```
 
-In Node, `downword/images/node` adds local files, a base directory that paths
+In Node, `@ksprtech/downword/images/node` adds local files, a base directory that paths
 and symlinks cannot escape, and an SSRF guard on remote hosts:
 
 ```ts
-import { convert } from "downword";
-import { createNodeImageResolver } from "downword/images/node";
+import { convert } from "@ksprtech/downword";
+import { createNodeImageResolver } from "@ksprtech/downword/images/node";
 
 const bytes = await convert("![diagram](./diagram.png)", {
   imageResolver: createNodeImageResolver({ baseDir: "./docs" }),
@@ -371,8 +371,8 @@ one as `rasterizer`, or the image degrades to the placeholder.
 ## Diagrams (mermaid)
 
 ````ts
-import { parseMarkdown, renderDocument } from "downword";
-import { renderMermaid } from "downword/plugins/mermaid";
+import { parseMarkdown, renderDocument } from "@ksprtech/downword";
+import { renderMermaid } from "@ksprtech/downword/plugins/mermaid";
 
 const parsed = parseMarkdown("# Design\n\n```mermaid\nflowchart LR\n  A --> B\n```\n");
 const { document, warnings } = await renderMermaid(parsed);
@@ -408,8 +408,8 @@ raster twin. `embed: "svg"` ships both halves, so Word 2016+ draws the vector an
 everything else draws the same PNG.
 
 ```ts
-import { parseMarkdown } from "downword";
-import { renderMermaid } from "downword/plugins/mermaid";
+import { parseMarkdown } from "@ksprtech/downword";
+import { renderMermaid } from "@ksprtech/downword/plugins/mermaid";
 
 const { document, diagrams, rendered, warnings } = await renderMermaid(parseMarkdown("# hi"), {
   embed: "svg",
@@ -432,7 +432,7 @@ Pass a built-in by name, or an object that is merged one level deep over the
 default:
 
 ```ts
-import { convert, THEMES } from "downword";
+import { convert, THEMES } from "@ksprtech/downword";
 
 await convert("# Hello", { theme: "print" });
 
@@ -497,7 +497,7 @@ values.
 
 ```ts
 import { Packer } from "docx";
-import { nodesOfType, parseMarkdown, renderDocument } from "downword";
+import { nodesOfType, parseMarkdown, renderDocument } from "@ksprtech/downword";
 
 const document = parseMarkdown("# Title\n\n## Section\n\nBody.");
 
@@ -522,7 +522,7 @@ host that does not send `Access-Control-Allow-Origin` refuses it — which plent
 of image hosts and CDNs do not send. `fetch` rejects with a deliberately vague
 `TypeError` in that case, so downword cannot even report that it was CORS
 specifically. The image degrades to a visible placeholder and one `error`
-warning; the document is never lost. Node has no CORS, so `downword/images/node`
+warning; the document is never lost. Node has no CORS, so `@ksprtech/downword/images/node`
 and the CLI are unaffected, subject to their SSRF guard.
 
 **`convert()` is not byte-reproducible.** See
@@ -601,17 +601,17 @@ builtin becomes reachable.
 
 Subpath entry points:
 
-| Subpath                    | Contents                                            |
-| -------------------------- | --------------------------------------------------- |
-| `downword`                 | `convert` and everything above                      |
-| `downword/highlight`       | the highlight.js adapter (optional peer dependency) |
-| `downword/images/node`     | the filesystem + SSRF-guarded image resolver        |
-| `downword/plugins/math`    | `$…$` → native Word equations (optional peers)      |
-| `downword/plugins/mermaid` | mermaid diagrams (optional peer dependency)         |
+| Subpath                              | Contents                                            |
+| ------------------------------------ | --------------------------------------------------- |
+| `@ksprtech/downword`                 | `convert` and everything above                      |
+| `@ksprtech/downword/highlight`       | the highlight.js adapter (optional peer dependency) |
+| `@ksprtech/downword/images/node`     | the filesystem + SSRF-guarded image resolver        |
+| `@ksprtech/downword/plugins/math`    | `$…$` → native Word equations (optional peers)      |
+| `@ksprtech/downword/plugins/mermaid` | mermaid diagrams (optional peer dependency)         |
 
 ---
 
 - Source, issues and docs: <https://github.com/kspr-technologies/downword>
-- CLI: [`downword-cli`](https://www.npmjs.com/package/downword-cli)
+- CLI: [`@ksprtech/downword-cli`](https://www.npmjs.com/package/@ksprtech/downword-cli)
 
 MIT © 2026 KSPR Technologies

@@ -143,7 +143,8 @@ function declarationPaths(): Record<string, string[]> {
     if (subpath === "./package.json") continue;
     const types = conditions.import?.types;
     if (types === undefined) throw new Error(`exports["${subpath}"] declares no import types`);
-    const specifier = subpath === "." ? "downword" : `downword/${subpath.slice(2)}`;
+    const specifier =
+      subpath === "." ? "@ksprtech/downword" : `@ksprtech/downword/${subpath.slice(2)}`;
     paths[specifier] = [join(PACKAGE_DIR, types)];
   }
   return paths;
@@ -241,7 +242,7 @@ describe("README samples", () => {
     expect(diagnostics.map(describeDiagnostic)).toEqual([]);
   });
 
-  it("resolve `downword` to the built declarations, not to src", () => {
+  it("resolve `@ksprtech/downword` to the built declarations, not to src", () => {
     // A `paths` entry pointing at src would make this test pass while the
     // published types were broken, so assert the mapping itself.
     for (const targets of Object.values(declarationPaths())) {

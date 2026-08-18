@@ -1051,7 +1051,7 @@ async function bundle(entry: string, options: BuildOptions = {}): Promise<Metafi
   return result.metafile as Metafile;
 }
 
-describe("downword/plugins/math: the engines load lazily or not at all", () => {
+describe("@ksprtech/downword/plugins/math: the engines load lazily or not at all", () => {
   it("keeps temml and mathml2omml out of the main entry", async () => {
     const metafile = await bundle("src/index.ts");
     const inputs = Object.keys(metafile.inputs).join("\n");

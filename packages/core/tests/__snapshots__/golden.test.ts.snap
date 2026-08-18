@@ -207,7 +207,7 @@ exports[`golden: a full LLM-shaped document > matches the committed word/documen
 <w:ind w:left="720"/>
 </w:pPr>
 <w:r>
-<w:t xml:space="preserve">npm install downword</w:t>
+<w:t xml:space="preserve">npm install @ksprtech/downword</w:t>
 </w:r>
 </w:p>
 <w:p>
@@ -230,7 +230,7 @@ exports[`golden: a full LLM-shaped document > matches the committed word/documen
 <w:ind w:left="720"/>
 </w:pPr>
 <w:r>
-<w:t xml:space="preserve">import { convert } from &quot;downword&quot;;</w:t>
+<w:t xml:space="preserve">import { convert } from &quot;@ksprtech/downword&quot;;</w:t>
 </w:r>
 </w:p>
 <w:p>

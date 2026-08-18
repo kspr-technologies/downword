@@ -11,11 +11,11 @@
 const { mkdirSync, writeFileSync } = require("node:fs");
 const path = require("node:path");
 
-const { convert, DOCX_MIME_TYPE, VERSION } = require("downword");
+const { convert, DOCX_MIME_TYPE, VERSION } = require("@ksprtech/downword");
 
 const markdown = `# Hello from CommonJS
 
-downword ${VERSION} generated this file with \`require("downword")\`.
+downword ${VERSION} generated this file with \`require("@ksprtech/downword")\`.
 
 > Nothing left the process to build it.
 `;

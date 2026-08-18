@@ -1,4 +1,4 @@
-# downword-cli
+# @ksprtech/downword-cli
 
 ## 0.1.0
 
@@ -12,4 +12,4 @@
 ### Patch Changes
 
 - Updated dependencies []:
-  - downword@0.1.0
+  - @ksprtech/downword@0.1.0

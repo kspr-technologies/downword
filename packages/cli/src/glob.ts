@@ -18,7 +18,7 @@
  * they return the same files, so the Node 20 leg of CI is not a different
  * program from the Node 22 one. The alternative — depending on `fast-glob` or
  * `tinyglobby` — would put a transitive dependency tree behind
- * `npx downword`, for a feature the platform now ships.
+ * `npx @ksprtech/downword-cli`, for a feature the platform now ships.
  *
  * Neither implementation returns directories: this is a list of *files to
  * convert*, and `docs/*.md` happily matches a directory named `notes.md`.

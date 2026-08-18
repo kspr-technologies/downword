@@ -1,8 +1,8 @@
 /**
- * `downword/plugins/math` — TeX in, **native Word equations** out.
+ * `@ksprtech/downword/plugins/math` — TeX in, **native Word equations** out.
  *
  * ```ts
- * import { convertWithMath } from "downword/plugins/math";
+ * import { convertWithMath } from "@ksprtech/downword/plugins/math";
  *
  * const bytes = await convertWithMath("The area is $\\pi r^2$.");
  * ```
@@ -31,13 +31,13 @@
  * ## Why it is a separate entry point
  *
  * `temml` and `mathml2omml` are **optional peer dependencies**, reached through
- * a dynamic `import()` in `src/math/engine.ts`. Importing `downword` therefore
+ * a dynamic `import()` in `src/math/engine.ts`. Importing `@ksprtech/downword` therefore
  * costs nothing extra, and `tests/bundle.test.ts` proves it by bundling the
  * main entry and failing if either package appears in the graph. Install them
  * alongside this entry:
  *
  * ```sh
- * npm i downword temml mathml2omml
+ * npm i @ksprtech/downword temml mathml2omml
  * ```
  *
  * Without them every equation degrades to its TeX source as literal text, with
@@ -107,7 +107,7 @@ export {
  * The math plugin: a {@link DownwordPlugin} with both halves of the pipeline
  * hanging off it.
  *
- * `DownwordPlugin` describes what every `downword/plugins/*` entry has in
+ * `DownwordPlugin` describes what every `@ksprtech/downword/plugins/*` entry has in
  * common — a name, and a chance to warn during setup. Maths needs more than
  * that (a markdown-it rule **and** an async pass), so it adds two members
  * rather than pretending to fit.

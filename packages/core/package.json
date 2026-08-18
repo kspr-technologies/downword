@@ -1,5 +1,5 @@
 {
-  "name": "downword",
+  "name": "@ksprtech/downword",
   "version": "0.1.0",
   "type": "module",
   "description": "Markdown to Word (.docx) converter that runs entirely in your browser. Paste from ChatGPT/Claude, get a real Word document.",

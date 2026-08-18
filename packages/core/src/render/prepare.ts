@@ -87,7 +87,7 @@ export async function prepareHighlights(
  *
  * For a document-scale pass with bounded concurrency, resolver-contract
  * validation and the resolver's own diagnostics folded in, use
- * `resolveDocumentImages` from `downword/images` instead; this is the minimal
+ * `resolveDocumentImages` from `@ksprtech/downword/images` instead; this is the minimal
  * version the renderer's own contract needs.
  *
  * @param doc - The document to walk.

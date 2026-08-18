@@ -43,7 +43,7 @@ function run(command, args, options = {}) {
 
 // 1. Build + pack -----------------------------------------------------------
 console.log("\n== 1. build and pack packages/core ==");
-run("pnpm", ["--filter", "downword", "build"], { cwd: REPO_ROOT });
+run("pnpm", ["--filter", "@ksprtech/downword", "build"], { cwd: REPO_ROOT });
 
 rmSync(SCRATCH, { recursive: true, force: true });
 mkdirSync(SCRATCH, { recursive: true });
@@ -107,11 +107,11 @@ const REQUIRED_EXPORTS = [
 
 const ESM_CHECK = `
 import assert from "node:assert/strict";
-import * as downword from "downword";
-import { createHighlighter } from "downword/highlight";
-import { createNodeImageResolver } from "downword/images/node";
-import { convertWithMath, mathPlugin } from "downword/plugins/math";
-import { renderMermaid, countMermaidDiagrams } from "downword/plugins/mermaid";
+import * as downword from "@ksprtech/downword";
+import { createHighlighter } from "@ksprtech/downword/highlight";
+import { createNodeImageResolver } from "@ksprtech/downword/images/node";
+import { convertWithMath, mathPlugin } from "@ksprtech/downword/plugins/math";
+import { renderMermaid, countMermaidDiagrams } from "@ksprtech/downword/plugins/mermaid";
 
 const required = ${JSON.stringify(REQUIRED_EXPORTS)};
 const missing = required.filter((name) => !(name in downword));
@@ -123,14 +123,14 @@ assert.equal(
   downword.DOCX_MIME_TYPE,
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 );
-assert.equal(typeof createHighlighter, "function", "downword/highlight must export createHighlighter");
+assert.equal(typeof createHighlighter, "function", "@ksprtech/downword/highlight must export createHighlighter");
 assert.equal(
   typeof createNodeImageResolver,
   "function",
-  "downword/images/node must export createNodeImageResolver",
+  "@ksprtech/downword/images/node must export createNodeImageResolver",
 );
-assert.equal(typeof mathPlugin, "function", "downword/plugins/math must export mathPlugin");
-assert.equal(typeof renderMermaid, "function", "downword/plugins/mermaid must export renderMermaid");
+assert.equal(typeof mathPlugin, "function", "@ksprtech/downword/plugins/math must export mathPlugin");
+assert.equal(typeof renderMermaid, "function", "@ksprtech/downword/plugins/mermaid must export renderMermaid");
 assert.equal(
   countMermaidDiagrams({ type: "document", metadata: {}, children: [] }),
   0,
@@ -189,11 +189,11 @@ console.log(
 const CJS_CHECK = `
 "use strict";
 const assert = require("node:assert/strict");
-const downword = require("downword");
-const highlight = require("downword/highlight");
-const nodeImages = require("downword/images/node");
-const math = require("downword/plugins/math");
-const mermaid = require("downword/plugins/mermaid");
+const downword = require("@ksprtech/downword");
+const highlight = require("@ksprtech/downword/highlight");
+const nodeImages = require("@ksprtech/downword/images/node");
+const math = require("@ksprtech/downword/plugins/math");
+const mermaid = require("@ksprtech/downword/plugins/mermaid");
 
 const required = ${JSON.stringify(REQUIRED_EXPORTS)};
 const missing = required.filter((name) => !(name in downword));
@@ -208,18 +208,18 @@ assert.equal(
 assert.equal(
   typeof highlight.createHighlighter,
   "function",
-  "downword/highlight must export createHighlighter",
+  "@ksprtech/downword/highlight must export createHighlighter",
 );
 assert.equal(
   typeof nodeImages.createNodeImageResolver,
   "function",
-  "downword/images/node must export createNodeImageResolver",
+  "@ksprtech/downword/images/node must export createNodeImageResolver",
 );
-assert.equal(typeof math.mathPlugin, "function", "downword/plugins/math must export mathPlugin");
+assert.equal(typeof math.mathPlugin, "function", "@ksprtech/downword/plugins/math must export mathPlugin");
 assert.equal(
   typeof mermaid.renderMermaid,
   "function",
-  "downword/plugins/mermaid must export renderMermaid",
+  "@ksprtech/downword/plugins/mermaid must export renderMermaid",
 );
 
 async function main() {
@@ -263,8 +263,8 @@ const { createRequire } = require("node:module");
 const { dirname, join } = require("node:path");
 
 const require_ = createRequire(join(process.cwd(), "index.js"));
-const pkgPath = require_.resolve("downword/package.json");
-const pkg = require_("downword/package.json");
+const pkgPath = require_.resolve("@ksprtech/downword/package.json");
+const pkg = require_("@ksprtech/downword/package.json");
 const root = dirname(pkgPath);
 
 for (const [entry, conditions] of Object.entries(pkg.exports)) {

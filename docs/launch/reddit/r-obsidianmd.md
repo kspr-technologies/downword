@@ -121,7 +121,7 @@ design goal: never lose text, always say what happened.
   hear what actually happens.
 - MIT licensed, and the whole thing runs locally if a website is the part you do
   not like: https://github.com/kspr-technologies/downword. The CLI
-  (`npx downword-cli note.md`) does everything the web version does except
+  (`npx @ksprtech/downword-cli note.md`) does everything the web version does except
   mermaid, since mermaid needs a real browser to measure text.
 
 I am the author. Ask me anything, including which of the "does not survive" rows

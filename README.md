@@ -6,7 +6,7 @@
 > Paste from ChatGPT/Claude, get a real Word document.
 
 [![CI](https://github.com/kspr-technologies/downword/actions/workflows/ci.yml/badge.svg)](https://github.com/kspr-technologies/downword/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/downword?color=cb3837&logo=npm&label=npm)](https://www.npmjs.com/package/downword)
+[![npm](https://img.shields.io/npm/v/@ksprtech/downword?color=cb3837&logo=npm&label=npm)](https://www.npmjs.com/package/@ksprtech/downword)
 [![core bundle](https://img.shields.io/badge/core-74.2%20kB%20min%2Bgzip-1f6feb)](packages/core/.size-limit.json)
 [![license](https://img.shields.io/badge/license-MIT-1f6feb)](LICENSE)
 
@@ -41,7 +41,7 @@
 > [!WARNING]
 > **Pre-release.** The library, the CLI and the test suite are real and green —
 > but nothing is published to npm yet, so the version badge above will stay
-> empty and `npm install downword` will not work until the first release. The
+> empty and `npm install @ksprtech/downword` will not work until the first release. The
 > hosted web tool ships with it. Until then, build from source; see
 > [Development](#development).
 
@@ -63,24 +63,24 @@ and the markdown never reaches a server.
 
 ### 2. The command line
 
-The binary is called `downword`, but it ships in the **`downword-cli`**
-package — `downword` itself is the library and has no executable. So one-shot
-runs name the CLI package:
+The binary is called `downword`, but it ships in the
+**`@ksprtech/downword-cli`** package — `@ksprtech/downword` itself is the
+library and has no executable. So one-shot runs name the CLI package:
 
 ```sh
-npx downword-cli notes.md                        # -> notes.docx
-npx downword-cli "docs/**/*.md" --outdir build/  # one .docx per file
-cat notes.md | npx downword-cli > notes.docx     # stdin -> stdout
+npx @ksprtech/downword-cli notes.md                        # -> notes.docx
+npx @ksprtech/downword-cli "docs/**/*.md" --outdir build/  # one .docx per file
+cat notes.md | npx @ksprtech/downword-cli > notes.docx     # stdin -> stdout
 ```
 
 ```sh
-npx downword-cli report.md --theme academic --toc --page-numbers --math omml
+npx @ksprtech/downword-cli report.md --theme academic --toc --page-numbers --math omml
 ```
 
 Install it once and the command is just `downword`:
 
 ```sh
-npm install -g downword-cli
+npm install -g @ksprtech/downword-cli
 downword notes.md
 ```
 
@@ -89,11 +89,11 @@ Every flag, default and exit code: **[packages/cli/README.md](packages/cli/READM
 ### 3. The library
 
 ```sh
-npm install downword
+npm install @ksprtech/downword
 ```
 
 ```ts
-import { convert } from "downword";
+import { convert } from "@ksprtech/downword";
 
 const bytes = await convert("# Hello\n\nFrom **downword**.");
 // bytes is a Uint8Array holding a real .docx
@@ -102,7 +102,7 @@ const bytes = await convert("# Hello\n\nFrom **downword**.");
 In a browser, straight to a download:
 
 ```ts
-import { convertToBlob } from "downword";
+import { convertToBlob } from "@ksprtech/downword";
 
 const markdown =
   "# Quarterly review\n\n| Region | Revenue |\n| ------ | ------: |\n| EMEA   |    1.2M |\n";
@@ -116,7 +116,7 @@ link.click();
 With the options that make it look like a document somebody meant to write:
 
 ```ts
-import { convert, inchesToTwips } from "downword";
+import { convert, inchesToTwips } from "@ksprtech/downword";
 
 const markdown = "# Q3 Report\n\n## Revenue\n\nUp and to the right.\n";
 
@@ -267,14 +267,14 @@ converters that handle math at all hand you a PNG, which is a picture of an
 equation: it cannot be corrected, searched, restyled or read aloud.
 
 ```ts
-import { convertWithMath } from "downword/plugins/math";
+import { convertWithMath } from "@ksprtech/downword/plugins/math";
 
 const bytes = await convertWithMath("Euler: $e^{i\\pi} + 1 = 0$\n", {
   math: { math: "omml", onWarning: (warning) => console.warn(warning.message) },
 });
 ```
 
-It lives behind `downword/plugins/math` and needs two optional peers (`temml`,
+It lives behind `@ksprtech/downword/plugins/math` and needs two optional peers (`temml`,
 `mathml2omml`), so a project with no equations never pays for it.
 
 ## Limitations
@@ -292,7 +292,7 @@ The honest list. Each of these is measured or reproduced, not guessed.
   unaffected (subject to the SSRF guard on private and loopback addresses).
 
   ```ts
-  import { convert } from "downword";
+  import { convert } from "@ksprtech/downword";
 
   const bytes = await convert("![logo](https://example.com/logo.png)", {
     allowRemoteImages: true,
@@ -384,22 +384,22 @@ a copy of Word can make.
 
 ## Packages
 
-| Package                          | npm            | What it is                          |
-| -------------------------------- | -------------- | ----------------------------------- |
-| [`packages/core`](packages/core) | `downword`     | The library. Browser and Node.      |
-| [`packages/cli`](packages/cli)   | `downword-cli` | The `downword` command line binary. |
+| Package                          | npm                      | What it is                          |
+| -------------------------------- | ------------------------ | ----------------------------------- |
+| [`packages/core`](packages/core) | `@ksprtech/downword`     | The library. Browser and Node.      |
+| [`packages/cli`](packages/cli)   | `@ksprtech/downword-cli` | The `downword` command line binary. |
 
 Subpath entry points — everything heavy lives behind one, and
 `tests/bundle.test.ts` fails if any of it reappears in the main entry's import
 graph:
 
-| Subpath                    | Contents                                       |
-| -------------------------- | ---------------------------------------------- |
-| `downword`                 | `convert`, the model, the themes, the warnings |
-| `downword/highlight`       | the highlight.js adapter (optional peer)       |
-| `downword/images/node`     | the filesystem + SSRF-guarded image resolver   |
-| `downword/plugins/math`    | `$…$` → native Word equations (optional peers) |
-| `downword/plugins/mermaid` | mermaid diagrams (optional peer)               |
+| Subpath                              | Contents                                       |
+| ------------------------------------ | ---------------------------------------------- |
+| `@ksprtech/downword`                 | `convert`, the model, the themes, the warnings |
+| `@ksprtech/downword/highlight`       | the highlight.js adapter (optional peer)       |
+| `@ksprtech/downword/images/node`     | the filesystem + SSRF-guarded image resolver   |
+| `@ksprtech/downword/plugins/math`    | `$…$` → native Word equations (optional peers) |
+| `@ksprtech/downword/plugins/mermaid` | mermaid diagrams (optional peer)               |
 
 ## Development
 

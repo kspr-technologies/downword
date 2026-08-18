@@ -898,7 +898,7 @@ describe("mermaid: the canvas rasteriser", () => {
 
 const PACKAGE_DIR = fileURLToPath(new URL("..", import.meta.url));
 
-describe("downword/plugins/mermaid: mermaid is loaded lazily or not at all", () => {
+describe("@ksprtech/downword/plugins/mermaid: mermaid is loaded lazily or not at all", () => {
   it("has no static import of mermaid, only a dynamic one", async () => {
     const result = await build({
       absWorkingDir: PACKAGE_DIR,

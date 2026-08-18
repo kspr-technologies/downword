@@ -2,8 +2,8 @@
  * The default syntax highlighter: highlight.js, loaded lazily, theme-driven.
  *
  * ```ts
- * import { renderDocument, prepareHighlights } from "downword/render";
- * import { createHighlighter } from "downword/highlight";
+ * import { renderDocument, prepareHighlights } from "@ksprtech/downword/render";
+ * import { createHighlighter } from "@ksprtech/downword/highlight";
  *
  * const highlights = await prepareHighlights(doc, createHighlighter());
  * const file = renderDocument(doc, { highlights });

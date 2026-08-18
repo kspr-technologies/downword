@@ -1,13 +1,13 @@
 [
   {
-    "name": "downword: the \".\" entry, whole public surface, excluding docx",
+    "name": "@ksprtech/downword: the \".\" entry, whole public surface, excluding docx",
     "path": "dist/index.js",
     "ignore": ["docx"],
     "limit": "150 kB",
     "gzip": true
   },
   {
-    "name": "downword: convert() only, excluding docx",
+    "name": "@ksprtech/downword: convert() only, excluding docx",
     "path": "dist/index.js",
     "import": "{ convert }",
     "ignore": ["docx"],
@@ -15,13 +15,13 @@
     "gzip": true
   },
   {
-    "name": "downword: the \".\" entry INCLUDING docx 9.7.1 (a pre-bundled, non-tree-shakeable blob)",
+    "name": "@ksprtech/downword: the \".\" entry INCLUDING docx 9.7.1 (a pre-bundled, non-tree-shakeable blob)",
     "path": "dist/index.js",
     "limit": "195 kB",
     "gzip": true
   },
   {
-    "name": "downword/highlight: excluding highlight.js, which is loaded lazily",
+    "name": "@ksprtech/downword/highlight: excluding highlight.js, which is loaded lazily",
     "path": "dist/highlight.js",
     "import": "{ createHighlighter }",
     "ignore": ["highlight.js"],
@@ -29,7 +29,7 @@
     "gzip": true
   },
   {
-    "name": "downword/plugins/mermaid: excluding mermaid, which is loaded lazily",
+    "name": "@ksprtech/downword/plugins/mermaid: excluding mermaid, which is loaded lazily",
     "path": "dist/plugins/mermaid.js",
     "import": "{ renderMermaid }",
     "ignore": ["mermaid"],
@@ -37,7 +37,7 @@
     "gzip": true
   },
   {
-    "name": "downword/plugins/math: the math machinery alone, excluding docx, markdown-it and the lazy TeX engines",
+    "name": "@ksprtech/downword/plugins/math: the math machinery alone, excluding docx, markdown-it and the lazy TeX engines",
     "path": "dist/plugins/math.js",
     "import": "{ convertDocumentMath, mathMarkdownIt }",
     "ignore": ["docx", "markdown-it", "markdown-it-footnote", "temml", "mathml2omml"],
@@ -45,7 +45,7 @@
     "gzip": true
   },
   {
-    "name": "downword/plugins/math: the whole entry, which re-exports the core pipeline, excluding docx and the lazy TeX engines",
+    "name": "@ksprtech/downword/plugins/math: the whole entry, which re-exports the core pipeline, excluding docx and the lazy TeX engines",
     "path": "dist/plugins/math.js",
     "ignore": ["docx", "temml", "mathml2omml"],
     "limit": "100 kB",

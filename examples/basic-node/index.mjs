@@ -8,11 +8,11 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-import { convert, VERSION } from "downword";
+import { convert, VERSION } from "@ksprtech/downword";
 
 const markdown = `# Hello from ESM
 
-downword ${VERSION} generated this file with \`import { convert } from "downword"\`.
+downword ${VERSION} generated this file with \`import { convert } from "@ksprtech/downword"\`.
 
 - Paste your ChatGPT or Claude answer
 - Get a real Word document

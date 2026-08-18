@@ -42,13 +42,13 @@ A short guide, with **bold**, *italic*, ~~struck~~ and \`inline code\`.
 1. Install the package:
 
    \`\`\`sh
-   npm install downword
+   npm install @ksprtech/downword
    \`\`\`
 
 2. Call it:
 
    \`\`\`ts
-   import { convert } from "downword";
+   import { convert } from "@ksprtech/downword";
 
    const bytes = await convert("# Hello");
    \`\`\`

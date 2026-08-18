@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 /**
  * Bundle discipline, proven rather than asserted.
  *
- * `downword`'s main entry has one job beyond converting markdown: it must stay
+ * `@ksprtech/downword`'s main entry has one job beyond converting markdown: it must
  * cheap and it must stay browser-safe. Both are one careless `import` away from
  * being untrue, and neither shows up in a type error or a failing unit test —
  * the package would keep working perfectly while quietly costing every consumer
@@ -32,8 +32,8 @@ const PACKAGE_DIR = fileURLToPath(new URL("..", import.meta.url));
  * Packages that must never be in the main entry's graph.
  *
  * Combined, they are several megabytes. Each is reachable only from a subpath
- * export (`downword/highlight`) or is a dependency of a plugin entry point that
- * does not exist yet (`downword/plugins/math`, `.../mermaid`) — listing the
+ * export (`@ksprtech/downword/highlight`) or is a dependency of a plugin entry point that
+ * does not exist yet (`@ksprtech/downword/plugins/math`, `.../mermaid`) — listing the
  * future ones now means the guard is already in place when they land.
  */
 const FORBIDDEN_PACKAGES = ["highlight.js", "katex", "temml", "mathml2omml", "mermaid"] as const;
@@ -138,7 +138,7 @@ describe("main entry: no heavy static dependencies", () => {
     // in the graph because THEMES.print reuses the measured AAA-contrast
     // palette rather than duplicating it. Everything else under src/highlight/
     // - the loader table, the engine adapter, the emitter - belongs to the
-    // `downword/highlight` subpath and must stay there.
+    // `@ksprtech/downword/highlight` subpath and must stay there.
     expect(inputs.filter((input) => input.startsWith("src/highlight/"))).toEqual([
       "src/highlight/palette.ts",
     ]);
@@ -173,7 +173,7 @@ describe("main entry: browser safety", () => {
   });
 });
 
-describe("downword/highlight: highlight.js is loaded lazily or not at all", () => {
+describe("@ksprtech/downword/highlight: highlight.js is loaded lazily or not at all", () => {
   it("has no static import of highlight.js, only dynamic ones", async () => {
     // `packages: "external"` reproduces what tsup publishes: highlight.js is an
     // optional peer dependency, so its specifiers survive into the output and

@@ -2,9 +2,9 @@
  * What the CLI actually loads, measured rather than asserted in a comment.
  *
  * The library is split into a small core plus four optional entry points, three
- * of which are expensive or browser-only: `downword/plugins/mermaid` needs a
- * DOM and pulls a ~500 kB dependency, `downword/plugins/math` pulls two, and
- * `downword/highlight` pulls highlight.js. A CLI that imported them "just in
+ * of which are expensive or browser-only: `@ksprtech/downword/plugins/mermaid` needs a
+ * DOM and pulls a ~500 kB dependency, `@ksprtech/downword/plugins/math` pulls two, and
+ * `@ksprtech/downword/highlight` pulls highlight.js. A CLI that imported them "just in
  * case" would pay for all of it on every run, including `--help`.
  *
  * Each test runs the real binary under `NODE_V8_COVERAGE`, which makes V8 write
@@ -156,10 +156,10 @@ describe("the built binary's static imports", () => {
       (match) => match[1] ?? "",
     );
 
-    expect(statics).not.toContain("downword");
-    expect(statics).not.toContain("downword/plugins/mermaid");
-    expect(statics).not.toContain("downword/plugins/math");
-    expect(statics).not.toContain("downword/highlight");
+    expect(statics).not.toContain("@ksprtech/downword");
+    expect(statics).not.toContain("@ksprtech/downword/plugins/mermaid");
+    expect(statics).not.toContain("@ksprtech/downword/plugins/math");
+    expect(statics).not.toContain("@ksprtech/downword/highlight");
     // Everything it does import statically is a Node builtin.
     expect(statics.filter((specifier) => !specifier.startsWith("node:"))).toEqual([]);
   });

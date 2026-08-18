@@ -15,7 +15,7 @@ they are closed, and several of them are false today. Posting early is not
 | #   | Gate                                                                                                                                                                                                                                                                                                                      | True today?                  |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | 1   | **`github.com/kspr-technologies/downword` exists and is public.** Every draft links to it, `package.json` already points at it, and the README's CI badge already resolves against it.                                                                                                                                    | **No — it 404s.**            |
-| 2   | **`downword` and `downword-cli` are published to npm, and every quoted command has been run from a clean cache.** The drafts contain `npm install downword` and `npx downword-cli notes.md`. See the note below — the root README quotes a different invocation and one of the two is wrong.                              | **No.**                      |
+| 2   | **`@ksprtech/downword` and `@ksprtech/downword-cli` are published to npm, and every quoted command has been run from a clean cache.** The drafts contain `npm install @ksprtech/downword` and `npx @ksprtech/downword-cli notes.md`. See the note below — the package names are scoped and the binary is not.             | **No.**                      |
 | 3   | **A human has opened the output in real Microsoft Word** and filled in at least one column of [`docs/fidelity-matrix.md`](../fidelity-matrix.md), with a row in its verification log. Follow the protocol in that file — do not spot-check and call it done.                                                              | **No — zero Word coverage.** |
 | 4   | **The demo GIF is recorded.** See the `TODO(hero)` block at the top of the root [`README.md`](../../README.md); it has the shot list and the ffmpeg command. HN tolerates no media; Reddit and LinkedIn convert far worse without it.                                                                                     | No.                          |
 | 5   | **Third-party facts re-verified.** These drafts describe how Notion exports markdown, what the Obsidian Pandoc plugin is called, and how four directories accept submissions. All of that was written on 2026-08-18 and all of it can change. Re-check before you paste; see the per-file "verify before posting" notes.  | Written, not re-checked.     |
@@ -24,18 +24,39 @@ they are closed, and several of them are false today. Posting early is not
 
 ### Gate 2 has a trap in it
 
-The `downword` **bin** is declared by the **`downword-cli`** package
-(`packages/cli/package.json` → `"bin": { "downword": … }`). The `downword`
-package — the library — declares no bin at all. So the root README's
-`npx downword notes.md` resolves the _library_ package, which has nothing to
-run. The drafts in this directory say `npx downword-cli notes.md` instead, which
-should work because npx runs a package's sole binary even when the names differ.
+**Three names, and no two of them are the same.** The product is `downword`,
+the binary is `downword`, and the npm packages are `@ksprtech/downword` (the
+library) and `@ksprtech/downword-cli` (the CLI).
 
-**Neither form has been verified against a published package, because there is
-no published package.** Before you post anything containing a command: publish,
-then run both forms in a container with an empty npm cache, then fix whichever
-of the two documents is wrong. A launch post whose first code block does not run
-is the most expensive kind of typo.
+The scope is not a preference. `npm publish` refuses the unscoped name outright:
+
+```text
+403 - Package name too similar to existing package "download";
+      try renaming your package to '@ksprtech/downword'
+```
+
+That similarity check only runs server-side, at publish time — so a 404 from
+the registry for an unclaimed name proves nothing. Do not "simplify" the
+package names back; the publish will just fail again.
+
+The bin is declared by **`@ksprtech/downword-cli`**
+(`packages/cli/package.json` → `"bin": { "downword": … }`), and
+`@ksprtech/downword` — the library — declares no bin at all. So:
+
+- `npx @ksprtech/downword-cli notes.md` is the one-shot form. It works because
+  npx runs a package's sole binary even when the binary's name and the
+  package's name differ.
+- `npx @ksprtech/downword notes.md` resolves the _library_, which has nothing
+  to run.
+- After `npm install -g @ksprtech/downword-cli` the command is plain
+  `downword`. The scope never appears on the command line.
+
+The root README and every draft in this directory quote the same form.
+
+**None of it has been verified against a published package, because there is no
+published package.** Before you post anything containing a command: publish,
+then run each form in a container with an empty npm cache. A launch post whose
+first code block does not run is the most expensive kind of typo.
 
 ### After gate 3, come back and edit
 
@@ -133,7 +154,7 @@ and the looser version is what a reader will hold you to.
    your text, your filename, or any part of the document. Say that concretely
    rather than saying "anonymous".
 
-3. **`npm install downword` does not work yet** (gate 2), and
+3. **`npm install @ksprtech/downword` does not work yet** (gate 2), and
    `github.com/kspr-technologies/downword` **404s** (gate 1). No draft may imply
    otherwise before those gates close.
 

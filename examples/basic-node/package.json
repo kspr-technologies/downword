@@ -9,6 +9,6 @@
     "start": "node index.mjs"
   },
   "dependencies": {
-    "downword": "workspace:*"
+    "@ksprtech/downword": "workspace:*"
   }
 }

@@ -4,7 +4,7 @@
  *
  * ## Nothing here is imported until it is needed
  *
- * Every reference to `downword` in this file is either an `import type` (erased
+ * Every reference to `@ksprtech/downword` in this file is either an `import type` (erased
  * at build time) or an `await import(...)` inside the conversion. That is what
  * makes `downword --help` and `downword --version` answer without loading
  * `docx`, markdown-it or the converter, and it is what keeps the three optional
@@ -18,8 +18,8 @@
  * | --- | --- |
  * | image resolver | `createNodeImageResolver`, rooted at the markdown file's own directory: local pictures work, `/etc/passwd` does not, and the network stays off unless `--remote-images` |
  * | mermaid | a fence scanner (`./mermaid.ts`) so a diagram the CLI cannot draw is named rather than silently left as code |
- * | maths | `downword/plugins/math`, loaded only for `--math omml` / `--math image` |
- * | highlighting | `downword/highlight`, loaded only for `--highlight` |
+ * | maths | `@ksprtech/downword/plugins/math`, loaded only for `--math omml` / `--math image` |
+ * | highlighting | `@ksprtech/downword/highlight`, loaded only for `--highlight` |
  *
  * ## Failure
  *
@@ -29,8 +29,13 @@
  * not failures and never change the exit code — see `./diagnostics.ts`.
  */
 
-import type { ConvertOptions, ConvertWarning, Highlighter, MarkdownItPlugin } from "downword";
-import type { MathWarning } from "downword/plugins/math";
+import type {
+  ConvertOptions,
+  ConvertWarning,
+  Highlighter,
+  MarkdownItPlugin,
+} from "@ksprtech/downword";
+import type { MathWarning } from "@ksprtech/downword/plugins/math";
 
 import type { Diagnostic } from "./diagnostics.js";
 import { CliError, EXIT, describeError } from "./errors.js";
@@ -102,14 +107,14 @@ function toMathDiagnostic(warning: MathWarning): Diagnostic {
 /** Loads the optional highlighter, degrading to plain code blocks if it cannot. */
 async function loadHighlighter(report: ConversionRequest["report"]): Promise<Highlighter | null> {
   try {
-    const { createHighlighter } = await import("downword/highlight");
+    const { createHighlighter } = await import("@ksprtech/downword/highlight");
     return createHighlighter();
   } catch (error: unknown) {
     report({
       severity: "error",
       label: "highlight/unavailable",
       message:
-        `--highlight could not load downword/highlight (${describeError(error)}); ` +
+        `--highlight could not load @ksprtech/downword/highlight (${describeError(error)}); ` +
         `code blocks stay plain. Install the optional peer: npm i highlight.js`,
       line: null,
     });
@@ -143,8 +148,8 @@ export async function convertMarkdown(request: ConversionRequest): Promise<Uint8
   ];
 
   const [{ convert }, { createNodeImageResolver }] = await Promise.all([
-    import("downword"),
-    import("downword/images/node"),
+    import("@ksprtech/downword"),
+    import("@ksprtech/downword/images/node"),
   ]);
   const highlighter = options.highlight ? await loadHighlighter(report) : null;
 
@@ -178,7 +183,7 @@ export async function convertMarkdown(request: ConversionRequest): Promise<Uint8
     if (options.math === "off") {
       bytes = await convert(markdown, convertOptions);
     } else {
-      const { convertWithMath } = await import("downword/plugins/math");
+      const { convertWithMath } = await import("@ksprtech/downword/plugins/math");
       bytes = await convertWithMath(markdown, {
         ...convertOptions,
         math: {

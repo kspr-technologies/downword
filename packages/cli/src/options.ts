@@ -3,7 +3,7 @@
  *
  * Two rules this file keeps.
  *
- * **Nothing from `downword` is imported here.** The enumerations below are
+ * **Nothing from `@ksprtech/downword` is imported here.** The enumerations below are
  * literal copies of the library's, so that `downword --help` and
  * `downword --version` answer without loading the converter, `docx` or
  * markdown-it at all. `tests/vocabulary.test.ts` compares each list against the
@@ -24,7 +24,7 @@ import { TRY_HELP } from "./help.js";
 /* The vocabulary                                                              */
 /* -------------------------------------------------------------------------- */
 
-/** Built-in theme names. Mirrors `THEMES` in `downword`. */
+/** Built-in theme names. Mirrors `THEMES` in `@ksprtech/downword`. */
 export const THEME_NAMES = ["default", "github", "academic", "academic-double", "print"] as const;
 
 /** A built-in theme name. */
@@ -36,7 +36,7 @@ export const PAGE_SIZES = ["A4", "Letter"] as const;
 /** A paper size. */
 export type PageSizeName = (typeof PAGE_SIZES)[number];
 
-/** Equation handling. Mirrors `MathMode` in `downword/plugins/math`. */
+/** Equation handling. Mirrors `MathMode` in `@ksprtech/downword/plugins/math`. */
 export const MATH_MODES = ["omml", "image", "off"] as const;
 
 /** How equations are handled. */

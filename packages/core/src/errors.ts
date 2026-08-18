@@ -10,7 +10,7 @@
  * happened to throw.
  *
  * ```ts
- * import { convert, isDownwordError } from "downword";
+ * import { convert, isDownwordError } from "@ksprtech/downword";
  *
  * try {
  *   await convert("# hi");

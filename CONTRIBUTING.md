@@ -61,20 +61,20 @@ node scripts/pack-smoke.mjs                        # pack the tarball, import it
 Scoping to one package:
 
 ```sh
-pnpm --filter downword test
-pnpm --filter downword-cli build
+pnpm --filter @ksprtech/downword test
+pnpm --filter @ksprtech/downword-cli build
 ```
 
 ## 3. Repository layout
 
 ```
-packages/core/            # the `downword` package
+packages/core/            # the `@ksprtech/downword` package
   src/
     index.ts              # public API barrel
     convert.ts            # convert() — the conversion entry point
     types.ts              # public types (ConvertOptions, DownwordPlugin, …)
-    plugins/math.ts       # `downword/plugins/math`    (stub)
-    plugins/mermaid.ts    # `downword/plugins/mermaid` -> src/mermaid/**
+    plugins/math.ts       # `@ksprtech/downword/plugins/math`    (stub)
+    plugins/mermaid.ts    # `@ksprtech/downword/plugins/mermaid` -> src/mermaid/**
   tests/
     convert.test.ts       # unit tests
     golden.test.ts        # golden/snapshot tests over word/document.xml
@@ -86,11 +86,11 @@ packages/core/            # the `downword` package
   vitest.config.ts
   .size-limit.json        # bundle budget
 
-packages/cli/             # the `downword-cli` package (bin: downword)
+packages/cli/             # the `@ksprtech/downword-cli` package (bin: downword)
   src/index.ts            # the process: exit code, unhandled rejections
   src/run.ts              # argv -> exit code; takes its streams as an argument
   src/options.ts          # node:util parseArgs, no CLI framework dependency
-  src/convert.ts          # the only module that imports `downword` (lazily)
+  src/convert.ts          # the only module that imports the library (lazily)
   src/glob.ts             # fs.promises.glob where Node has it, matcher where not
   tests/cli.test.ts       # help, version and every usage error
   tests/e2e.test.ts       # spawns the binary, then opens the .docx it produced
@@ -129,7 +129,7 @@ The workflow is the same either way:
 3. **Run the tests and review the snapshot diff.**
 
    ```sh
-   pnpm --filter downword test
+   pnpm --filter @ksprtech/downword test
    ```
 
    The first run writes the snapshot into
@@ -138,7 +138,7 @@ The workflow is the same either way:
    was correct on the day it was recorded. Update with:
 
    ```sh
-   pnpm --filter downword test -- -u
+   pnpm --filter @ksprtech/downword test -- -u
    ```
 
 4. **Keep the output deterministic.** Snapshots must not churn between runs. If
@@ -157,7 +157,7 @@ The workflow is the same either way:
    pnpm build && pnpm size
    ```
 
-   The budget for `downword` is 150 kB min+gzip **excluding** the `docx` writer
+   The budget for `@ksprtech/downword` is 150 kB min+gzip **excluding** the `docx` writer
    (which is a ~103 kB gzip pre-bundled blob and is listed under `ignore` in
    `packages/core/.size-limit.json`).
 
@@ -166,7 +166,7 @@ The workflow is the same either way:
 ### Adding a plugin entry point
 
 Plugins are separate subpath exports so that heavy optional dependencies stay
-out of the main bundle. To add `downword/plugins/<name>`:
+out of the main bundle. To add `@ksprtech/downword/plugins/<name>`:
 
 1. Create `packages/core/src/plugins/<name>.ts` exporting a factory that returns
    a `DownwordPlugin` (see `packages/core/src/types.ts`).

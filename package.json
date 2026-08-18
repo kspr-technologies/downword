@@ -27,7 +27,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "size": "pnpm --filter downword size",
+    "size": "pnpm --filter @ksprtech/downword size",
     "examples": "pnpm -r --filter \"./examples/*\" start",
     "docx:validity": "node scripts/docx-validity.mjs",
     "changeset": "changeset",

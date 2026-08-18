@@ -160,7 +160,7 @@ export async function convertToDocument(
  * Converts markdown to a Word `.docx` file.
  *
  * ```ts
- * import { convert } from "downword";
+ * import { convert } from "@ksprtech/downword";
  *
  * const bytes = await convert("# Hello\n\nFrom **downword**.");
  * ```
@@ -202,7 +202,7 @@ export async function convert(markdown: string, options: ConvertOptions = {}): P
  * `showSaveFilePicker` and `fetch(url, { body })` all want:
  *
  * ```ts
- * import { convertToBlob } from "downword";
+ * import { convertToBlob } from "@ksprtech/downword";
  *
  * const blob = await convertToBlob("# Hello");
  * const url = URL.createObjectURL(blob);

@@ -9,7 +9,7 @@
  * teaching the CLI about it fails here rather than in someone's terminal.
  */
 
-import { THEMES } from "downword";
+import { THEMES } from "@ksprtech/downword";
 import { describe, expect, it } from "vitest";
 
 import { MATH_MODES, PAGE_SIZES, THEME_NAMES } from "../src/options.js";
@@ -20,7 +20,7 @@ describe("the CLI's vocabulary matches the library's", () => {
   });
 
   it("accepts every theme it advertises", async () => {
-    const { convert } = await import("downword");
+    const { convert } = await import("@ksprtech/downword");
 
     for (const theme of THEME_NAMES) {
       await expect(convert("# hi", { theme })).resolves.toBeInstanceOf(Uint8Array);
@@ -28,7 +28,7 @@ describe("the CLI's vocabulary matches the library's", () => {
   });
 
   it("accepts every page size it advertises", async () => {
-    const { convert } = await import("downword");
+    const { convert } = await import("@ksprtech/downword");
 
     for (const pageSize of PAGE_SIZES) {
       await expect(convert("# hi", { pageSize })).resolves.toBeInstanceOf(Uint8Array);
@@ -36,7 +36,7 @@ describe("the CLI's vocabulary matches the library's", () => {
   });
 
   it("accepts every maths mode it advertises", async () => {
-    const { resolveMathOptions } = await import("downword/plugins/math");
+    const { resolveMathOptions } = await import("@ksprtech/downword/plugins/math");
 
     for (const math of MATH_MODES) {
       expect(resolveMathOptions({ math }).math).toBe(math);

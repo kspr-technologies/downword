@@ -8,7 +8,7 @@
  * hosts (the CLI) import it by path:
  *
  * ```ts
- * import { createNodeImageResolver } from "downword/…/images/node.js";
+ * import { createNodeImageResolver } from "@ksprtech/downword/…/images/node.js";
  * ```
  *
  * It adds three things to {@link createImageResolver}:

@@ -2,7 +2,7 @@
  * Naming the ```` ```mermaid ```` fences the CLI cannot draw.
  *
  * mermaid measures text by laying it out in a DOM, so there is no headless path
- * that is not a headless *browser*. `downword/plugins/mermaid` says so itself
+ * that is not a headless *browser*. `@ksprtech/downword/plugins/mermaid` says so itself
  * and degrades cleanly — but only if you run it, and running it means importing
  * a browser-only entry point into a Node process to be told "not here". The CLI
  * does not: it finds the fences during the parse it was already doing, leaves
@@ -18,12 +18,12 @@
  *  - **a line number**, from the token's source map, so the message points at
  *    the fence rather than at the file.
  *
- * Nothing in this module imports mermaid, `downword/plugins/mermaid`, or
+ * Nothing in this module imports mermaid, `@ksprtech/downword/plugins/mermaid`, or
  * anything else that needs a DOM; `tests/startup.test.ts` proves it by listing
  * every script a real conversion loads.
  */
 
-import type { MarkdownItPlugin } from "downword";
+import type { MarkdownItPlugin } from "@ksprtech/downword";
 
 /** One ```` ```mermaid ```` fence, as found in the source. */
 export interface MermaidFence {
@@ -106,6 +106,6 @@ export function describeSkippedFence(fence: MermaidFence, index: number): string
     `left the \`\`\`mermaid fence ${name} as a code block: ` +
     `drawing a diagram needs a browser DOM, which a CLI does not have. ` +
     `Render it to an image and reference it with ![](diagram.png), ` +
-    `or convert in the browser with downword/plugins/mermaid.`
+    `or convert in the browser with @ksprtech/downword/plugins/mermaid.`
   );
 }

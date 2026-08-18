@@ -1,4 +1,4 @@
-# downword
+# @ksprtech/downword
 
 ## 0.1.0
 

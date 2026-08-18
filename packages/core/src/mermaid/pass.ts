@@ -314,8 +314,8 @@ function nonNegative(value: number | undefined, option: string, fallback: number
  * Turns every ```` ```mermaid ```` fence in a document into an embedded picture.
  *
  * ```ts
- * import { parseMarkdown, renderDocument } from "downword";
- * import { renderMermaid } from "downword/plugins/mermaid";
+ * import { parseMarkdown, renderDocument } from "@ksprtech/downword";
+ * import { renderMermaid } from "@ksprtech/downword/plugins/mermaid";
  *
  * const parsed = parseMarkdown(markdown);
  * const { document, warnings } = await renderMermaid(parsed);

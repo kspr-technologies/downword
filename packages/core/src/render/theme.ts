@@ -277,7 +277,7 @@ export interface ThemeInit {
   /**
    * **Replaces** {@link DEFAULT_THEME}'s palette rather than merging with it,
    * exactly like `bulletLevels` and `orderedFormats` above and like
-   * `HighlighterOptions.scopeStyles` in `downword/highlight`.
+   * `HighlighterOptions.scopeStyles` in `@ksprtech/downword/highlight`.
    *
    * A palette is a designed set, not a bag of independent tokens: merging leaves
    * whichever scopes the new palette happens not to name painted in the old

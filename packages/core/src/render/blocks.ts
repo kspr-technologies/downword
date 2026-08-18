@@ -755,7 +755,7 @@ function normalizeColor(color: string): string {
  * `theme: "print"` a no-op for whole languages (all of CSS, whose scopes are
  * dash-separated and so unreachable by `scopeColor`'s prefix walk) and made
  * `codePalette`'s documented replace-not-merge semantics unobservable at render
- * time. The palettes now name every scope `downword/highlight` can emit; a
+ * time. The palettes now name every scope `@ksprtech/downword/highlight` can emit; a
  * scope neither names is meant to be uncoloured.
  */
 function spanColor(span: HighlightSpan, ctx: RenderContext): string | null {

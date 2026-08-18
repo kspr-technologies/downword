@@ -21,7 +21,7 @@
  * mermaid is ~500 kB and an **optional** peer dependency. `import("mermaid")`
  * inside a function keeps it out of the static graph, so a bundler emits it as
  * its own chunk and a document with no diagrams never fetches it — the same
- * arrangement `downword/highlight` has with highlight.js, and one
+ * arrangement `@ksprtech/downword/highlight` has with highlight.js, and one
  * `tests/bundle.test.ts` enforces for the core entry.
  */
 

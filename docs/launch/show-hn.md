@@ -126,7 +126,7 @@ downword can't read a `.docx`. What it can't do is run in a tab on a locked-down
 work laptop, and that's the entire gap I'm standing in.
 
 Repo: https://github.com/kspr-technologies/downword — MIT. There's a CLI
-(`npx downword-cli notes.md`) and a library if you want markdown → `.docx` inside
+(`npx @ksprtech/downword-cli notes.md`) and a library if you want markdown → `.docx` inside
 your own app.
 
 If anyone here has Word on Windows and ten minutes, filling in one column of

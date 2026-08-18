@@ -283,7 +283,7 @@ Markdown to Word (.docx), entirely in your browser. Real heading styles, native 
 `https://github.com/kspr-technologies/downword`, alternative to CloudConvert.
 Any free-text field can take the 268-character short description from §1.
 
-## 10. awesome-cli-apps — for `downword-cli`
+## 10. awesome-cli-apps — for `@ksprtech/downword-cli`
 
 Repo: <https://github.com/agarrharr/awesome-cli-apps>
 

@@ -9,6 +9,6 @@
     "start": "node index.cjs"
   },
   "dependencies": {
-    "downword": "workspace:*"
+    "@ksprtech/downword": "workspace:*"
   }
 }

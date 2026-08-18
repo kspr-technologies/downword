@@ -1,10 +1,10 @@
 # downword-cli
 
 > Markdown to Word (`.docx`) at the command line, from
-> [downword](https://www.npmjs.com/package/downword).
+> [downword](https://www.npmjs.com/package/@ksprtech/downword).
 
 ```sh
-npx downword-cli notes.md        # -> notes.docx
+npx @ksprtech/downword-cli notes.md        # -> notes.docx
 ```
 
 Real Word constructs, not a hand-rolled XML file: heading styles, numbering
@@ -15,8 +15,8 @@ rather than in the text.
 ## Install
 
 ```sh
-npm install -g downword-cli     # then the command is: downword …
-                                # one-shot, no install: npx downword-cli …
+npm install -g @ksprtech/downword-cli     # then the command is: downword …
+                                # one-shot, no install: npx @ksprtech/downword-cli …
 ```
 
 Nothing else is required. Two features have optional peer dependencies, and each
@@ -86,7 +86,7 @@ downword: docs/architecture.md:12: mermaid/no-dom: left the ```mermaid fence
 ````
 
 Pre-render the diagram and reference the picture with `![](diagram.png)`, or
-convert in the browser with `downword/plugins/mermaid`.
+convert in the browser with `@ksprtech/downword/plugins/mermaid`.
 
 ## Diagnostics and exit codes
 

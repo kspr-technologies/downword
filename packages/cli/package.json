@@ -1,5 +1,5 @@
 {
-  "name": "downword-cli",
+  "name": "@ksprtech/downword-cli",
   "version": "0.1.0",
   "type": "module",
   "description": "Command line interface for downword - Markdown to Word (.docx).",
@@ -52,7 +52,7 @@
     "prepack": "pnpm build"
   },
   "dependencies": {
-    "downword": "workspace:*"
+    "@ksprtech/downword": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22",
