@@ -139,7 +139,7 @@
     "size-limit": "13.0.3",
     "temml": "0.13.4",
     "tsup": "8.5.1",
-    "typescript": "^5",
+    "typescript": "^6",
     "vitest": "4.1.10"
   }
 }
