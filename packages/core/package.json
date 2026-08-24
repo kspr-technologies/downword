@@ -130,7 +130,7 @@
     "@size-limit/preset-small-lib": "13.0.3",
     "@types/markdown-it": "^14",
     "@types/node": "^22",
-    "esbuild": "0.28.1",
+    "esbuild": "0.28.2",
     "highlight.js": "^11",
     "jszip": "3.10.1",
     "markdown-it-task-lists": "2.1.1",
