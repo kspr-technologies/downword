@@ -55,7 +55,7 @@
     "@ksprtech/downword": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@types/node": "^26",
     "jszip": "3.10.1",
     "tsup": "8.5.1",
     "typescript": "^5",
