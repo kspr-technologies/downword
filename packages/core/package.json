@@ -129,7 +129,7 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "13.0.3",
     "@types/markdown-it": "^14",
-    "@types/node": "^22",
+    "@types/node": "^26",
     "esbuild": "0.28.1",
     "highlight.js": "^11",
     "jszip": "3.10.1",
