@@ -103,7 +103,7 @@
   },
   "dependencies": {
     "docx": "9.7.1",
-    "markdown-it": "15.0.0",
+    "markdown-it": "15.0.1",
     "markdown-it-footnote": "4.0.0"
   },
   "peerDependencies": {
